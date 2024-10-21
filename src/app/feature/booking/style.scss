@@ -1,0 +1,91 @@
+.ant-image-mask {
+  border-radius: 0.5rem;
+}
+.invisible {
+  .ant-image-mask {
+    display: none;
+  }
+}
+.details-card {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  .ant-card-body {
+    padding: 16px !important;
+  }
+  .divider {
+    border: 2px solid green;
+    height: 20px !important;
+  }
+  .details-table {
+    width: 100%;
+    margin-bottom: 1rem;
+    tr {
+      td {
+        padding: 4px 0;
+        font-size: 1.1em;
+      }
+      :last-child {
+        font-weight: bold;
+        text-align: end;
+      }
+    }
+  }
+  .details-service {
+    .details-service-body {
+      font-size: 1.1em;
+      svg {
+        font-size: 1.4em !important;
+      }
+    }
+    .ant-card-body {
+      padding: 8px !important;
+    }
+  }
+}
+.schedule-details {
+  .e-schedule {
+    .e-table-container {
+      .e-table-wrap {
+        .e-schedule-table {
+          col{
+            width: 80px !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+.formBook{
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.court-card {
+  flex: 1;
+  text-align: center;
+  .ant-card-body {
+    padding: 15px !important;
+  }
+}
+
+.top-staff {
+  flex: 1;
+}
+.featured-staff {
+  flex: 1;
+}
+.staff-list {
+  .divider {
+    border: 2px solid green;
+    height: 64px !important;
+  }
+}
+.ant-avatar-lg {
+  width: 64px !important;
+  height: 64px !important;
+}
+
+.button {
+  margin-top: 1rem;
+  height: 40px;
+  border-radius: 1rem;
+}

@@ -1,5 +1,7 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
+import BookingCourtPage from '../feature/booking/BookingCourtPage';
 import App from '../layout/App';
+
 
 
 export const routes: RouteObject[] = [
@@ -7,7 +9,13 @@ export const routes: RouteObject[] = [
   {
     path: '/',
     element: <App/>,
-    children: [],
+    children: [
+      {
+        path: 'dat-san',
+        element: <BookingCourtPage/>,
+        children: [],
+      },
+    ],
   },
 ];
 

@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import '@/index.scss';
+// import '@/index.scss';
 import { RouterProvider } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { router } from './app/router/Routes.tsx';
