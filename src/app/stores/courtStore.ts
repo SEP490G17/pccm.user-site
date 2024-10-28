@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";;
-import { listCourtMock } from "@/app/public/mocks/courtcluster.mocks";
+import { listCourtMock } from "@/app/mocks/courtcluster.mocks";
 import { ICourtCluster } from "../models/courtcluster.model";
 
 export default class CourtStore {

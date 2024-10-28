@@ -1,0 +1,254 @@
+.news-page {
+    display: flex;
+    flex-direction: column;
+    max-width: 85%;
+    margin: auto;
+    padding: 20px 0;
+
+}
+
+.news-main-section {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: nowrap;
+}
+
+.news-updates {
+    width: 65%;
+}
+
+.recent-posts {
+    width: 30%;
+    margin-left: 25px;
+}
+
+.news-list {
+    display: grid;
+    grid-template-rows: repeat(5, auto);
+    gap: 20px;
+}
+
+.pagination {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+}
+.news-item {
+    display: flex;
+    gap: 20px;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.news-content{
+    align-content: center;
+}
+
+.news-content h3 {
+    font-size: 1.3rem;
+}
+
+.thumbnail {
+    width:150px;
+    height:100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.news-content p {
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.recent-posts {
+    width: 30%;
+    margin-left: 25px;
+    background-color: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height:10%;
+
+}
+
+
+.recent-post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.recent-post-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-radius: 8px;
+    background-color: white;
+
+}
+
+.recent-post-item img {
+    width: 75px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.related-news {
+    width: 100%;
+    margin-top: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 30px;
+}
+
+.related-news-list {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.related-news-item {
+    width: 300px;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+.related-news-item img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.related-news-item h4 {
+    font-size: 1rem;
+    margin-top: 10px;
+    line-height: 1.4;
+}
+.related-news-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    position: relative;
+}
+
+.arrow {
+    display: none;
+    cursor: pointer;
+}
+
+.arrow.visible {
+    display: block;
+}
+
+.left-arrow {
+    margin-right: 10px;
+}
+
+.right-arrow {
+    margin-left: 10px;
+}
+
+.arrow svg {
+    font-size: 24px;
+    color: #000;
+}
+.section-title {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.recent-posts-title {
+    position: relative;
+    top: -30px;
+    background: transparent;
+    font-size: 1.6rem;
+    padding-left: 10px;
+    color: #333;
+}
+
+.news-updates h2,
+.recent-posts-title {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    display: inline-block;
+    margin-right: auto;
+    color: #333;
+}
+
+.recent-posts {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    margin-top: 50px;
+}
+
+.recent-post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.recent-post-item {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.recent-post-item:hover {
+    background-color: #eaeaea;
+}
+
+.recent-post-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.recent-post-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.recent-post-content h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0px;
+}
+
+.recent-post-content p {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.recent-post-content .post-date {
+    font-size: 0.85rem;
+    color: #999;
+}
+
+.related-news-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    position: relative;
+}
+
+
+.section-title {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    color: #333;
+}

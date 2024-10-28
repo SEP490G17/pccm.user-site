@@ -1,0 +1,44 @@
+// ProfilePopUp.scss
+.modal-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #4A4A4A;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .form-item {
+        label {
+            font-weight: 500;
+            font-size: 1.1rem;
+            color: #333;
+        }
+        
+        .ant-input {
+            border-radius: 8px;
+            border: 1px solid #E2E8F0;
+            &:focus {
+                border-color: #1890ff; 
+                box-shadow: 0 0 5px rgba(24, 144, 255, 0.5);
+            }
+        }
+
+        .error {
+            color: #ff4d4f; 
+            font-size: 0.9rem;
+        }
+    }
+
+    .edit-button {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+
+        button {
+            min-width: 100px;
+        }
+    }
+}

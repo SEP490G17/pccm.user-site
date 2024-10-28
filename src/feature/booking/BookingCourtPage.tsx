@@ -1,9 +1,9 @@
 import { Col, Row, Typography } from "antd";
 import { useEffect, useState } from "react";
-import san1 from "@/app/public/images/san1.png";
-import san2 from "@/app/public/images/san2.png";
-import san3 from "@/app/public/images/san3.png";
-import san4 from "@/app/public/images/san4.png";
+import san1 from "@/assets/images/san1.png";
+import san2 from "@/assets/images/san2.png";
+import san3 from "@/assets/images/san3.png";
+import san4 from "@/assets/images/san4.png";
 
 import "./style.scss";
 import { FaLocationDot } from "react-icons/fa6";
@@ -27,6 +27,7 @@ const BookingCourtPage = () => {
     const [court, setCourt] = useState<ICourtCluster>();
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         if (courtStore.listCourt.length === 0) {
             courtStore.loadListCourt();
         }
@@ -35,6 +36,7 @@ const BookingCourtPage = () => {
 
     return (
         <>
+            <div style={{ maxWidth: '85%', margin: 'auto', padding: '20px 0px' }}>
             <Row style={{ marginBottom: '1rem' }}>
                 <Col span={18}>
                     <Typography.Title level={3}>{court?.title}</Typography.Title>
@@ -45,7 +47,7 @@ const BookingCourtPage = () => {
 
                     <FaLocationDot style={{ marginRight: "5px", width: "10px" }} />
                     <Typography.Text className="flex items-center gap-1" style={{fontSize:'16px'}}>
-                        {court?.location}
+                        {court?.location.thanhpho}
                     </Typography.Text>
                     
                 </Col>
@@ -81,6 +83,7 @@ const BookingCourtPage = () => {
             </div>
             
             <ReviewCourtCluster/>
+            </div>
         </>
     );
 }

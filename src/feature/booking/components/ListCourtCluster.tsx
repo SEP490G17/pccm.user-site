@@ -73,7 +73,7 @@ function ProductList({ title, itemsPerPage }: IProps) {
                                         {c.title}
                                     </Typography.Title>
                                     <Typography.Paragraph className="overflow-hidden w-full">
-                                        Khu vực: {c.location}
+                                        Khu vực:  {c.location.thanhpho} - {c.location.tinh}
                                     </Typography.Paragraph>
                                     <Row justify="space-between">
                                         <Typography.Paragraph>Số sân: 3</Typography.Paragraph>

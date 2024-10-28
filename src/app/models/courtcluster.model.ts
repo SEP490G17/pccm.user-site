@@ -1,7 +1,7 @@
 export interface ICourtCluster {
   id: number;
   title: string;
-  location: string;
+  location: ILocation;
   ownerid: string;
   description: string;
   images: string[];
@@ -27,4 +27,9 @@ export interface IProducts {
 export interface ICategory {
   id: number;
   name: string;
+}
+export interface ILocation {
+  tinh: string;
+  thanhpho: string;
+  diachi: string;
 }

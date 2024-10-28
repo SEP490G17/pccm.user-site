@@ -1,0 +1,45 @@
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 5rem;
+    padding: 0 2rem;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    z-index: 999;
+    width: 100%;
+    line-height: normal;
+}
+
+.header-title {
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.467rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 1;
+}
+
+.header-input {
+    border-radius: 8px;
+    border-color: #E2E8F0;
+    width: 35rem;
+    height: 2.5rem;
+    margin-right: 0.5rem;
+}
+
+.header-user-fullname {
+    color: #333;
+    font-size: 1.05rem;
+    font-weight: 500;
+}
+
+.header-user-phone {
+    display: block;
+    color: #777;
+    font-size: 1.05rem;
+    font-weight: 400;
+}
