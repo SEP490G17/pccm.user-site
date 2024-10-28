@@ -9,9 +9,9 @@
   }
 }
 :global(.ant-modal) {
-    width: 40% !important; 
+    width: 50% !important; 
     max-width: 90vw;         
-    height: 55% !important;  
+    height: 70% !important;  
 }
 :global(.ant-form) {
    text-align: center;
@@ -30,7 +30,7 @@
     display: flex;
     transition: transform 0.6s ease-in-out;
     transform: translateX(0);
-    align-items: stretch; // Add this to ensure equal height for both forms
+    align-items: stretch; 
 
     &.activeSignUp {
         transform: translateX(-50%);
@@ -41,9 +41,9 @@
     width: 50%;
     padding: 40px;
     transition: opacity 0.6s ease-in-out;
-    display: flex; // Add this to make it a flex container
-    flex-direction: column; // Ensure content stacks vertically
-    justify-content: center; // Center the content vertically
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
 }
 
 .activeSignIn {

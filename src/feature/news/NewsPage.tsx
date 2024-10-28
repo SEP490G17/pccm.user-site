@@ -17,7 +17,7 @@ const NewsPage = () => {
     const sortedNews = newsStore.paginatedNews.slice().sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     const recentPosts = sortedNews.slice(0, 5);
     const shuffledNews = [...newsStore.listNews].sort(() => 0.5 - Math.random());
-    const relatedPageSize = 4;
+    const relatedPageSize = 3;
     const { currentPage, pageSize, relatedNewsCurrentPage } = newsStore;
 
 

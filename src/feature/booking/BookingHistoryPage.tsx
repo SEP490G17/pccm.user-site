@@ -11,6 +11,7 @@ const BookingHistoryPage: React.FC = observer(() => {
     const { bookingHistoryStore } = useStore();
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         bookingHistoryStore.loadListBooking(); 
     }, []);
 

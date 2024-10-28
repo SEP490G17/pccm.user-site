@@ -4,7 +4,7 @@ import logo from '@/assets/pickerball-icon.png';
 import notificationIcon from '@/assets/notification.svg';
 import defaultUserIcon from '@/assets/defaultUser.png';
 import arrowDownIcon from '@/assets/arrow-down.svg';
-import listCourtIcon from '@/assets/notification.svg';
+import listCourtIcon from '@/assets/san_the_thao1.gif';
 import { observer } from 'mobx-react-lite';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -115,10 +115,11 @@ const Header = () => {
                 </Space>
 
                 <Space size={20}>
-                    <AntImage src={notificationIcon} width={24} height={24} preview={false} alt="Notifications" />
-                    <Button type="text" onClick={() => navigate('/list-courtcluster')}>
-                        <AntImage src={listCourtIcon} width={24} height={24} preview={false} alt="List Courts" />
+                   
+                    <Button type="text"  onClick={() => navigate('/list-courtcluster')}>
+                        <AntImage src={listCourtIcon} width={40} height={30} preview={false} alt="List Courts" />
                     </Button>
+                    <AntImage src={notificationIcon} width={24} height={24} preview={false} alt="Notifications" />
                     <Avatar src={defaultUserIcon} size={52} alt="User Avatar" />
                     <div>
                         <Text className="header-user-fullname">
