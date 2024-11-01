@@ -1,33 +1,13 @@
-.court-cluster-container {
-  overflow: hidden;
-  position: relative;
-
-  &.next .items-wrapper {
-    transform: translateX(-100%);
-  }
-
-  &.prev .items-wrapper {
-    transform: translateX(100%);
-  }
-
-  .items-wrapper {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-    transform: translateX(0);
-  }
-}
-
 .court-card {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition:
-  transform 0.3s ease,
-  box-shadow 0.3s ease;
-  background-color: #fff;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #f7f7f7;
   margin-bottom: 24px;
 
   &:hover {
+    background-color: white; // Change to white on hover
     transform: translateY(-5px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   }
@@ -89,9 +69,4 @@
   &:hover {
     background-color: darkgreen;
   }
-}
-
-.slider-container {
-    width: 100%;
-    padding: 16px;
 }

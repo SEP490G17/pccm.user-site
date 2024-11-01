@@ -1,9 +1,8 @@
 import { useStore } from "@/app/stores/store";
-import { Button, Card, Row, Col, Skeleton, Typography, Select, Tag, Image } from "antd";
+import { Button, Card, Row, Col, Skeleton, Typography, Tag, Image } from "antd";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
 import './style/HomeCourtCluster.scss';
 
@@ -23,47 +22,43 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
         loadListCourt();
     }, []);
 
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage] = useState(1);
+    const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
+
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentItems = listCourt.slice(startIndex, startIndex + itemsPerPage);
+    const filteredCourts = selectedLocation
+        ? listCourt.filter(court => court.location.thanhpho === selectedLocation)
+        : listCourt;
+    const currentItems = filteredCourts.slice(startIndex, startIndex + itemsPerPage);
 
-    const hasPrevious = currentPage > 1;
-    const hasNext = startIndex + itemsPerPage < listCourt.length;
-
-    const handleNext = () => {
-        if (hasNext) {
-            setCurrentPage(currentPage + 1);
-        }
-    };
-
-    const handlePrevious = () => {
-        if (hasPrevious) {
-            setCurrentPage(currentPage - 1);
-        }
+    const handleLocationFilter = (location: string) => {
+        setSelectedLocation(location);
     };
 
     return (
         <>
             <Row justify="space-between" align="middle" style={{ marginBottom: '16px' }}>
                 <Title level={3}>{title}</Title>
-                <Select placeholder="Chọn vị trí" style={{ maxWidth: '300px' }}>
-                    <Select.Option value="Hà Nội">Hà Nội</Select.Option>
-                    <Select.Option value="Hồ Chí Minh">Hồ Chí Minh</Select.Option>
-                    <Select.Option value="Đà Nẵng">Đà Nẵng</Select.Option>
-                </Select>
+                <div>
+                    {["Hà Nội", "Hồ Chí Minh", "Đà Nẵng"].map(location => (
+                        <Button
+                            key={location}
+                            type={selectedLocation === location ? "primary" : "default"}
+                            onClick={() => handleLocationFilter(location)}
+                            style={{ marginRight: '8px' }}
+                        >
+                            {location}
+                        </Button>
+                    ))}
+                </div>
             </Row>
-            <Row justify="space-between" >
+            <Row justify="space-between">
                 {loadingInitial ? (
                     <Skeleton active />
                 ) : (
                     <>
-                        <Row justify="space-between" align="middle" style={{ marginTop: '16px' }}>
-                            <Col>
-                                <Button onClick={handlePrevious} type="primary" disabled={!hasPrevious} icon={<IoIosArrowBack />} />
-                            </Col>
-                        </Row>
                         {currentItems.map((c) => (
-                            <Col key={c.id} span={5} >
+                            <Col key={c.id} span={6} style={{ padding: '10px' }} >
                                 <Card hoverable className="court-card">
                                     <Image src={c.images[0]} width={"100%"} height={"200px"} />
                                     <div className="court-details">
@@ -99,11 +94,6 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
                                 </Card>
                             </Col>
                         ))}
-                        <Row justify="space-between" align="middle" style={{ marginTop: '16px' }}>
-                            <Col>
-                                <Button onClick={handleNext} type="primary" disabled={!hasNext} icon={<IoIosArrowForward />} />
-                            </Col>
-                        </Row>
                         {currentItems.length < itemsPerPage &&
                             Array.from({ length: itemsPerPage - currentItems.length }).map((_, index) => (
                                 <Col key={index} span={6}>
@@ -118,3 +108,4 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
 }
 
 export default observer(CourtClusterList);
+ 
