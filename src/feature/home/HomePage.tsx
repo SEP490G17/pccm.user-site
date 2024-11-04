@@ -15,7 +15,7 @@ const Home: React.FC = () => {
                 <div style={{ marginBottom: '70px' }}>
                     <ListBanner title="" />
                 </div>
-                <div style={{ marginBottom: '70px' }}>
+                <div style={{ marginBottom: '70px'}}>
                     <ListCourtCluster title="Sân thể thao mới" itemsPerPage={3} />
                 </div>
 

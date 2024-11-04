@@ -62,7 +62,7 @@ const NewsPage = () => {
                                     />
                                     <div className="news-content">
                                         <h3>{newsItem.title}</h3>
-                                        <p>{newsItem.description}</p>
+                                        <p>{newsItem.title}</p>
                                         <span>{new Date(newsItem.createdAt).toLocaleDateString()}</span>
                                     </div>
                                 </Link>
@@ -88,7 +88,7 @@ const NewsPage = () => {
                                     <img src={newsItem.thumbnail || '/default-thumbnail.jpg'} alt={newsItem.title} />
                                     <div className="recent-post-content">
                                         <h4>{newsItem.title}</h4>
-                                        <p>{newsItem.description.slice(0, 70)}...</p>
+                                        <p>{newsItem.title.slice(0, 70)}...</p>
                                         <span className="post-date">{new Date(newsItem.createdAt).toLocaleDateString()}</span>
                                     </div>
                                 </Link>
@@ -114,7 +114,7 @@ const NewsPage = () => {
                                 <Link key={newsItem.id} to={`/news/${newsItem.id}`} className="related-news-item">
                                     <img src={newsItem.thumbnail || '/default-thumbnail.jpg'} alt={newsItem.title} />
                                     <h4>{newsItem.title}</h4>
-                                    <p>{newsItem.description.slice(0, 70)}...</p>
+                                    <p>{newsItem.title.slice(0, 70)}...</p>
                                     <span>{new Date(newsItem.createdAt).toLocaleDateString()}</span>
                                 </Link>
                             ))}

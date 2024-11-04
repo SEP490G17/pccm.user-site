@@ -39,7 +39,7 @@ function HomeNews({ title, itemsPerPage }: IProps) {
                                 <Link to={`/news/${news.id}`} key={news.id}>
                                     <Card
                                         hoverable
-                                        bodyStyle={{ padding: 0 }}
+                                        bodyStyle={{padding: 0}}
                                         className="news-card"
                                     >
                                         <div className="card-image-wrapper">

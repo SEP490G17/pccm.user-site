@@ -15,8 +15,8 @@ interface IProps {
 }
 
 function CourtClusterList({ title, itemsPerPage }: IProps) {
-    const { courtStore } = useStore();
-    const { listCourt, loadListCourt, loadingInitial } = courtStore;
+    const { courtClusterStore } = useStore();
+    const { listCourt, loadListCourt, loadingInitial } = courtClusterStore;
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -67,24 +67,24 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
                         <Row gutter={[16, 16]}>
                             {currentItems.map((c) => (
                                 <Col span={8}>
-                                    <Card hoverable className="court-card">
+                                    <Card hoverable className="court-card" style={{ height: '465px' }}>
                                         <Image src={c.images[0]} />
-                                        <div className="court-details">
-                                            <div className="court-info">
+                                        <div className="court-details" style={{ height: '100%' }}>
+                                            <div className="court-info" style={{ height: '100%' }}>
                                                 <Title level={5} className="overflow-hidden">{c.title}</Title>
                                                 <Paragraph>
-                                                    Khu vực: {c.location.thanhpho} - {c.location.tinh}
+                                                    Khu vực: {c.address}
                                                 </Paragraph>
-                                                <Paragraph className="service-paragraph">
-                                                    Dịch vụ: {c.services.slice(0, 2).map((service) => (
-                                                        <Tag key={service.id}>{service.name}</Tag>
+                                                <Paragraph className="service-paragraph" style={{ height: '25px' }}>
+                                                    {c.services.slice(0, 2).map((service) => (
+                                                        <Tag key={service.id}>{service.serviceName}</Tag>
                                                     ))}
                                                 </Paragraph>
-                                                <Paragraph className="product-paragraph">
-                                                    Sản phẩm: {c.products.slice(0, 2).map(product => product.name).join(', ')}
-                                                </Paragraph>
+                                                {/* <Paragraph className="product-paragraph">
+                                                    Sản phẩm: {c.products.slice(0, 2).map(product => product.productName).join(', ')}
+                                                </Paragraph> */}
                                                 <Row justify="space-between" align="middle" className="rating-row">
-                                                    <Paragraph>Số sân: {c.quantity}</Paragraph>
+                                                    <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>
                                                     <Row>
                                                         <FaStar className="text-yellow-500" color="#f7d03f" style={{ marginTop: '3px' }} />
                                                         <FaStar className="text-yellow-500" color="#f7d03f" style={{ marginTop: '3px' }} />
@@ -95,7 +95,13 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
                                                     </Row>
                                                 </Row>
                                             </div>
-                                            <Button className="book-button" onClick={() => navigate('/dat-san')}>
+                                            <Button
+                                                className="book-button"
+                                                onClick={async () => {
+                                                    await courtClusterStore.getDetailsCourtCluster(c.id.toString());
+                                                    navigate(`/dat-san/${c.id}`);
+                                                }}
+                                            >
                                                 Đặt ngay kẻo muộn
                                             </Button>
                                         </div>

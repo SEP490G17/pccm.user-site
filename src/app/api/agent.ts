@@ -4,6 +4,8 @@ import { store } from '../stores/store';
 import { toast } from 'react-toastify';
 import { sleep } from '../helper/utils';
 import { Banner } from '../models/banner.model';
+import { ICourtCluster } from '../models/courtcluster.model';
+import { INews } from '../models/news.model';
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
@@ -72,9 +74,20 @@ const Banners = {
   list: (): Promise<Banner[]> => requests.get(`/banner/usersite`),
 };
 
+const CourtClusters = {
+  list: (): Promise<ICourtCluster[]> => requests.get(`/courtCluster/list-all-usersite`),
+  details: (id: string): Promise<ICourtCluster> => requests.get(`/CourtCluster/usersite/${id}`),
+};
+
+const News = {
+  list: (): Promise<INews[]> => requests.get(`/News/usersite`),
+};
+
 const agent = {
   requests,
   Banners,
+  CourtClusters,
+  News,
 };
 
 export default agent;

@@ -1,8 +1,7 @@
-export interface News {
+export interface INews {
   id: number;
   thumbnail: string;
   title: string;
-  description: string;
   status: number;
   tags: string[];
   createdAt: string;

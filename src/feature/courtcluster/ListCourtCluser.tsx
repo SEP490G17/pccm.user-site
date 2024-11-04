@@ -18,8 +18,8 @@ interface IProps {
 }
 
 function ListCourtCluster({ itemsPerPage }: IProps) {
-    const { courtStore } = useStore();
-    const { listCourt, loadListCourt, loadingInitial } = courtStore;
+    const { courtClusterStore } = useStore();
+    const { listCourt, loadListCourt, loadingInitial } = courtClusterStore;
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -42,6 +42,11 @@ function ListCourtCluster({ itemsPerPage }: IProps) {
                     { title: "Sân thể thao", to: "/list-courtcluster" }
                 ]}
             />
+
+            <div className="banner-container">
+                <ListBanner title="" />
+            </div>
+
             <Row justify="space-between" align="middle" className="filter-row" style={{ marginBottom: "32px" }}>
                 <Col span={3}>
                     <Button type="primary" icon={<IoMdRefresh />} style={{ width: "100%", backgroundColor: 'green' }}>
@@ -81,9 +86,7 @@ function ListCourtCluster({ itemsPerPage }: IProps) {
                 </Col>
             </Row>
 
-            <div className="banner-container">
-                <ListBanner title="" />
-            </div>
+
 
             <Row gutter={[16, 16]} className="court-list">
                 {loadingInitial
@@ -100,18 +103,18 @@ function ListCourtCluster({ itemsPerPage }: IProps) {
                                     <div className="court-info">
                                         <Title level={5} className="court-title">{c.title}</Title>
                                         <Paragraph>
-                                            Khu vực: {c.location.thanhpho} - {c.location.tinh}
+                                            Khu vực: {c.address}
                                         </Paragraph>
-                                        <Paragraph className="service-paragraph">
-                                            Dịch vụ: {c.services.slice(0, 2).map((service) => (
-                                                <Tag key={service.id}>{service.name}</Tag>
+                                        <Paragraph className="service-paragraph" style={{ height: '25px' }}>
+                                            {c.services.slice(0, 2).map((service) => (
+                                                <Tag key={service.id}>{service.serviceName}</Tag>
                                             ))}
                                         </Paragraph>
-                                        <Paragraph className="product-paragraph">
-                                            Sản phẩm: {c.products.slice(0, 2).map(product => product.name).join(', ')}
-                                        </Paragraph>
+                                        {/* <Paragraph className="product-paragraph">
+                                            Sản phẩm: {c.products.slice(0, 2).map(product => product.productName).join(', ')}
+                                        </Paragraph> */}
                                         <Row justify="space-between" align="middle" className="rating-row">
-                                            <Paragraph>Số sân: {c.quantity}</Paragraph>
+                                            <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>
                                             <Row>
                                                 <FaStar className="text-yellow-500" color="#f7d03f" />
                                                 <FaStar className="text-yellow-500" color="#f7d03f" />

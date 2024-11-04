@@ -1,35 +1,40 @@
 export interface ICourtCluster {
   id: number;
+  courtClusterName: string;
   title: string;
-  location: ILocation;
-  ownerid: string;
+  address: string;
+  location: string;
   description: string;
   images: string[];
-  services: IServices[];
-  createAt: string;
-  openHours: string[];
-  addresss: string;
+  services: IService[];
+  openTime: string;
+  closeTime: string;
+  numbOfCourts: number;
+  products: IProduct[];
+}
+
+// export interface ILocation {
+//   tinh: string;
+//   thanhpho: string;
+//   diachi: string;
+// }
+
+export interface IService {
+  id: number;
+  serviceName: string;
+  price: number;
+  courtClusterName: string;
+  courtClusterId: number;
+  description: string;
+}
+
+export interface IProduct {
+  id: number;
+  productName: string;
   quantity: number;
-  products: IProducts[];
-}
-
-export interface IServices {
-  id: number;
-  name: string;
-}
-
-export interface IProducts {
-  category: ICategory[];
-  id: number;
-  name: string;
-}
-
-export interface ICategory {
-  id: number;
-  name: string;
-}
-export interface ILocation {
-  tinh: string;
-  thanhpho: string;
-  diachi: string;
+  priceBuy: number;
+  priceSell: number;
+  categoryName: string;
+  categoryId: number;
+  thumbnailUrl: string;
 }

@@ -45,7 +45,7 @@ export const routes: RouteObject[] = [
         element: <ProfilePage />
       },
       {
-        path: 'dat-san',
+        path: 'dat-san/:id',
         element: <BookingCourtPage />,
         children: [],
       }

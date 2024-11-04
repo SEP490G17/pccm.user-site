@@ -21,11 +21,11 @@ export default function DetailsCourtCard({ court }: IProps) {
         <tbody>
           <tr>
             <td>Giờ mở cửa:</td>
-            <td style={{textAlign: 'right'}}>{court?.openHours[0]} - {court?.openHours[1]}</td>
+            <td style={{textAlign: 'right'}}>{court?.openTime} - {court?.closeTime}</td>
           </tr>
           <tr>
             <td>Số sân thi đấu:</td>
-            <td>{court?.quantity} Sân</td>
+            <td>{court?.numbOfCourts} Sân</td>
           </tr>
           <tr>
             <td>Giá sân:</td>

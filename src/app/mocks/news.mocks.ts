@@ -56,5 +56,32 @@ export const listNewsMock: News[] = [
     status: 1,
     tags: ['Festival', 'Local'],
     createdAt: '2024-10-19',
+  },
+  {
+    id: 6,
+    thumbnail: image1,
+    title: 'Local Festival This Weekend',
+    description: 'A local festival will take place...',
+    status: 1,
+    tags: ['Festival', 'Local'],
+    createdAt: '2024-10-19',
+  },
+  {
+    id: 6,
+    thumbnail: image1,
+    title: 'Local Festival This Weekend',
+    description: 'A local festival will take place...',
+    status: 1,
+    tags: ['Festival', 'Local'],
+    createdAt: '2024-10-19',
+  },
+  {
+    id: 6,
+    thumbnail: image1,
+    title: 'Local Festival This Weekend',
+    description: 'A local festival will take place...',
+    status: 1,
+    tags: ['Festival', 'Local'],
+    createdAt: '2024-10-19',
   }
 ];

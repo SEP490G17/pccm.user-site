@@ -12,17 +12,17 @@ interface IProps {
     itemsPerPage: number
 }
 function ProductList({ title, itemsPerPage }: IProps) {
-    const { courtStore } = useStore();
-    const { listCourt, loadListCourt, loadingInitial } = courtStore;
+    const { courtClusterStore } = useStore();
+    const { listCourt1, loadListCourt, loadingInitial } = courtClusterStore;
     useEffect(() => {
         loadListCourt();
     }, []);
     const [currentPage, setCurrentPage] = useState(1);
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentItems = listCourt.slice(startIndex, startIndex + itemsPerPage);
+    const currentItems = listCourt1.slice(startIndex, startIndex + itemsPerPage);
 
     const hasPrevious = currentPage > 1;
-    const hasNext = startIndex + itemsPerPage < listCourt.length;
+    const hasNext = startIndex + itemsPerPage < listCourt1.length;
 
     const handleNext = () => {
         if (hasNext) {

@@ -4,9 +4,7 @@
 
 .banner-slide {
   position: relative;
-  height: 250px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 500px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -21,7 +19,6 @@
   bottom: 0;
   background-size: cover;
   background-position: center;
-  border-radius: 8px;
 }
 
 .banner-overlay {
@@ -30,9 +27,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
   z-index: 1;
-  border-radius: 8px;
 }
 
 .banner-content {
@@ -64,6 +59,7 @@
 .banner-button {
   background-color: green;
 }
+
 .banner-btn {
   text-align: right;
 }

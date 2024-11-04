@@ -1,14 +1,14 @@
-import { createContext, useContext } from "react";
-import CommonStore from "./commonStore";
-import CourtStore from "./courtStore";
-import BannerStore from "./bannerStore";
-import NewsStore from "./newsStore";
-import AuthStore from "./authStore";
-import BookingHistoryStore from "./bookinghistoryStore"
+import { createContext, useContext } from 'react';
+import CommonStore from './commonStore';
+import BannerStore from './bannerStore';
+import NewsStore from './newsStore';
+import AuthStore from './authStore';
+import BookingHistoryStore from './bookinghistoryStore';
+import courtClusterStore from './courtClusterStore';
 
 interface Store {
   commonStore: CommonStore;
-  courtStore: CourtStore;
+  courtClusterStore: courtClusterStore;
   bannerStore: BannerStore;
   newsStore: NewsStore;
   authStore: AuthStore;
@@ -16,12 +16,12 @@ interface Store {
 }
 
 export const store: Store = {
-  commonStore : new CommonStore(),
-  courtStore: new CourtStore(),
+  commonStore: new CommonStore(),
+  courtClusterStore: new courtClusterStore(),
   bannerStore: new BannerStore(),
   newsStore: new NewsStore(),
   authStore: new AuthStore(),
-  bookingHistoryStore : new BookingHistoryStore(),
+  bookingHistoryStore: new BookingHistoryStore(),
 };
 
 export const StoreContext = createContext(store);
