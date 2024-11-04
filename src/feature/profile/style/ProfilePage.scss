@@ -1,0 +1,47 @@
+.profile-page-container {
+  .avatar-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    .ant-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      overflow: hidden;
+    }
+  }
+  .ant-form-item-label {
+    width: 120px;
+  }
+
+  .form-container {
+    .form-row.compact {
+      display: flex;
+      width: 100%;
+
+      > .ant-form-item {
+        flex: 1;
+      }
+    }
+
+    .form-row {
+      display: flex;
+      width: 100%;
+      gap: 20%;
+    }
+
+    .ant-input,
+    .ant-picker,
+    .ant-select {
+      width: 100%;
+    }
+  }
+  .edit-button {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+}

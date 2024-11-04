@@ -94,7 +94,7 @@ const LoginPopUp: React.FC<LoginPopUpProps> = ({ visible, onClose }) => {
                                 </div>
                                 <span>or use your email for registration</span>
                                 <Form.Item name="username" rules={[{ required: true, message: 'Vui lòng nhập tên!' }]}>
-                                    <Input className={styles.input} onChange={(e) => setFieldValue('username', e.target.value)} placeholder="Name" />
+                                    <Input className={styles.input} onChange={(e) => setFieldValue('username', e.target.value)} placeholder="UserName" />
                                 </Form.Item>
                                 <Form.Item name="password" rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}>
                                     <Input.Password className={styles.input} onChange={(e) => setFieldValue('password', e.target.value)} placeholder="Password" />

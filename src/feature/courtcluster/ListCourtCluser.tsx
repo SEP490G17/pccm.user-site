@@ -1,13 +1,13 @@
 import { useStore } from "@/app/stores/store";
-import { Breadcrumb, Button, Card, Row, Col, Typography, Select, Input, Tag, Image } from "antd";
+import { Button, Card, Row, Col, Typography, Select, Input, Tag, Image } from "antd";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { IoMdRefresh } from "react-icons/io";
-import { Link } from 'react-router-dom';
 import ListBanner from '@/feature/home/components/HomeBanner';
 import Pagination from '@/feature/atoms/Pagination';
 import "./ListCourtCluster.scss";
+import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
@@ -36,14 +36,12 @@ function ListCourtCluster({ itemsPerPage }: IProps) {
 
     return (
         <div className="list-court-cluster">
-            <Breadcrumb className="breadcrumb">
-                <Breadcrumb.Item>
-                    <Link to="/home">Trang chủ</Link>
-                </Breadcrumb.Item>
-                <Breadcrumb.Item>
-                    <Link to="/listcourtcluster">Sân thể thao</Link>
-                </Breadcrumb.Item>
-            </Breadcrumb>
+            <PageHeadingAtoms
+                breadCrumb={[
+                    { title: "Trang chủ", to: "/home" },
+                    { title: "Sân thể thao", to: "/list-courtcluster" }
+                ]}
+            />
             <Row justify="space-between" align="middle" className="filter-row" style={{ marginBottom: "32px" }}>
                 <Col span={3}>
                     <Button type="primary" icon={<IoMdRefresh />} style={{ width: "100%", backgroundColor: 'green' }}>
@@ -87,7 +85,7 @@ function ListCourtCluster({ itemsPerPage }: IProps) {
                 <ListBanner title="" />
             </div>
 
-            <Row gutter={[16, 16]} justify="space-between" className="court-list">
+            <Row gutter={[16, 16]} className="court-list">
                 {loadingInitial
                     ? Array.from({ length: 4 }).map((_, i) => (
                         <Col key={i} span={5}>

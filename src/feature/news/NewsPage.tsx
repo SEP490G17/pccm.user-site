@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/app/stores/store';
-import { Breadcrumb, Skeleton, Row, Col, Button } from 'antd';
+import { Skeleton, Row, Col, Button } from 'antd';
+import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
 import { Link } from 'react-router-dom';
 import Pagination from '@/feature/atoms/Pagination';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
@@ -22,7 +23,7 @@ const NewsPage = () => {
 
 
     const hasRelatedPrevious = relatedNewsCurrentPage > 1;
-    const hasRelatedNext = relatedNewsCurrentPage < Math.ceil(shuffledNews.length / pageSize); 
+    const hasRelatedNext = relatedNewsCurrentPage < Math.ceil(shuffledNews.length / pageSize);
 
 
     const handleRelatedNext = () => {
@@ -39,15 +40,12 @@ const NewsPage = () => {
 
     return (
         <div className="news-page">
-            <Breadcrumb style={{ padding: '15px 0px' }} className="breadcrumb">
-                <Breadcrumb.Item>
-                    <Link to="/home">Trang chủ</Link>
-                </Breadcrumb.Item>
-                <Breadcrumb.Item>
-                    <Link to="/news">Tin tức</Link>
-                </Breadcrumb.Item>
-            </Breadcrumb>
-
+            <PageHeadingAtoms
+                breadCrumb={[
+                    { title: "Trang chủ", to: "/home" },
+                    { title: "Tin tức", to: "/news/" }
+                ]}
+            />
             <div className="news-main-section">
                 <div className="news-updates">
                     <h2 className="section-title">Tin tức mới cập nhật</h2>
@@ -80,7 +78,7 @@ const NewsPage = () => {
                 </div>
 
                 <div className="recent-posts">
-                    <h3 className="section-title recent-posts-title" style={{marginTop:'30px'}}>Bài viết gần đây</h3>
+                    <h3 className="section-title recent-posts-title" style={{ marginTop: '30px' }}>Bài viết gần đây</h3>
                     {newsStore.loadingInitial ? (
                         <Skeleton active title paragraph={{ rows: 3 }} />
                     ) : (
@@ -112,7 +110,7 @@ const NewsPage = () => {
                             </Col>
                         </Row>
                         <div className="related-news-list">
-                                {shuffledNews.slice((relatedNewsCurrentPage - 1) * relatedPageSize, relatedNewsCurrentPage * relatedPageSize).map((newsItem) => (
+                            {shuffledNews.slice((relatedNewsCurrentPage - 1) * relatedPageSize, relatedNewsCurrentPage * relatedPageSize).map((newsItem) => (
                                 <Link key={newsItem.id} to={`/news/${newsItem.id}`} className="related-news-item">
                                     <img src={newsItem.thumbnail || '/default-thumbnail.jpg'} alt={newsItem.title} />
                                     <h4>{newsItem.title}</h4>
