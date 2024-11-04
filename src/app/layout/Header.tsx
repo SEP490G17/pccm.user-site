@@ -76,7 +76,7 @@ const Header = () => {
 
 
     const menu = (
-        <Menu onClick={handleMenuClick}>
+        <Menu className='menu' onClick={handleMenuClick}>
             <Menu.Item key="viewProfile" icon={<UserOutlined />}>View Profile</Menu.Item>
             <Menu.Item key="viewHistory" icon={<HistoryOutlined />}>View History Booking</Menu.Item>
             <Menu.Item key="changePassword" icon={<KeyOutlined />}>Change Password</Menu.Item>
@@ -102,7 +102,7 @@ const Header = () => {
                         alt="Logo"
                     />
                     <Text className="header-title">
-                        Pickle ball
+                        Pickleball
                     </Text>
                 </Space>
 
@@ -128,7 +128,15 @@ const Header = () => {
                             {userProfile.phoneNumber}
                         </Text>
                     </div>
-                    <Dropdown overlay={menu} trigger={['click']}>
+                    <Dropdown
+                        className='dropdown'
+                        overlay={menu}
+                        trigger={['hover']}
+                        getPopupContainer={(triggerNode) => {
+                            const container = document.querySelector('.header-container') as HTMLElement;
+                            return container || triggerNode;
+                        }}
+                    >
                         <Button type="text" icon={<AntImage src={arrowDownIcon} width={24} height={24} preview={false} alt="Arrow Down" />} />
                     </Dropdown>
                 </Space>

@@ -3,7 +3,7 @@ import { router } from '../router/Routes';
 import { store } from '../stores/store';
 import { toast } from 'react-toastify';
 import { sleep } from '../helper/utils';
-
+import { Banner } from '../models/banner.model';
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
@@ -68,6 +68,13 @@ const requests = {
   del: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 };
 
-const agent = { requests};
+const Banners = {
+  list: (): Promise<Banner[]> => requests.get(`/banner/usersite`),
+};
+
+const agent = {
+  requests,
+  Banners,
+};
 
 export default agent;

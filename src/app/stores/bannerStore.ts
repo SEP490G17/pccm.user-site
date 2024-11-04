@@ -1,9 +1,10 @@
-import { makeAutoObservable, runInAction } from "mobx";
-import { listBannerMock } from "@/app/mocks/banner.mocks";
-import { Banner } from "../models/banner.model";
+import { makeAutoObservable, runInAction } from 'mobx';
+import { Banner } from '../models/banner.model';
+import agent from '../api/agent';
 
 export default class BannerStore {
-  listBanner: Banner[] = [];
+  bannerRegistry = new Map<number, Banner>();
+  bannerArray: Banner[] = [];
   loadingInitial: boolean = false;
 
   constructor() {
@@ -12,8 +13,8 @@ export default class BannerStore {
 
   loadListBanner = async () => {
     this.setLoadingInitial(true);
-    this.listBanner = [...listBannerMock];
     await runInAction(async () => {
+      this.bannerArray = await agent.Banners.list();
       this.setLoadingInitial(false);
     });
   };

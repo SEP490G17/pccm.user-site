@@ -63,7 +63,7 @@ function ProductList({ title, itemsPerPage }: IProps) {
                             <IoIosArrowBack />
                         </Button>
                         {currentItems.map((c) => (
-                            <Card key={c.id} className="court-card" hoverable>
+                            <Card key={c.id} className="court-card">
                                 <Image src={c.images[0]} width={"300px"} height={"200px"} />
                                 <div className="text-start">
                                     <Typography.Title
@@ -78,12 +78,12 @@ function ProductList({ title, itemsPerPage }: IProps) {
                                     <Row justify="space-between">
                                         <Typography.Paragraph>Số sân: 3</Typography.Paragraph>
                                         <Row>
-                                            <FaStar className="text-yellow-500" color="#f7d03f" style={{marginTop:'3px'}}/>
-                                            <FaStar className="text-yellow-500" color="#f7d03f" style={{marginTop:'3px'}}/>
-                                            <FaStar className="text-yellow-500" color="#f7d03f" style={{marginTop:'3px'}}/>
-                                            <FaStar className="text-yellow-500" color="#f7d03f" style={{marginTop:'3px'}}/>
-                                            <FaStarHalfAlt className="text-yellow-500" color="#f7d03f" style={{marginTop:'3px'}}/>
-                                            <Typography.Paragraph style={{marginLeft:'5px'}}>(4.5)</Typography.Paragraph>
+                                            <FaStar className="text-yellow-500" color="#f7d03f" style={{ marginTop: '3px' }} />
+                                            <FaStar className="text-yellow-500" color="#f7d03f" style={{ marginTop: '3px' }} />
+                                            <FaStar className="text-yellow-500" color="#f7d03f" style={{ marginTop: '3px' }} />
+                                            <FaStar className="text-yellow-500" color="#f7d03f" style={{ marginTop: '3px' }} />
+                                            <FaStarHalfAlt className="text-yellow-500" color="#f7d03f" style={{ marginTop: '3px' }} />
+                                            <Typography.Paragraph style={{ marginLeft: '5px' }}>(4.5)</Typography.Paragraph>
                                         </Row>
                                     </Row>
 

@@ -15,6 +15,10 @@ export const routes: RouteObject[] = [
     element: <MainLayout />,
     children: [
       {
+        path: '',
+        element: <HomePage />,
+      },
+      {
         path: 'home',
         element: <HomePage />,
       },
@@ -23,7 +27,7 @@ export const routes: RouteObject[] = [
         element: <NewsPage />
       },
       {
-        path: 'news/:id', 
+        path: 'news/:id',
         element: <NewsDetailPage />
       },
       {
@@ -36,7 +40,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'dat-san',
-        element: <BookingCourtPage/>,
+        element: <BookingCourtPage />,
         children: [],
       }
     ],

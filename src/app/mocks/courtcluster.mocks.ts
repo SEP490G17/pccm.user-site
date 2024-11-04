@@ -241,7 +241,7 @@ export const listCourtMock: ICourtCluster[] = [
   },
   {
        id: 9,
-    title: 'Sân Pickleball Việt Hà 01',
+    title: 'Sân Pickleball Việt Hà 09',
     location: {
       tinh: "Thừa Thiên Huế",
       thanhpho: "Thành phố Huế",
@@ -272,7 +272,7 @@ export const listCourtMock: ICourtCluster[] = [
   },
   {
     id: 10,
-    title: 'Sân Pickleball Việt Hà 02',
+    title: 'Sân Pickleball Việt Hà 10',
     location: {
       tinh: "Thừa Thiên Huế",
       thanhpho: "Thành phố Huế",
@@ -301,7 +301,7 @@ export const listCourtMock: ICourtCluster[] = [
   },
   {
     id: 11,
-    title: 'Sân Pickleball Việt Hà 03',
+    title: 'Sân Pickleball Việt Hà 11',
     location: {
       tinh: "Thừa Thiên Huế",
       thanhpho: "Thành phố Huế",
@@ -330,7 +330,7 @@ export const listCourtMock: ICourtCluster[] = [
   },
   {
     id: 12,
-    title: 'Sân Pickleball Việt Hà 04',
+    title: 'Sân Pickleball Việt Hà 12',
     location: {
       tinh: "Thừa Thiên Huế",
       thanhpho: "Thành phố Huế",
@@ -359,7 +359,7 @@ export const listCourtMock: ICourtCluster[] = [
   },
     {
     id: 13,
-    title: 'Sân Pickleball Việt Hà 05',
+    title: 'Sân Pickleball Việt Hà 13',
     location: {
       tinh: "Thừa Thiên Huế",
       thanhpho: "Thành phố Huế",
@@ -388,7 +388,7 @@ export const listCourtMock: ICourtCluster[] = [
   },
     {
     id: 14,
-    title: 'Sân Pickleball Việt Hà 06',
+    title: 'Sân Pickleball Việt Hà 14',
     location: {
       tinh: "Thừa Thiên Huế",
       thanhpho: "Thành phố Huế",
@@ -414,35 +414,5 @@ export const listCourtMock: ICourtCluster[] = [
       { id: 1, name: 'Trà đá', category: [{ id: 1, name: 'Đồ uống' }] },
       { id: 2, name: 'Bim bim', category: [{ id: 1, name: 'Đồ ăn' }] },
     ],
-  },
-    {
-    id: 15,
-    title: 'Sân Pickleball Việt Hà 07',
-    location: {
-      tinh: "Thừa Thiên Huế",
-      thanhpho: "Thành phố Huế",
-      diachi: "70 Nguyễn Huệ, Phường Vĩnh Ninh",
-    },
-    ownerid: 'admin',
-    description: 'sân pickleball',
-    images: [san1, san2, san3, san4],
-    services: [
-      { id: 1, name: 'Wifi' },
-      { id: 2, name: 'Bãi đỗ xe oto' },
-      { id: 3, name: 'Bãi đỗ xe máy' },
-      { id: 4, name: 'Căng tin' },
-      { id: 5, name: 'Trà đá' },
-      { id: 6, name: 'Đồ ăn' },
-      { id: 7, name: 'Nước uống' },
-    ],
-    createAt: '21/10/2024',
-    openHours: ['6:00', '23:00'],
-    addresss: 'https://maps.app.goo.gl/vRn4XHyqJGSiKvEm6',
-    quantity: 2,
-    products: [
-      { id: 1, name: 'Trà đá', category: [{ id: 1, name: 'Đồ uống' }] },
-      { id: 2, name: 'Bim bim', category: [{ id: 1, name: 'Đồ ăn' }] },
-    ],
-  },
-
+  }
 ];
