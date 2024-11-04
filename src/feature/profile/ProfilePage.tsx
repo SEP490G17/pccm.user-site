@@ -38,7 +38,7 @@ const ProfilePage: React.FC = () => {
             <div style={{ maxWidth: '70%', margin: 'auto' }}>
 
                 <div style={{ padding: '5%', backgroundColor: 'white', borderRadius: '8px' }}>
-                    <h1>Profile</h1>
+                    <h1>View Profile</h1>
                     <Formik
                         initialValues={{
                             userName: userProfile.userName,
@@ -59,29 +59,33 @@ const ProfilePage: React.FC = () => {
                     >
                         {({ values, handleChange, handleSubmit, setFieldTouched, errors, setFieldValue }) => (
                             <form onSubmit={handleSubmit} className="form-container">
-                                {/* Avatar Section */}
                                 <div className="avatar-section">
                                     <Upload
                                         name="avatar"
                                         showUploadList={false}
                                         onChange={(info) => {
                                             if (info.file.status === 'done') {
-                                                // Handle uploaded image update here
+                                                // Xử lý cập nhật ảnh tải lên
                                             }
                                         }}
                                         disabled={!isEditing}
                                     >
-                                        <Avatar
-                                            size={100}
-                                            src={userProfile.avatar || ''}
-                                            icon={isEditing ? <EditOutlined /> : undefined}
-                                            style={{ cursor: isEditing ? 'pointer' : 'default' }}
-                                        />
+                                        <div className="avatar-wrapper">
+                                            <Avatar
+                                                size={100}
+                                                src={userProfile.avatar || ''}
+                                                style={{ cursor: isEditing ? 'pointer' : 'default' }}
+                                            />
+                                            {isEditing && (
+                                                <div className="avatar-overlay">
+                                                    <EditOutlined style={{ fontSize: '24px', color: 'white' }} />
+                                                    <span>Choose</span>
+                                                </div>
+                                            )}
+                                        </div>
                                     </Upload>
                                 </div>
-
-                                {/* User Name */}
-                                <Form.Item label="User Name" help={errors.userName && <div className="error">{errors.userName}</div>}>
+                                <Form.Item label="Tên Người Dùng" help={errors.userName && <div className="error">{errors.userName}</div>}>
                                     <Input
                                         name="userName"
                                         onChange={handleChange}
@@ -90,9 +94,6 @@ const ProfilePage: React.FC = () => {
                                         onBlur={() => setFieldTouched('userName')}
                                     />
                                 </Form.Item>
-
-                                {/* Other Fields */}
-                                {/* Email and Phone Row */}
                                 <div className="form-row compact">
                                     <Form.Item label="Email" help={errors.email && <div className="error">{errors.email}</div>}>
                                         <Input
@@ -103,7 +104,7 @@ const ProfilePage: React.FC = () => {
                                             onBlur={() => setFieldTouched('email')}
                                         />
                                     </Form.Item>
-                                    <Form.Item label="Phone" help={errors.phone && <div className="error">{errors.phone}</div>}>
+                                    <Form.Item label="Số Điện Thoại" help={errors.phone && <div className="error">{errors.phone}</div>}>
                                         <Input
                                             name="phone"
                                             onChange={handleChange}
@@ -113,10 +114,8 @@ const ProfilePage: React.FC = () => {
                                         />
                                     </Form.Item>
                                 </div>
-
-                                {/* Birthday and Gender Row */}
                                 <div className="form-row compact">
-                                    <Form.Item label="Birthday" help={errors.birthday && <div className="error">{errors.birthday}</div>}>
+                                    <Form.Item label="Ngày sinh" help={errors.birthday && <div className="error">{errors.birthday}</div>}>
                                         <DatePicker
                                             name="birthday"
                                             onChange={(date) => setFieldValue('birthday', date)}
@@ -124,7 +123,7 @@ const ProfilePage: React.FC = () => {
                                             disabled={!isEditing}
                                         />
                                     </Form.Item>
-                                    <Form.Item label="Gender" help={errors.gender && <div className="error">{errors.gender}</div>}>
+                                    <Form.Item label="Giới Tính" help={errors.gender && <div className="error">{errors.gender}</div>}>
                                         <Select
                                             onChange={(value) => setFieldValue('gender', value)}
                                             value={values.gender}
@@ -136,9 +135,7 @@ const ProfilePage: React.FC = () => {
                                         </Select>
                                     </Form.Item>
                                 </div>
-
-                                {/* Address */}
-                                <Form.Item label="Address" help={errors.address && <div className="error">{errors.address}</div>}>
+                                <Form.Item label="Địa Chỉ" help={errors.address && <div className="error">{errors.address}</div>}>
                                     <Input
                                         name="address"
                                         onChange={handleChange}

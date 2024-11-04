@@ -41,7 +41,7 @@ const ChangePasswordPopUp: React.FC<ChangePasswordPopUpProps> = ({ visible, onCl
                 {({ values, handleChange, handleSubmit, errors, touched }) => (
                     <form onSubmit={handleSubmit} className="modal-body">
                         <Form.Item
-                            label="Current Password"
+                            label="Mật khẩu cũ"
                             help={errors.currentPassword && touched.currentPassword ? errors.currentPassword : null}
                             validateStatus={touched.currentPassword && errors.currentPassword ? 'error' : ''}
                         >
@@ -53,7 +53,7 @@ const ChangePasswordPopUp: React.FC<ChangePasswordPopUpProps> = ({ visible, onCl
                         </Form.Item>
 
                         <Form.Item
-                            label="New Password"
+                            label="Mật khẩu mới"
                             help={errors.newPassword && touched.newPassword ? errors.newPassword : null}
                             validateStatus={touched.newPassword && errors.newPassword ? 'error' : ''}
                         >
@@ -65,7 +65,7 @@ const ChangePasswordPopUp: React.FC<ChangePasswordPopUpProps> = ({ visible, onCl
                         </Form.Item>
 
                         <Form.Item
-                            label="Confirm New Password"
+                            label="Nhập lại mật khẩu mới"
                             help={errors.confirmPassword && touched.confirmPassword ? errors.confirmPassword : null}
                             validateStatus={touched.confirmPassword && errors.confirmPassword ? 'error' : ''}
                         >
