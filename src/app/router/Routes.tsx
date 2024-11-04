@@ -30,7 +30,6 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'news/:id',
-        path: 'news/:id',
         element: <NewsDetailPage />
       },
       {
@@ -47,7 +46,6 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'dat-san',
-        element: <BookingCourtPage />,
         element: <BookingCourtPage />,
         children: [],
       }

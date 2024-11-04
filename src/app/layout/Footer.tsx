@@ -116,12 +116,12 @@ const AppFooter = () => {
                     </Row>
                     <Divider className="footer-divider" />
                     <Text className="footer-copyright">
-                        © 2023 Thế Giới Thể Thao. All Rights Reserved.
+                        © 2024 Thế Giới Thể Thao. All Rights Reserved.
                     </Text>
                 </Footer>
-                <div className="footer-red">
+                {/* <div className="footer-red">
                     <Text>SEP490 - TruongBQ,VuNBL,TrongNP,HUNGNT,HieuPM</Text>
-                </div>
+                </div> */}
             </Layout>
         </>
     );

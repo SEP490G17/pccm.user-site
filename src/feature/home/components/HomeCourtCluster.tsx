@@ -1,18 +1,20 @@
 import { useStore } from "@/app/stores/store";
-import { Button, Card, Row, Col, Skeleton, Typography, Select, Tag, Image, Space } from "antd";
+import { Button, Card, Row, Col, Skeleton, Typography, Tag, Image, Space } from "antd";
 import { observer } from "mobx-react-lite";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import './style/HomeCourtCluster.scss';
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 const { Title, Paragraph } = Typography;
 
 interface IProps {
     title: string,
+    itemsPerPage: number
 }
 
-function CourtClusterList({ title }: IProps) {
+function CourtClusterList({ title, itemsPerPage }: IProps) {
     const { courtStore } = useStore();
     const { listCourt, loadListCourt, loadingInitial } = courtStore;
     const navigate = useNavigate();

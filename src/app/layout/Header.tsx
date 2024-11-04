@@ -1,4 +1,4 @@
-import { Avatar, Button, Input, Typography, Space, Dropdown, Menu, Divider } from 'antd';
+import { Avatar, Button, Input, Typography, Space, Dropdown, Menu, Divider, Image } from 'antd';
 import { SearchOutlined, LogoutOutlined, UserOutlined, HistoryOutlined, KeyOutlined } from '@ant-design/icons';
 import logo from '@/assets/pickerball-icon.png';
 import notificationIcon from '@/assets/notification.svg';
@@ -71,9 +71,7 @@ const Header = () => {
         <>
             <div className="header-container">
                 <Space align="center">
-                    <img src={logo} width="65" height="45" alt="Logo" />
-                    <Text className="header-title">Pickle ball</Text>
-                    <AntImage
+                    <Image
                         preview={false}
                         src={logo}
                         width={'4.0345rem'}
@@ -128,7 +126,7 @@ const Header = () => {
                             return container || triggerNode;
                         }}
                     >
-                        <Button type="text" icon={<AntImage src={arrowDownIcon} width={24} height={24} preview={false} alt="Arrow Down" />} />
+                        <Button type="text" icon={<Image src={arrowDownIcon} width={24} height={24} preview={false} alt="Arrow Down" />} />
                     </Dropdown>
                 </Space>
             </div>
