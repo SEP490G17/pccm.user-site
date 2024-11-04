@@ -48,7 +48,7 @@ function HomeNews({ title, itemsPerPage }: IProps) {
                                                 alt={news.title}
                                                 className="news-card-image"
                                                 loading="lazy"
-                                                preview = {false}
+                                                preview={false}
                                             />
                                         </div>
                                         <div className="card-content">
@@ -83,7 +83,7 @@ function HomeNews({ title, itemsPerPage }: IProps) {
                 )}
             </Row>
 
-            <Row justify="center" style={{ marginTop: '16px' }}>
+            <Row justify="center">
                 <Button
                     type="primary"
                     className="view-more-btn"

@@ -1,9 +1,8 @@
 import { useStore } from "@/app/stores/store";
 import { Button, Card, Row, Col, Skeleton, Typography, Select, Tag, Image, Space } from "antd";
 import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
 import './style/HomeCourtCluster.scss';
 
@@ -11,10 +10,9 @@ const { Title, Paragraph } = Typography;
 
 interface IProps {
     title: string,
-    itemsPerPage: number
 }
 
-function CourtClusterList({ title, itemsPerPage }: IProps) {
+function CourtClusterList({ title }: IProps) {
     const { courtStore } = useStore();
     const { listCourt, loadListCourt, loadingInitial } = courtStore;
     const navigate = useNavigate();
@@ -53,11 +51,6 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
         <>
             <Row justify="space-between" align="middle" style={{ marginBottom: '16px' }}>
                 <Title level={3}>{title}</Title>
-                <Select placeholder="Chọn vị trí" style={{ maxWidth: '300px' }}>
-                    <Select.Option value="Hà Nội">Hà Nội</Select.Option>
-                    <Select.Option value="Hồ Chí Minh">Hồ Chí Minh</Select.Option>
-                    <Select.Option value="Đà Nẵng">Đà Nẵng</Select.Option>
-                </Select>
             </Row>
             <Row justify="space-between">
                 {loadingInitial ? (

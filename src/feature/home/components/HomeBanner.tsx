@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { Banner } from "@/app/models/banner.model";
 import "./style/HomeBanner.scss";
+import "./style/HomeBanner.scss";
 
 interface IProps {
     title: string;

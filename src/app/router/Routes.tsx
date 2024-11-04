@@ -5,7 +5,9 @@ import HomePage from '@/feature/home/HomePage';
 import NewsPage from '@/feature/news/NewsPage';
 import NewsDetailPage from '@/feature/news/NewsDetailPage';
 import ListCourtCluser from '@/feature/courtcluster/ListCourtCluser';
-import BookingHistoryPage from '@/feature/booking/BookingHistoryPage'
+import BookingHistoryPage from '@/feature/booking/BookingHistoryPage';
+import ProfilePage from '@/feature/profile/ProfilePage'
+
 
 
 export const routes: RouteObject[] = [
@@ -28,6 +30,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'news/:id',
+        path: 'news/:id',
         element: <NewsDetailPage />
       },
       {
@@ -39,7 +42,12 @@ export const routes: RouteObject[] = [
         element: <BookingHistoryPage />
       },
       {
+        path: 'view-profile',
+        element: <ProfilePage />
+      },
+      {
         path: 'dat-san',
+        element: <BookingCourtPage />,
         element: <BookingCourtPage />,
         children: [],
       }
