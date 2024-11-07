@@ -50,3 +50,11 @@
     font-size: 1.05rem;
     font-weight: 400;
 }
+
+.header-text {
+    transition: color 0.3s ease;
+}
+
+.header-item:hover .header-text {
+    color: red;
+}

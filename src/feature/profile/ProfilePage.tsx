@@ -32,13 +32,13 @@ const ProfilePage: React.FC = () => {
             <PageHeadingAtoms
                 breadCrumb={[
                     { title: "Trang chủ", to: "/home" },
-                    { title: "ViewProfile", to: "/view-profile/" }
+                    { title: "Thông tin cá nhân", to: "/view-profile/" }
                 ]}
             />
             <div style={{ maxWidth: '70%', margin: 'auto' }}>
 
                 <div style={{ padding: '5%', backgroundColor: 'white', borderRadius: '8px' }}>
-                    <h1>View Profile</h1>
+                    <h1>Sửa thông tin</h1>
                     <Formik
                         initialValues={{
                             userName: userProfile.userName,
@@ -52,7 +52,7 @@ const ProfilePage: React.FC = () => {
                         onSubmit={(values) => {
                             handleUpdateProfile({
                                 ...values,
-                                birthday: values.birthday ? values.birthday.format('YYYY-MM-DD') : '',
+                                birthday: values.birthday ? values.birthday.format('DD-MM-YYYY') : '',
                             });
                             setEditing(false);
                         }}
@@ -79,7 +79,6 @@ const ProfilePage: React.FC = () => {
                                             {isEditing && (
                                                 <div className="avatar-overlay">
                                                     <EditOutlined style={{ fontSize: '24px', color: 'white' }} />
-                                                    <span>Choose</span>
                                                 </div>
                                             )}
                                         </div>

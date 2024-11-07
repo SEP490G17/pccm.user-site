@@ -1,11 +1,12 @@
 import { useStore } from "@/app/stores/store";
-import { Button, Card, Row, Col, Skeleton, Typography, Tag, Image, Space } from "antd";
+import { Button, Card, Row, Col, Skeleton, Typography, Tag, Image, Space, Flex } from "antd";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import './style/HomeCourtCluster.scss';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import CourtBookingForm from "@/feature/booking/BookingForm";
 
 const { Title, Paragraph } = Typography;
 
@@ -18,6 +19,16 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
     const { courtClusterStore } = useStore();
     const { listCourt, loadListCourt, loadingInitial } = courtClusterStore;
     const navigate = useNavigate();
+
+    const courts = [
+        { id: 'court1', name: 'Sân 1', number: 1, availableSlots: ['10:00 - 13:00', '15:00 - 20:00'] },
+        { id: 'court2', name: 'Sân 2', number: 2, availableSlots: ['09:00 - 12:00', '14:00 - 20:00'] },
+        { id: 'court3', name: 'Sân 3', number: 3, availableSlots: ['09:00 - 10:00', '12:00 - 15:00', '17:00 - 20:00'] },
+    ];
+
+    const handleBook = (values) => {
+        console.log(`Đã đặt sân ID: ${values.court} vào lúc ${values.timeSlot}`);
+    };
 
     useEffect(() => {
         loadListCourt();
@@ -95,15 +106,23 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
                                                     </Row>
                                                 </Row>
                                             </div>
-                                            <Button
-                                                className="book-button"
-                                                onClick={async () => {
-                                                    await courtClusterStore.getDetailsCourtCluster(c.id.toString());
-                                                    navigate(`/dat-san/${c.id}`);
-                                                }}
-                                            >
-                                                Đặt ngay kẻo muộn
-                                            </Button>
+                                            <Flex justify="space-between">
+                                                <CourtBookingForm
+                                                    courts={courts}
+                                                    onBook={handleBook} >
+
+                                                </CourtBookingForm>
+                                                <Button
+                                                    className="book-button"
+                                                    onClick={async () => {
+                                                        await courtClusterStore.getDetailsCourtCluster(c.id.toString());
+                                                        navigate(`/dat-san/${c.id}`);
+                                                    }}
+                                                >
+                                                    Đặt ngay kẻo muộn
+                                                </Button>
+                                            </Flex>
+
                                         </div>
                                     </Card>
                                 </Col>

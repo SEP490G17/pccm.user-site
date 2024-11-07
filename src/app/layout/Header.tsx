@@ -1,9 +1,6 @@
-import { Avatar, Button, Input, Typography, Space, Dropdown, Menu, Divider, Image } from 'antd';
+import { Avatar, Input, Typography, Space, Dropdown, Menu, Divider, Image, Flex, Row, Col } from 'antd';
 import { SearchOutlined, LogoutOutlined, UserOutlined, HistoryOutlined, KeyOutlined } from '@ant-design/icons';
 import logo from '@/assets/pickerball-icon.png';
-import notificationIcon from '@/assets/notification.svg';
-import defaultUserIcon from '@/assets/defaultUser.png';
-import arrowDownIcon from '@/assets/arrow-down.svg';
 import listCourtIcon from '@/assets/san_the_thao1.gif';
 import { observer } from 'mobx-react-lite';
 import { useState, useEffect } from 'react';
@@ -11,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import ChangePasswordPopUp from '@/feature/profile/ChangePasswordPopUp';
 import LoginPopUp from '@/feature/login/LoginPopUp';
 import './style/Header.scss';
+import { useStore } from '../stores/store';
 
 const { Text } = Typography;
 
@@ -21,6 +19,8 @@ const Header = () => {
     const [charIndex, setCharIndex] = useState(0);
     const [isLoginModalVisible, setLoginModalVisible] = useState(false);
     const [isChangePasswordModalVisible, setChangePasswordModalVisible] = useState(false);
+    const { authStore } = useStore();
+    const { userApp, logout } = authStore;
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -54,23 +54,41 @@ const Header = () => {
         } else if (key === "changePassword") {
             setChangePasswordModalVisible(true);
         }
+        else if (key === "logout") {
+            logout();
+        }
     };
 
     const menu = (
-        <Menu className='menu' onClick={handleMenuClick}>
-            <Menu.Item key="viewProfile" icon={<UserOutlined />}>View Profile</Menu.Item>
-            <Menu.Item key="viewHistory" icon={<HistoryOutlined />}>View History Booking</Menu.Item>
-            <Menu.Item key="changePassword" icon={<KeyOutlined />}>Change Password</Menu.Item>
+        <Menu className="menu" onClick={handleMenuClick}>
+
+            <Menu.Item key="viewProfile" icon={<UserOutlined />}>
+                Thông tin cá nhân
+            </Menu.Item>
+            <Menu.Item key="viewHistory" icon={<HistoryOutlined />}>
+                Lịch sử đặt sân
+            </Menu.Item>
+            <Menu.Item key="changePassword" icon={<KeyOutlined />}>
+                Đổi mật khẩu
+            </Menu.Item>
             <Divider style={{ margin: '4px 0' }} />
-            <Menu.Item key="login" icon={<UserOutlined />}>Login</Menu.Item>
-            <Menu.Item key="logout" icon={<LogoutOutlined />}>Logout</Menu.Item>
+            {!userApp && (
+                <Menu.Item key="login" icon={<UserOutlined />}>
+                    Đăng nhập
+                </Menu.Item>
+            )}
+            {userApp && (
+                <Menu.Item key="logout" icon={<LogoutOutlined />}>
+                    Đăng xuất
+                </Menu.Item>
+            )}
         </Menu>
     );
 
     return (
         <>
-            <div className="header-container">
-                <Space align="center">
+            <div className="header-container" style={{ padding: '0 50px' }}>
+                <Space align="center" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
                     <Image
                         preview={false}
                         src={logo}
@@ -90,44 +108,51 @@ const Header = () => {
                         suffix={<SearchOutlined onClick={handleSearch} />}
                     />
                 </Space>
-
-                <Space size={20}>
-                    <Space
-                        style={{
-                            display: 'inline-flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            gap: '0.625rem',
-                            borderRadius: '100%',
-                            border: '1px solid #63748A',
-                            padding: '0.1rem',
-                        }}
-                    >
-                        <Avatar
-                            shape="circle"
-                            style={{ backgroundColor: 'transparent', border: 'none' }}
-                            icon={<img src={notificationIcon} width={24} height={24} alt="Notifications" />}
-                        />
-                    </Space>
-                    <Button type="text" onClick={() => navigate('/list-courtcluster')}>
-                        <img src={listCourtIcon} width={40} height={30} alt="List Courts" />
-                    </Button>
-                    <Avatar src={defaultUserIcon} size={52} alt="User Avatar" />
-                    <div>
-                        <Text className="header-user-fullname">John Doe</Text>
-                        <Text className="header-user-phone">+123456789</Text>
-                    </div>
-                    <Dropdown
-                        className='dropdown'
-                        overlay={menu}
-                        trigger={['hover']}
-                        getPopupContainer={(triggerNode) => {
-                            const container = document.querySelector('.header-container') as HTMLElement;
-                            return container || triggerNode;
-                        }}
-                    >
-                        <Button type="text" icon={<Image src={arrowDownIcon} width={24} height={24} preview={false} alt="Arrow Down" />} />
-                    </Dropdown>
+                <Space size={40} align="center">
+                    <Row gutter={[16, 16]}>
+                        <Col span={24}>
+                            <div className="header-item" onClick={() => navigate('/list-courtcluster')} style={{ cursor: "pointer" }}>
+                                <Flex vertical align="center">
+                                    <Image
+                                        preview={false}
+                                        src={listCourtIcon}
+                                        width={30}
+                                        height={24}
+                                        alt="Sân thể thao"
+                                    />
+                                    <Text className="header-text">Sân thể thao</Text>
+                                </Flex>
+                            </div>
+                        </Col>
+                    </Row>
+                    <Col span={24}>
+                        <Dropdown
+                            className="dropdown"
+                            overlay={menu}
+                            trigger={['hover']}
+                            getPopupContainer={(triggerNode) => {
+                                const container = document.querySelector('.header-container') as HTMLElement;
+                                return container || triggerNode;
+                            }}
+                        >
+                            <div className="header-item" style={{ cursor: "pointer", width: '100%' }}>
+                                <Flex vertical align="center">
+                                    {!userApp && (
+                                        <>
+                                            <Avatar size={24} alt="Tài khoản" />
+                                            <Text className="header-text">Tài khoản</Text>
+                                        </>
+                                    )}
+                                    {userApp && (
+                                        <>
+                                            <Avatar size={24} alt="Tài khoản" src={userApp.image} />
+                                            <Text className="header-text">{userApp.displayName}</Text>
+                                        </>
+                                    )}
+                                </Flex>
+                            </div>
+                        </Dropdown>
+                    </Col>
                 </Space>
             </div>
             <LoginPopUp visible={isLoginModalVisible} onClose={() => setLoginModalVisible(false)} />

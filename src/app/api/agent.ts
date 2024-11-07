@@ -6,6 +6,8 @@ import { sleep } from '../helper/utils';
 import { Banner } from '../models/banner.model';
 import { ICourtCluster } from '../models/courtcluster.model';
 import { INews } from '../models/news.model';
+import { LoginDto, RegisterDto } from '../models/account.model';
+import { User } from '../models/user.model';
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
@@ -83,11 +85,17 @@ const News = {
   list: (): Promise<INews[]> => requests.get(`/News/usersite`),
 };
 
+const Account = {
+  register: (value: RegisterDto): Promise<void> => requests.post(`/Account/register`, value),
+  login: (value: LoginDto): Promise<User> => requests.post(`/Account/login`, value),
+};
+
 const agent = {
   requests,
   Banners,
   CourtClusters,
   News,
+  Account,
 };
 
 export default agent;

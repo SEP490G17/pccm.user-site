@@ -3,6 +3,7 @@ import { Layout } from 'antd';
 import Header from './Header';
 import Footer from './Footer';
 import { observer } from 'mobx-react-lite';
+import { ToastContainer } from 'react-toastify';
 
 const { Content } = Layout;
 
@@ -23,6 +24,7 @@ const App = () => {
                 <Header />
             </Layout.Header>
 
+
             <Content
                 style={{
                     background: '#F5F6F7',
@@ -34,9 +36,11 @@ const App = () => {
                     paddingRight: 0,
                 }}
             >
+
                 <Outlet />
             </Content>
 
+            <ToastContainer style={{paddingTop:'80px'}} position="top-right" hideProgressBar theme="colored" />
             <Layout.Footer
                 style={{
                     width: '100%',

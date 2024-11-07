@@ -5,6 +5,7 @@ import NewsStore from './newsStore';
 import AuthStore from './authStore';
 import BookingHistoryStore from './bookinghistoryStore';
 import courtClusterStore from './courtClusterStore';
+import AccountStore from './accountStore';
 
 interface Store {
   commonStore: CommonStore;
@@ -13,6 +14,7 @@ interface Store {
   newsStore: NewsStore;
   authStore: AuthStore;
   bookingHistoryStore: BookingHistoryStore;
+  accountStore: AccountStore;
 }
 
 export const store: Store = {
@@ -22,6 +24,7 @@ export const store: Store = {
   newsStore: new NewsStore(),
   authStore: new AuthStore(),
   bookingHistoryStore: new BookingHistoryStore(),
+  accountStore: new AccountStore(),
 };
 
 export const StoreContext = createContext(store);

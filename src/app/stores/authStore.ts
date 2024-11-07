@@ -1,45 +1,65 @@
 import { makeAutoObservable } from 'mobx';
 import { User } from '../models/user.model';
-import { router } from '../router/Routes';
+import { LoginDto } from '../models/account.model';
+import agent from '../api/agent';
+
+const SESSION_EXPIRATION_TIME = 3600 * 1000;
 
 export default class AuthStore {
-    userApp: User | null = null;
-    rememberMe: boolean = false;
+  userApp: User | null = null;
+  rememberMe: boolean = false;
+  loadingLogin: boolean = false;
 
-    constructor() {
-        makeAutoObservable(this);
+  constructor() {
+    makeAutoObservable(this);
+
+    const savedUser = localStorage.getItem('userApp');
+    if (savedUser) {
+      const data = JSON.parse(savedUser);
+      this.userApp = data.user;
     }
+  }
 
-    get isLoggedIn() {
-        return !!this.userApp;
+  get isLoggedIn() {
+    return !!this.userApp;
+  }
+
+  setRememberMe = () => {
+    this.rememberMe = !this.rememberMe;
+  };
+
+  // Mock login function
+  login = async (data: LoginDto) => {
+    this.loadingLogin = true;
+    this.userApp = await agent.Account.login(data).finally(() => (this.loadingLogin = false));
+
+    if (this.userApp) {
+      const sessionData = {
+        user: this.userApp,
+        expiration: Date.now() + SESSION_EXPIRATION_TIME,
+      };
+      localStorage.setItem('userApp', JSON.stringify(sessionData));
     }
+  };
 
-    setRememberMe = () => {
-        this.rememberMe = !this.rememberMe;
-        console.log(this.rememberMe);
-    };
+  loadUserFromLocalStorage = () => {
+    const savedSession = localStorage.getItem('userApp');
+    if (savedSession) {
+      const sessionData = JSON.parse(savedSession);
+      if (sessionData.expiration > Date.now()) {
+        this.userApp = sessionData.user;
+      } else {
+        this.clearUserFromLocalStorage();
+      }
+    }
+  };
 
-    // Mock login function
-    login = async (creds: { username: string; password: string }) => {
-        const mockUsername = 'testuser';
-        const mockPassword = 'testpass';
+  clearUserFromLocalStorage = () => {
+    localStorage.removeItem('userApp');
+    this.userApp = null;
+  };
 
-        // Simulate validation
-        if (creds.username === mockUsername && creds.password === mockPassword) {
-            this.userApp = {
-                username: mockUsername,
-                displayName: 'Test User', // Mock display name
-                token: 'mock-token-12345', // Mock token
-                // Include any additional properties required by the User interface
-            };
-            router.navigate('/');
-        } else {
-            throw new Error('Invalid credentials');
-        }
-    };
-
-    logout = () => {
-        this.userApp = null;
-        router.navigate('/login');
-    };
+  logout = () => {
+    this.clearUserFromLocalStorage();
+  };
 }

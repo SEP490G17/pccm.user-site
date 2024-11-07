@@ -7,6 +7,7 @@ import NewsDetailPage from '@/feature/news/NewsDetailPage';
 import ListCourtCluser from '@/feature/courtcluster/ListCourtCluser';
 import BookingHistoryPage from '@/feature/booking/BookingHistoryPage';
 import ProfilePage from '@/feature/profile/ProfilePage'
+import RegisterPage from '@/feature/login/RegisterPage';
 
 
 
@@ -43,6 +44,10 @@ export const routes: RouteObject[] = [
       {
         path: 'view-profile',
         element: <ProfilePage />
+      },
+      {
+        path: 'register',
+        element: <RegisterPage />
       },
       {
         path: 'dat-san/:id',
