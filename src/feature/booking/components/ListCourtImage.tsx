@@ -12,7 +12,7 @@ export default function ListCourtImage({ images }: IProps) {
           <Image
             src={images?.[0]}
             width="100%"
-            height="405px"
+            height="410px"
             className="rounded-lg object-cover"
           />
         </Col>

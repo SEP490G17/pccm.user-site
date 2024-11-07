@@ -3,7 +3,12 @@ export interface ICourtCluster {
   courtClusterName: string;
   title: string;
   address: string;
-  location: string;
+  province: string;
+  provinceName: string;
+  district: string;
+  districtName: string;
+  ward: string;
+  wardName: string;
   description: string;
   images: string[];
   services: IService[];

@@ -7,10 +7,13 @@ import dayjs from 'dayjs';
 import { EditOutlined } from '@ant-design/icons';
 import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
 import './style/ProfilePage.scss';
+import { useStore } from '@/app/stores/store';
 
 const { Option } = Select;
 
 const ProfilePage: React.FC = () => {
+    const { uploadStore } = useStore()
+    const { upImage } = uploadStore
     const [isEditing, setEditing] = useState(false);
     const [userProfile, setUserProfile] = useState<UserProfile>(userProfileMock);
 
@@ -38,7 +41,7 @@ const ProfilePage: React.FC = () => {
             <div style={{ maxWidth: '70%', margin: 'auto' }}>
 
                 <div style={{ padding: '5%', backgroundColor: 'white', borderRadius: '8px' }}>
-                    <h1>Sửa thông tin</h1>
+                    <h1>Thay đổi thông tin</h1>
                     <Formik
                         initialValues={{
                             userName: userProfile.userName,
@@ -61,11 +64,12 @@ const ProfilePage: React.FC = () => {
                             <form onSubmit={handleSubmit} className="form-container">
                                 <div className="avatar-section">
                                     <Upload
+                                        accept='image/*'
                                         name="avatar"
                                         showUploadList={false}
                                         onChange={(info) => {
                                             if (info.file.status === 'done') {
-                                                // Xử lý cập nhật ảnh tải lên
+                                                upImage(info.file, info.file.fileName)
                                             }
                                         }}
                                         disabled={!isEditing}

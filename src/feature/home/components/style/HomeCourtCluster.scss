@@ -80,13 +80,14 @@
 
 .book-button {
   width: 48%;
-  background-color: green;
+  background-color: #115363;
   color: white;
   border: none;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: darkgreen;
+    border-color: black !important;
+    color: black !important;
   }
 }
 

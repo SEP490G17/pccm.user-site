@@ -8,6 +8,8 @@ import { ICourtCluster } from '../models/courtcluster.model';
 import { INews } from '../models/news.model';
 import { LoginDto, RegisterDto } from '../models/account.model';
 import { User } from '../models/user.model';
+import { ImageUpload } from '../models/upload.model';
+import { IBookingModel, ISlots } from '../models/booking.model';
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
@@ -90,12 +92,26 @@ const Account = {
   login: (value: LoginDto): Promise<User> => requests.post(`/Account/login`, value),
 };
 
+const Upload = {
+  post: (file: FormData): Promise<ImageUpload> => requests.post(`/upload`, file),
+};
+
+const Booking = {
+  slots: (data: ISlots): Promise<any> =>
+    requests.get(
+      `/Booking/available-slots?date=${data.date}&courtClusterId=${data.courtClusterId}`,
+    ),
+  create: (data: IBookingModel): Promise<any> => requests.post(`/booking`, data),
+};
+
 const agent = {
   requests,
   Banners,
   CourtClusters,
   News,
   Account,
+  Upload,
+  Booking,
 };
 
 export default agent;

@@ -1,5 +1,5 @@
 import { useStore } from "@/app/stores/store";
-import { Button, Card, Row, Col, Skeleton, Typography, Tag, Image, Space, Flex } from "antd";
+import { Button, Card, Row, Col, Skeleton, Typography, Tag, Image, Space } from "antd";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
@@ -11,8 +11,8 @@ import CourtBookingForm from "@/feature/booking/BookingForm";
 const { Title, Paragraph } = Typography;
 
 interface IProps {
-    title: string,
-    itemsPerPage: number
+    title: string;
+    itemsPerPage: number;
 }
 
 function CourtClusterList({ title, itemsPerPage }: IProps) {
@@ -20,21 +20,14 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
     const { listCourt, loadListCourt, loadingInitial } = courtClusterStore;
     const navigate = useNavigate();
 
-    const courts = [
-        { id: 'court1', name: 'Sân 1', number: 1, availableSlots: ['10:00 - 13:00', '15:00 - 20:00'] },
-        { id: 'court2', name: 'Sân 2', number: 2, availableSlots: ['09:00 - 12:00', '14:00 - 20:00'] },
-        { id: 'court3', name: 'Sân 3', number: 3, availableSlots: ['09:00 - 10:00', '12:00 - 15:00', '17:00 - 20:00'] },
-    ];
-
-    const handleBook = (values) => {
-        console.log(`Đã đặt sân ID: ${values.court} vào lúc ${values.timeSlot}`);
-    };
-
     useEffect(() => {
         loadListCourt();
-    }, []);
+    }, [loadListCourt]);
 
     const [currentPage, setCurrentPage] = useState(1);
+    const [loadingCourtId, setLoadingCourtId] = useState<number | null>(null);
+    const [quickBookingLoadingCourtId, setQuickBookingLoadingCourtId] = useState<number | null>(null);
+
     const startIndex = (currentPage - 1) * itemsPerPage;
     const currentItems = listCourt.slice(startIndex, startIndex + itemsPerPage);
 
@@ -42,22 +35,11 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
     const hasNext = startIndex + itemsPerPage < listCourt.length;
 
     const handleNext = () => {
-        if (hasNext) {
-            setCurrentPage(currentPage + 1);
-        } else {
-            // Loop back to the first page when at the end
-            setCurrentPage(1);
-        }
+        setCurrentPage(hasNext ? currentPage + 1 : 1);
     };
 
     const handlePrevious = () => {
-        if (hasPrevious) {
-            setCurrentPage(currentPage - 1);
-        } else {
-            // Loop back to the last page when at the beginning
-            const lastPage = Math.ceil(listCourt.length / itemsPerPage);
-            setCurrentPage(lastPage);
-        }
+        setCurrentPage(hasPrevious ? currentPage - 1 : Math.ceil(listCourt.length / itemsPerPage));
     };
 
     return (
@@ -69,31 +51,29 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
                 {loadingInitial ? (
                     <Skeleton active />
                 ) : (
-                    <Space size={"large"}>
+                    <Space size="large">
                         <Row justify="space-between" align="middle" style={{ marginTop: '16px' }}>
                             <Col>
-                                <Button onClick={handlePrevious} type="primary" disabled={!hasPrevious} icon={<IoIosArrowBack />} />
+                                <Button onClick={handlePrevious} style={{
+                                    backgroundColor: !hasPrevious ? 'white' : "#115363",
+                                    color: !hasPrevious ? 'black' : 'white'
+                                }} disabled={!hasPrevious} icon={<IoIosArrowBack />} />
                             </Col>
                         </Row>
                         <Row gutter={[16, 16]}>
                             {currentItems.map((c) => (
-                                <Col span={8}>
+                                <Col span={8} key={c.id}>
                                     <Card hoverable className="court-card" style={{ height: '465px' }}>
                                         <Image src={c.images[0]} />
                                         <div className="court-details" style={{ height: '100%' }}>
                                             <div className="court-info" style={{ height: '100%' }}>
                                                 <Title level={5} className="overflow-hidden">{c.title}</Title>
-                                                <Paragraph>
-                                                    Khu vực: {c.address}
-                                                </Paragraph>
+                                                <Paragraph>Khu vực: {c.address}</Paragraph>
                                                 <Paragraph className="service-paragraph" style={{ height: '25px' }}>
                                                     {c.services.slice(0, 2).map((service) => (
                                                         <Tag key={service.id}>{service.serviceName}</Tag>
                                                     ))}
                                                 </Paragraph>
-                                                {/* <Paragraph className="product-paragraph">
-                                                    Sản phẩm: {c.products.slice(0, 2).map(product => product.productName).join(', ')}
-                                                </Paragraph> */}
                                                 <Row justify="space-between" align="middle" className="rating-row">
                                                     <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>
                                                     <Row>
@@ -106,32 +86,36 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
                                                     </Row>
                                                 </Row>
                                             </div>
-                                            <Flex justify="space-between">
+                                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                                 <CourtBookingForm
-                                                    courts={courts}
-                                                    onBook={handleBook} >
-
-                                                </CourtBookingForm>
+                                                    courtClusterId={c.id}
+                                                    loadingCourtId={loadingCourtId}
+                                                    setLoadingCourtId={setLoadingCourtId}
+                                                />
                                                 <Button
+                                                    loading={quickBookingLoadingCourtId === c.id}
                                                     className="book-button"
                                                     onClick={async () => {
+                                                        setQuickBookingLoadingCourtId(c.id);
                                                         await courtClusterStore.getDetailsCourtCluster(c.id.toString());
                                                         navigate(`/dat-san/${c.id}`);
+                                                        setQuickBookingLoadingCourtId(null);
                                                     }}
                                                 >
                                                     Đặt ngay kẻo muộn
                                                 </Button>
-                                            </Flex>
-
+                                            </div>
                                         </div>
                                     </Card>
                                 </Col>
                             ))}
                         </Row>
-
                         <Row justify="space-between" align="middle" style={{ marginTop: '16px' }}>
                             <Col>
-                                <Button onClick={handleNext} type="primary" disabled={!hasNext} icon={<IoIosArrowForward />} />
+                                <Button onClick={handleNext} style={{
+                                    backgroundColor: !hasNext ? 'white' : "#115363",
+                                    color: !hasNext ? 'black' : 'white'
+                                }} disabled={!hasNext} icon={<IoIosArrowForward />} />
                             </Col>
                         </Row>
                     </Space>

@@ -6,6 +6,8 @@ import AuthStore from './authStore';
 import BookingHistoryStore from './bookinghistoryStore';
 import courtClusterStore from './courtClusterStore';
 import AccountStore from './accountStore';
+import UploadStore from './uploadStore';
+import BookingStore from './bookingStore';
 
 interface Store {
   commonStore: CommonStore;
@@ -15,6 +17,8 @@ interface Store {
   authStore: AuthStore;
   bookingHistoryStore: BookingHistoryStore;
   accountStore: AccountStore;
+  uploadStore: UploadStore;
+  bookingStore: BookingStore;
 }
 
 export const store: Store = {
@@ -25,6 +29,8 @@ export const store: Store = {
   authStore: new AuthStore(),
   bookingHistoryStore: new BookingHistoryStore(),
   accountStore: new AccountStore(),
+  uploadStore: new UploadStore(),
+  bookingStore: new BookingStore()
 };
 
 export const StoreContext = createContext(store);

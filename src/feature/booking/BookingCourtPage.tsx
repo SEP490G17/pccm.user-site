@@ -58,7 +58,7 @@ const BookingCourtPage = () => {
                         </Col>
                     </Row>
                 </div>
-                <div className="w-full mt-2 mb-6">
+                <div className="w-full mt-2 mb-6" style={{marginTop:'30px'}}>
                     <Row gutter={[24, 1]}>
                         <Col span={6}>
                             <BookWithRequirement />
