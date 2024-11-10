@@ -1,5 +1,5 @@
 import { useStore } from "@/app/stores/store";
-import { Card, Col, Row, Image, Skeleton, Typography, Button, Tag } from "antd";
+import { Card, Col, Row, Skeleton, Typography, Button, Tag } from "antd";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
@@ -35,23 +35,27 @@ function HomeNews({ title, itemsPerPage }: IProps) {
                 ) : (
                     <>
                         {currentItems.map((news, index) => (
-                            <Col key={news.id} span={index === 1 ? 16 : 8} >
+                            <Col key={news.id} span={index === 1 ? 16 : 8}>
                                 <Link to={`/news/${news.id}`} key={news.id}>
                                     <Card
                                         hoverable
-                                        bodyStyle={{padding: 0}}
+                                        bodyStyle={{ padding: 0, display: 'flex', flexDirection: 'column', height: '100%' }}
                                         className="news-card"
                                     >
-                                        <div className="card-image-wrapper">
-                                            <Image
-                                                src={news.thumbnail}
-                                                alt={news.title}
-                                                className="news-card-image"
-                                                loading="lazy"
-                                                preview={false}
-                                            />
-                                        </div>
-                                        <div className="card-content">
+                                        <div
+                                            style={{
+                                                backgroundImage: `url(${news.thumbnail})`,
+                                                backgroundSize: 'cover',
+                                                backgroundPosition: 'center',
+                                                width: '100%',
+                                                height: '100%',
+                                                borderTopLeftRadius: '8px',
+                                                borderTopRightRadius: '8px',
+                                                objectFit: 'cover',
+                                                display:'block'
+                                            }}
+                                        />
+                                        <div className="card-content" style={{ padding: '16px' }}>
                                             <Typography.Text strong className="card-title">
                                                 {news.title}
                                             </Typography.Text>
@@ -64,11 +68,10 @@ function HomeNews({ title, itemsPerPage }: IProps) {
                                                     ))}
                                                 </div>
                                                 <Typography.Text className="card-date">
-                                                    Ngày đăng: {news.createdAt}
+                                                    Ngày đăng: {new Date(news.createdAt).toLocaleDateString()}
                                                 </Typography.Text>
                                             </div>
                                         </div>
-
                                     </Card>
                                 </Link>
                             </Col>

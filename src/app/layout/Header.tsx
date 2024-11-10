@@ -46,7 +46,11 @@ const Header = () => {
 
     const handleMenuClick = ({ key }: { key: string }) => {
         if (key === "viewProfile") {
-            navigate('/view-profile');
+            if (userApp) {
+                navigate('/view-profile');
+            } else {
+                setLoginModalVisible(true);
+            }
         } else if (key === "login") {
             setLoginModalVisible(true);
         } else if (key === "viewHistory") {

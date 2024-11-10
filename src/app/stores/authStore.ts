@@ -1,10 +1,9 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { User } from '../models/user.model';
 import { LoginDto } from '../models/account.model';
 import agent from '../api/agent';
-
-const SESSION_EXPIRATION_TIME = 3600 * 1000;
-
+import { store } from './store';
+import { router } from '../router/Routes';
 export default class AuthStore {
   userApp: User | null = null;
   rememberMe: boolean = false;
@@ -12,12 +11,6 @@ export default class AuthStore {
 
   constructor() {
     makeAutoObservable(this);
-
-    const savedUser = localStorage.getItem('userApp');
-    if (savedUser) {
-      const data = JSON.parse(savedUser);
-      this.userApp = data.user;
-    }
   }
 
   get isLoggedIn() {
@@ -28,17 +21,20 @@ export default class AuthStore {
     this.rememberMe = !this.rememberMe;
   };
 
-  // Mock login function
-  login = async (data: LoginDto) => {
-    this.loadingLogin = true;
-    this.userApp = await agent.Account.login(data).finally(() => (this.loadingLogin = false));
-
-    if (this.userApp) {
-      const sessionData = {
-        user: this.userApp,
-        expiration: Date.now() + SESSION_EXPIRATION_TIME,
-      };
-      localStorage.setItem('userApp', JSON.stringify(sessionData));
+  login = async (creds: LoginDto) => {
+    try {
+      const user = await agent.Account.login(creds);
+      if (this.rememberMe) {
+        store.commonStore.setToken(user.token);
+      } else {
+        store.commonStore.setTokenSession(user.token);
+      }
+      runInAction(() => {
+        this.userApp = user;
+      });
+    } catch (error) {
+      console.log(error);
+      throw error;
     }
   };
 
@@ -60,6 +56,19 @@ export default class AuthStore {
   };
 
   logout = () => {
-    this.clearUserFromLocalStorage();
+    store.commonStore.setToken(null);
+    localStorage.removeItem('jwt');
+    sessionStorage.removeItem('jwt');
+    this.userApp = null;
+    router.navigate('/');
+  };
+
+  getUser = async () => {
+    try {
+      const user = await agent.Account.current();
+      runInAction(() => (this.userApp = user));
+    } catch (error) {
+      console.log(error);
+    }
   };
 }

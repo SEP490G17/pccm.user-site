@@ -1,11 +1,11 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { INews } from '../models/news.model';
+import { INews, INewsDto } from '../models/news.model';
 import agent from '../api/agent';
 
 export default class NewsStore {
   listNews: INews[] = [];
   loadingInitial: boolean = false;
-
+  newsDetail: INewsDto | undefined = undefined;
   currentPage: number = 1; // Trang hiện tại cho tin tức
   relatedNewsCurrentPage: number = 1; // Trang hiện tại cho tin liên quan
   pageSize: number = 5; // Số lượng tin tức mỗi trang
@@ -25,6 +25,10 @@ export default class NewsStore {
     await runInAction(async () => {
       this.setLoadingInitial(false);
     });
+  };
+
+  detailNews = async (id: number) => {
+    this.newsDetail = await agent.News.detail(id);
   };
 
   // Tính danh sách tin tức dựa vào trang hiện tại

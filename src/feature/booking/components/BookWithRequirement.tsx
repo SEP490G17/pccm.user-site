@@ -5,7 +5,7 @@ export default function BookWithRequirement() {
   return (
     <Card className="formBook">
       <Flex style={{ marginBottom: '1rem'}}>
-        <Typography.Text style={{ fontSize: '1.3rem', fontWeight:'bolder' }}><Divider type="vertical" className="divider" style={{border: '2px solid green', height: '20px'}}/>Đặt sân theo yêu cầu</Typography.Text>
+        <Typography.Text style={{ fontSize: '1.3rem', fontWeight:'bolder' }}><Divider type="vertical" className="divider" style={{border: '2px solid green', height: '20px'}}/>Xem chi tiết</Typography.Text>
       </Flex>
       <Form>
         <Form.Item>

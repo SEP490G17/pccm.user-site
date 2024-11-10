@@ -102,7 +102,7 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
                                                         setQuickBookingLoadingCourtId(null);
                                                     }}
                                                 >
-                                                    Đặt ngay kẻo muộn
+                                                    Chi tiết sân
                                                 </Button>
                                             </div>
                                         </div>

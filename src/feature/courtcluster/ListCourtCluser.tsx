@@ -126,7 +126,7 @@ function ListCourtCluster({ itemsPerPage }: IProps) {
                                         </Row>
                                     </div>
                                     <Button className="book-button">
-                                        Đặt ngay kẻo muộn
+                                        Chi tiết sân
                                     </Button>
                                 </div>
                             </Card>

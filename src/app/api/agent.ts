@@ -5,11 +5,12 @@ import { toast } from 'react-toastify';
 import { sleep } from '../helper/utils';
 import { Banner } from '../models/banner.model';
 import { ICourtCluster } from '../models/courtcluster.model';
-import { INews } from '../models/news.model';
+import { INews, INewsDto } from '../models/news.model';
 import { LoginDto, RegisterDto } from '../models/account.model';
 import { User } from '../models/user.model';
 import { ImageUpload } from '../models/upload.model';
 import { IBookingModel, ISlots } from '../models/booking.model';
+import { IReview, ReviewsDto } from '../models/review.model';
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
@@ -85,15 +86,18 @@ const CourtClusters = {
 
 const News = {
   list: (): Promise<INews[]> => requests.get(`/News/usersite`),
+  detail: (id: number): Promise<INewsDto> => requests.get(`/News/${id}`),
 };
 
 const Account = {
+  current: () => requests.get<User>('/account'),
   register: (value: RegisterDto): Promise<void> => requests.post(`/Account/register`, value),
   login: (value: LoginDto): Promise<User> => requests.post(`/Account/login`, value),
+  profile: (): Promise<ImageUpload> => requests.post(`/Account/Profile`, {}),
 };
 
 const Upload = {
-  post: (file: FormData): Promise<ImageUpload> => requests.post(`/upload`, file),
+  post: (file: FormData): Promise<any> => requests.post(`/upload`, file),
 };
 
 const Booking = {
@@ -104,6 +108,12 @@ const Booking = {
   create: (data: IBookingModel): Promise<any> => requests.post(`/booking`, data),
 };
 
+const Reviews = {
+  listByCourtClusterId: (id: string): Promise<IReview[]> => requests.get(`/Review/${id}`),
+  create: (data: ReviewsDto): Promise<any> => requests.post(`/Review`, data),
+  delete: (id: number): Promise<any> => requests.del(`/Review/${id}`),
+};
+
 const agent = {
   requests,
   Banners,
@@ -112,6 +122,7 @@ const agent = {
   Account,
   Upload,
   Booking,
+  Reviews,
 };
 
 export default agent;

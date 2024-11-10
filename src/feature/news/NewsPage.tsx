@@ -57,7 +57,7 @@ const NewsPage = () => {
                                 <Link key={newsItem.id} to={`/news/${newsItem.id}`} className="news-item">
                                     <img
                                         className="thumbnail"
-                                        src={newsItem.thumbnail || '/default-thumbnail.jpg'}
+                                        src={newsItem.thumbnail}
                                         alt={newsItem.title}
                                     />
                                     <div className="news-content">

@@ -3,27 +3,22 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '@/app/stores/store';
 import { useParams } from 'react-router-dom';
 import './style/NewsDetailPage.scss';
-import ListBanner from '@/feature/home/components/HomeBanner';
-import { FacebookOutlined, TwitterOutlined, LinkOutlined } from '@ant-design/icons';
+// import ListBanner from '@/feature/home/components/HomeBanner';
+// import { FacebookOutlined, TwitterOutlined, LinkOutlined } from '@ant-design/icons';
 import defaultThumbnail from '@/assets/defaultUser.png';
 import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
 
 const NewsDetail: React.FC = () => {
     const { newsStore } = useStore();
     const { id } = useParams<{ id: string }>();
-
+    const newsId = Number(id);
+    const { newsDetail } = newsStore
     useEffect(() => {
         window.scrollTo(0, 0);
-        if (newsStore.listNews.length === 0) {
-            newsStore.loadListNews();
-        }
+        newsStore.detailNews(newsId);
     }, [newsStore]);
 
-    const newsItem = id
-        ? newsStore.listNews.find((news) => news.id === parseInt(id)) || null
-        : null;
-
-    if (!newsItem) {
+    if (!newsDetail) {
         return <div>Không tìm thấy tin tức</div>;
     }
 
@@ -33,35 +28,35 @@ const NewsDetail: React.FC = () => {
                 breadCrumb={[
                     { title: "Trang chủ", to: "/home" },
                     { title: "Tin tức", to: `/news` },
-                    { title: newsItem.title, to: `/news/${newsItem.id}` }
+                    { title: newsDetail.title, to: `/news/${newsDetail.id}` }
                 ]}
             />
-            <div style={{ marginBottom: '50px' }}>
+            {/* <div style={{ marginBottom: '50px' }}>
                 <ListBanner title="" />
-            </div>
+            </div> */}
             <div className="news-detail-content">
                 <div className="content-wrapper">
                     <div className="main-content">
-                        <h1 className="news-title">{newsItem.title}</h1>
+                        <h1 className="news-title">{newsDetail.title}</h1>
                         <img
-                            src={newsItem.thumbnail || defaultThumbnail}
-                            alt={newsItem.title || 'News image'}
+                            src={newsDetail.thumbnail || defaultThumbnail}
+                            alt={newsDetail.title || 'News image'}
                             className="news-thumbnail"
                         />
-                        <p className="news-description">{newsItem.description}</p>
+                        <div className="news-description" dangerouslySetInnerHTML={{ __html: newsDetail.description }} />
                         <div className="news-tags">
-                            <strong>Tags:</strong>
-                            {newsItem.tags.map((tag, index) => (
+                            <strong>Tags: </strong>
+                            {newsDetail.tags.map((tag, index) => (
                                 <span key={index} className="tag">
                                     {tag}
                                 </span>
                             ))}
                         </div>
                         <div className="news-date">
-                            <strong>Ngày đăng:</strong> {new Date(newsItem.createdAt).toLocaleDateString()}
+                            <strong>Ngày đăng: </strong> {new Date(newsDetail.createdAt).toLocaleDateString()}
                         </div>
                     </div>
-                    <div className="social-section">
+                    {/* <div className="social-section">
                         <div className="social-item">
                             <FacebookOutlined style={{ fontSize: '24px', color: '#3b5998' }} />
                         </div>
@@ -78,7 +73,7 @@ const NewsDetail: React.FC = () => {
                         <div className="social-item">
                             <LinkOutlined style={{ fontSize: '24px', color: '#000000' }} />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

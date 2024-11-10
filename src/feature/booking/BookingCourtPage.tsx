@@ -12,21 +12,30 @@ import ListCourtCluster from '@/feature/home/components/HomeCourtCluster';
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { observer } from "mobx-react";
+import PageHeadingAtoms from "../atoms/PageHeadingAtoms";
 
 const BookingCourtPage = () => {
     const { id } = useParams();
     const { courtClusterStore } = useStore();
-    const { selectedCourt } = courtClusterStore
+    const { selectedCourt, listReviews } = courtClusterStore
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         if (id) {
             courtClusterStore.getDetailsCourtCluster(id);
+            courtClusterStore.getListReviewByCourtClusterId(id);
         }
     }, [id, courtClusterStore]);
 
     return (
         <>
             <div style={{ maxWidth: '85%', margin: 'auto', padding: '20px 0px' }}>
+                <PageHeadingAtoms
+                    breadCrumb={[
+                        { title: "Trang chủ", to: "/home" },
+                        { title: "Chi tiết sân", to: `/dat-san/${id}` }
+                    ]}
+                />
                 <Row style={{ marginBottom: '1rem' }}>
                     <Col span={18}>
                         <Typography.Title level={3}>{selectedCourt?.title}</Typography.Title>
@@ -58,7 +67,7 @@ const BookingCourtPage = () => {
                         </Col>
                     </Row>
                 </div>
-                <div className="w-full mt-2 mb-6" style={{marginTop:'30px'}}>
+                <div className="w-full mt-2 mb-6" style={{ marginTop: '30px' }}>
                     <Row gutter={[24, 1]}>
                         <Col span={6}>
                             <BookWithRequirement />
@@ -72,7 +81,7 @@ const BookingCourtPage = () => {
                     <ListCourtCluster title="Sân pickleball khác" itemsPerPage={3} />
                 </div>
 
-                <ReviewCourtCluster />
+                <ReviewCourtCluster reviews={listReviews} courtClusterId={selectedCourt?.id} />
             </div>
         </>
     );

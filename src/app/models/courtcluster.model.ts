@@ -43,3 +43,5 @@ export interface IProduct {
   categoryId: number;
   thumbnailUrl: string;
 }
+
+
