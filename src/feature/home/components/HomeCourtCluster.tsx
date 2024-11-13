@@ -63,7 +63,7 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
                         <Row gutter={[16, 16]}>
                             {currentItems.map((c) => (
                                 <Col span={8} key={c.id}>
-                                    <Card hoverable className="court-card" style={{ height: '465px' }}>
+                                    <Card hoverable className="court-card" style={{ height: '420px' }}>
                                         <Image src={c.images[0]} />
                                         <div className="court-details" style={{ height: '100%' }}>
                                             <div className="court-info" style={{ height: '100%' }}>

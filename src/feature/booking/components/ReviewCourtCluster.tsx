@@ -53,7 +53,7 @@ const ReviewCourtCluster = ({ reviews, courtClusterId }: IProps) => {
         }
         else {
             const data = new ReviewsDto({
-                userId: "557ef055-e2c3-4bca-b904-315a088f9b7a",
+                userId: "612c71e2-a43e-426f-86c6-75820d61b36f",
                 comment: values.comment,
                 courtclusterId: courtClusterId,
                 createAt: "",
