@@ -1,10 +1,11 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { IAvailableSlotModel, IBookingModel, ISlots } from '../models/booking.model';
+import { CourtPrice, IAvailableSlotModel, IBookingModel, ISlots } from '../models/booking.model';
 import agent from '../api/agent';
 import { toast } from 'react-toastify';
 
 export default class BookingStore {
   availableSlot: IAvailableSlotModel[] | null = [];
+  courtPrice: CourtPrice[] | null = [];
   loadingInitial: boolean = false;
   loadingSlot: boolean = false;
   loadingCreate: boolean = false;
@@ -18,6 +19,14 @@ export default class BookingStore {
     await runInAction(async () => {
       const response = await agent.Booking.slots(values);
       this.availableSlot = response.availableSlots;
+      this.loadingSlot = false;
+    });
+  };
+
+  loadCourtPrice = async (value: number) => {
+    this.loadingSlot = true;
+    await runInAction(async () => {
+      this.courtPrice = await agent.Booking.priceCourt(value);
       this.loadingSlot = false;
     });
   };

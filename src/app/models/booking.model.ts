@@ -1,10 +1,10 @@
 export class IBookingModel {
+  totalPrice: number = 0;
+  fullName: string = '';
   phoneNumber: string = '';
   courtId: number = 0;
-  courtClusterId: number = 0;
-  startTime: string  = '';
+  startTime: string = '';
   endTime: string = '';
-  recurrenceRule: string = '';
 
   constructor(data?: Partial<IBookingModel>) {
     if (data) {
@@ -28,4 +28,11 @@ export class ISlots {
       Object.assign(this, data);
     }
   }
+}
+
+export interface CourtPrice {
+  courtId: number;
+  courtName: string;
+  time: string;
+  price: number;
 }

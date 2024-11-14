@@ -9,7 +9,7 @@ import { INews, INewsDto } from '../models/news.model';
 import { LoginDto, RegisterDto } from '../models/account.model';
 import { User } from '../models/user.model';
 import { ImageUpload } from '../models/upload.model';
-import { IBookingModel, ISlots } from '../models/booking.model';
+import { CourtPrice, IBookingModel, ISlots } from '../models/booking.model';
 import { IReview, ReviewsDto } from '../models/review.model';
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
@@ -106,6 +106,8 @@ const Booking = {
       `/Booking/available-slots?date=${data.date}&courtClusterId=${data.courtClusterId}`,
     ),
   create: (data: IBookingModel): Promise<any> => requests.post(`/booking`, data),
+  priceCourt: (data: number): Promise<CourtPrice[]> =>
+    requests.get(`/Booking/priceCourt?courtClusterId=${data}`),
 };
 
 const Reviews = {

@@ -22,7 +22,9 @@ const Header = () => {
     const { authStore } = useStore();
     const { userApp, logout } = authStore;
     const navigate = useNavigate();
-
+    useEffect(() => {
+        authStore.getUser();
+    }, []);
     useEffect(() => {
         const interval = setInterval(() => {
             if (charIndex < phrases[phraseIndex].length) {
