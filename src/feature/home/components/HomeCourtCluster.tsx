@@ -6,7 +6,7 @@ import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import './style/HomeCourtCluster.scss';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import CourtBookingForm from "@/feature/booking/components/BookingSuggestHours/BookingForm";
+import CourtBookingForm from "@/feature/booking/components/QuickBooking/BookingForm";
 
 const { Title, Paragraph } = Typography;
 

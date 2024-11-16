@@ -6,7 +6,6 @@ import { useStore } from '@/app/stores/store';
 import { CourtPrice, IBookingModel, ISlots } from '@/app/models/booking.model';
 import CourtSelection from './CourtSelection';
 import BookingDetail from './BookingDetail';
-import { toIsoString } from '@/app/helper/utils';
 
 const { Title } = Typography;
 
@@ -26,8 +25,8 @@ export interface DataType {
 const CourtBookingForm = ({ courtClusterId, loadingCourtId, setLoadingCourtId }: IProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
-  const [selectedCourt, setSelectedCourt] = useState<number | null>(null);
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
+  const [selectedCourt, setSelectedCourt] = useState<number | null>(null);
   const [availablePrices, setAvailablePrices] = useState<CourtPrice[]>([]);
   const [selectedTimeRange, setSelectedTimeRange] = useState<[Dayjs | null, Dayjs | null] | null>(null);
   const { bookingStore } = useStore();
@@ -83,8 +82,8 @@ const CourtBookingForm = ({ courtClusterId, loadingCourtId, setLoadingCourtId }:
   };
 
   const handleBook = async (values: any) => {
-    const startTime = selectedTimeRange?.[0] ? toIsoString(selectedTimeRange[0].toDate()) : undefined;
-    const endTime = selectedTimeRange?.[1] ? toIsoString(selectedTimeRange[1].toDate()) : undefined;
+    const startTime = selectedTimeRange?.[0]?.toISOString();
+    const endTime = selectedTimeRange?.[1]?.toISOString();
 
     const bookingDetails = new IBookingModel({
       totalPrice: values.totalPrice,

@@ -5,6 +5,7 @@ export class IBookingModel {
   courtId: number = 0;
   startTime: string = '';
   endTime: string = '';
+  recurrenceRule: string = '';
 
   constructor(data?: Partial<IBookingModel>) {
     if (data) {
