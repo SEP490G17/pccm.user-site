@@ -1,13 +1,14 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
-import BookingCourtPage from '@/feature/booking/BookingCourtPage';
+import CourtClusterDetailsPage from '@/feature/courtcluster/details/CourtClusterDetailsPage';
 import MainLayout from '@/app/layout/MainLayout';
 import HomePage from '@/feature/home/HomePage';
 import NewsPage from '@/feature/news/NewsPage';
 import NewsDetailPage from '@/feature/news/NewsDetailPage';
-import ListCourtCluser from '@/feature/courtcluster/ListCourtCluser';
-import BookingHistoryPage from '@/feature/booking/BookingHistoryPage';
+import ListCourtCluser from '@/feature/courtcluster/list/CourtCluserListPage';
+import BookingHistoryPage from '@/feature/booking/history/BookingHistoryPage';
 import ProfilePage from '@/feature/profile/ProfilePage'
-import RegisterPage from '@/feature/login/RegisterPage';
+import RegisterPage from '@/feature/auth/RegisterPage';
+import BookingDetailsPage from '@/feature/booking/details/BookingDetailsPage';
 
 
 
@@ -42,6 +43,10 @@ export const routes: RouteObject[] = [
         element: <BookingHistoryPage />
       },
       {
+        path: 'booking-history/chi-tiet/:id',
+        element: <BookingDetailsPage />
+      },
+      {
         path: 'view-profile',
         element: <ProfilePage />
       },
@@ -50,8 +55,8 @@ export const routes: RouteObject[] = [
         element: <RegisterPage />
       },
       {
-        path: 'dat-san/:id',
-        element: <BookingCourtPage />,
+        path: 'chi-tiet/:id',
+        element: <CourtClusterDetailsPage />,
         children: [],
       }
     ],

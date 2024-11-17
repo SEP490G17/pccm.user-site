@@ -2,7 +2,7 @@ import { Button, Card, Col, Divider, Flex, Form, Pagination, Progress, Rate, Row
 import TextArea from "antd/es/input/TextArea";
 import { useState } from "react";
 import { FaStar } from "react-icons/fa"
-import ReviewCard from "./ReviewCard";
+import ReviewCard from "../../../../booking/history/components/ReviewCard";
 import { IReview, ReviewsDto } from "@/app/models/review.model";
 import { useStore } from "@/app/stores/store";
 import { toast } from "react-toastify";
@@ -12,11 +12,11 @@ interface IProps {
     courtClusterId: number | undefined;
 }
 
-const ReviewCourtCluster = ({ reviews, courtClusterId }: IProps) => {
+const ReviewCourtClusterComponent = ({ reviews, courtClusterId }: IProps) => {
     const [value, setValue] = useState(0);
     const [comment, setComment] = useState("");
     const [isFormVisible, setIsFormVisible] = useState(false);
-    const { courtClusterStore } = useStore();
+    const { courtClusterDetailsStore } = useStore();
     const [form] = Form.useForm();
     const ratingsData: { [key: string]: number } = {
         1: 0,
@@ -59,7 +59,7 @@ const ReviewCourtCluster = ({ reviews, courtClusterId }: IProps) => {
                 createAt: "",
                 rating: values.star
             })
-            await courtClusterStore.createReviews(data)
+            await courtClusterDetailsStore.createReviews(data)
                 .then(() => {
                     setIsFormVisible(false);
                     form.resetFields();
@@ -128,7 +128,7 @@ const ReviewCourtCluster = ({ reviews, courtClusterId }: IProps) => {
                                     />
                                 </Form.Item>
                                 <Flex justify="end">
-                                    <Button loading={courtClusterStore.loadingReview}
+                                    <Button loading={courtClusterDetailsStore.loadingReview}
                                         type="primary" htmlType="submit"
                                         style={{ width: '9rem', height: '40px', borderRadius: '1rem', backgroundColor: "#115363" }}>
                                         Gửi đánh giá
@@ -163,4 +163,4 @@ const ReviewCourtCluster = ({ reviews, courtClusterId }: IProps) => {
     )
 }
 
-export default ReviewCourtCluster
+export default ReviewCourtClusterComponent

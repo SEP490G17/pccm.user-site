@@ -10,7 +10,7 @@ const { Content } = Layout;
 
 const Home: React.FC = () => {
     return (
-        <Layout style={{ maxWidth: '85%', margin: 'auto', padding: '20px 0px' }}>
+        <Layout>
             <Content style={{ padding: '10px' }}>
                 <div style={{ marginBottom: '70px' }}>
                     <ListBanner title="" />

@@ -1,9 +1,9 @@
+import agent from '@/app/api/agent';
+import { LoginDto } from '@/app/models/account.model';
+import { User } from '@/app/models/user.model';
+import { router } from '@/app/router/Routes';
+import { store } from '@/app/stores/store';
 import { makeAutoObservable, runInAction } from 'mobx';
-import { User } from '../models/user.model';
-import { LoginDto } from '../models/account.model';
-import agent from '../api/agent';
-import { store } from './store';
-import { router } from '../router/Routes';
 export default class AuthStore {
   userApp: User | null = null;
   rememberMe: boolean = false;
@@ -24,11 +24,11 @@ export default class AuthStore {
   login = async (creds: LoginDto) => {
     try {
       const user = await agent.Account.login(creds);
-      if (this.rememberMe) {
+      // if (this.rememberMe) {
         store.commonStore.setToken(user.token);
-      } else {
-        store.commonStore.setTokenSession(user.token);
-      }
+      // } else {
+      //   store.commonStore.setTokenSession(user.token);
+      // }
       runInAction(() => {
         this.userApp = user;
       });
@@ -64,11 +64,12 @@ export default class AuthStore {
   };
 
   getUser = async () => {
-    try {
-      const user = await agent.Account.current();
-      runInAction(() => (this.userApp = user));
-    } catch (error) {
-      console.log(error);
-    }
+      try {
+        const user = await agent.Account.current();
+        runInAction(() => (this.userApp = user));
+      } catch (error) {
+        console.log(error);
+      }
+    
   };
 }

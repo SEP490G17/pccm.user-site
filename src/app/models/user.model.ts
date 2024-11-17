@@ -3,6 +3,7 @@ export interface User {
   displayName: string;
   token: string;
   image: string;
+  phoneNumber: string;
 }
 export interface UserFormValues {
   username: string;

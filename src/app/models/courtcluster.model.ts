@@ -16,6 +16,20 @@ export interface ICourtCluster {
   closeTime: string;
   numbOfCourts: number;
   products: IProduct[];
+  courts: ICourt[];
+
+}
+
+export interface CourtPriceBooking {
+  courtId: number;
+  courtName: string;
+  time: string;
+  price: number;
+}
+
+export interface ICourt{
+  courtId: number;
+  courtName: string;
 }
 
 // export interface ILocation {
@@ -45,3 +59,10 @@ export interface IProduct {
 }
 
 
+
+export interface CourtPriceBooking {
+  courtId: number;
+  courtName: string;
+  time: string;
+  price: number;
+}

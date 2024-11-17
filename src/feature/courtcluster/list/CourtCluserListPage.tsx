@@ -6,7 +6,7 @@ import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { IoMdRefresh } from "react-icons/io";
 import ListBanner from '@/feature/home/components/HomeBanner';
 import Pagination from '@/feature/atoms/Pagination';
-import "./ListCourtCluster.scss";
+import "./CourtClusterList.scss";
 import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
 
 const { Title, Paragraph } = Typography;
@@ -17,7 +17,7 @@ interface IProps {
     itemsPerPage: number;
 }
 
-function ListCourtCluster({ itemsPerPage }: IProps) {
+function ListCourtClusterPage({ itemsPerPage }: IProps) {
     const { courtClusterStore } = useStore();
     const { listCourt, loadListCourt, loadingInitial } = courtClusterStore;
 
@@ -146,4 +146,4 @@ function ListCourtCluster({ itemsPerPage }: IProps) {
     );
 }
 
-export default observer(ListCourtCluster);
+export default observer(ListCourtClusterPage);

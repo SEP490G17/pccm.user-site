@@ -6,7 +6,7 @@ import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import './style/HomeCourtCluster.scss';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import CourtBookingForm from "@/feature/booking/components/QuickBooking/BookingForm";
+import CourtBookingForm from "@/feature/booking/history/components/QuickBooking/BookingForm";
 
 const { Title, Paragraph } = Typography;
 
@@ -16,7 +16,7 @@ interface IProps {
 }
 
 function CourtClusterList({ title, itemsPerPage }: IProps) {
-    const { courtClusterStore } = useStore();
+    const { courtClusterStore,courtClusterDetailsStore } = useStore();
     const { listCourt, loadListCourt, loadingInitial } = courtClusterStore;
     const navigate = useNavigate();
 
@@ -26,7 +26,6 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [loadingCourtId, setLoadingCourtId] = useState<number | null>(null);
-    const [quickBookingLoadingCourtId, setQuickBookingLoadingCourtId] = useState<number | null>(null);
 
     const startIndex = (currentPage - 1) * itemsPerPage;
     const currentItems = listCourt.slice(startIndex, startIndex + itemsPerPage);
@@ -63,7 +62,7 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
                         <Row gutter={[16, 16]}>
                             {currentItems.map((c) => (
                                 <Col span={8} key={c.id}>
-                                    <Card hoverable className="court-card" style={{ height: '420px' }}>
+                                    <Card hoverable className="court-card" >
                                         <Image src={c.images[0]} />
                                         <div className="court-details" style={{ height: '100%' }}>
                                             <div className="court-info" style={{ height: '100%' }}>
@@ -93,13 +92,10 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
                                                     setLoadingCourtId={setLoadingCourtId}
                                                 />
                                                 <Button
-                                                    loading={quickBookingLoadingCourtId === c.id}
                                                     className="book-button"
-                                                    onClick={async () => {
-                                                        setQuickBookingLoadingCourtId(c.id);
-                                                        await courtClusterStore.getDetailsCourtCluster(c.id.toString());
-                                                        navigate(`/dat-san/${c.id}`);
-                                                        setQuickBookingLoadingCourtId(null);
+                                                    onClick={() => {
+                                                        courtClusterDetailsStore.clearSelectedCourt();
+                                                        navigate(`/chi-tiet/${c.id}`);
                                                     }}
                                                 >
                                                     Chi tiết sân

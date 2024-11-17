@@ -9,8 +9,17 @@ import { INews, INewsDto } from '../models/news.model';
 import { LoginDto, RegisterDto } from '../models/account.model';
 import { User } from '../models/user.model';
 import { ImageUpload } from '../models/upload.model';
-import { CourtPrice, IBookingModel, ISlots } from '../models/booking.model';
+import {
+  BookingDetails,
+  BookingHistoryModel,
+  BookingModel,
+  CourtPrice,
+  IBookingModel,
+  ISlots,
+  PaymentType,
+} from '../models/booking.model';
 import { IReview, ReviewsDto } from '../models/review.model';
+import { PaginationModel } from '../models/pagination.model';
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
@@ -108,7 +117,17 @@ const Booking = {
   create: (data: IBookingModel): Promise<any> => requests.post(`/booking`, data),
   priceCourt: (data: number): Promise<CourtPrice[]> =>
     requests.get(`/Booking/priceCourt?courtClusterId=${data}`),
+  getListForSchedule: (body: object): Promise<BookingModel[]> => requests.post('/booking/v1', body),
+  getHistoryBooking: (query: string = ''): Promise<PaginationModel<BookingHistoryModel>> =>
+    requests.get('/booking/history' + query),
+  getDetailsV1: (id: number): Promise<BookingDetails> => requests.get(`/booking/v1/${id}`),
 };
+
+const PaymentAgent = {
+  create: (type: PaymentType, id: number) =>
+    requests.post<string>(`/payment/${type}/${id}/process-payment`, {}),
+};
+
 
 const Reviews = {
   listByCourtClusterId: (id: string): Promise<IReview[]> => requests.get(`/Review/${id}`),
@@ -125,6 +144,7 @@ const agent = {
   Upload,
   Booking,
   Reviews,
+  PaymentAgent
 };
 
 export default agent;

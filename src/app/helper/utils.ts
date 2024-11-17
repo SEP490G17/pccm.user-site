@@ -1,3 +1,4 @@
+import { BookingStatus } from '../models/booking.model';
 import { dateFormatOptions } from './settings';
 
 export const sleep = (ms: number) => {
@@ -19,6 +20,35 @@ export const catchErrorHandle = async <T>(promise: Promise<T>) : Promise<[undefi
           return [error]
       });
 }
+export const getBookingStatusColor = (status: number) => {
+  switch (status) {
+    case BookingStatus.Pending:
+      return 'blue';
+    case BookingStatus.Confirmed:
+      return 'green';
+    case BookingStatus.Declined:
+      return 'red';
+    case BookingStatus.Cancelled:
+      return 'orange';
+    default:
+      return 'blackAlpha';
+  }
+};
+
+export const getBookingStatusText = (status: number) => {
+  switch (status) {
+    case BookingStatus.Pending:
+      return 'Chờ xác nhận';
+    case BookingStatus.Confirmed:
+      return 'Đã xác nhận';
+    case BookingStatus.Declined:
+      return 'Đang từ chối';
+    case BookingStatus.Cancelled:
+      return 'Đã huỷ';
+    default:
+      return 'Không xác nhận';
+  }
+};
 
 export const toIsoString = (date: Date): string => {
   const tzo = -date.getTimezoneOffset();

@@ -40,7 +40,6 @@ const LoginPopUp: React.FC<LoginPopUpProps> = ({ visible, onClose }) => {
             onCancel={onClose}
             footer={null}
             centered
-            className={`${styles.container}`}
         >
             <div className={styles.formContainer}>
                 <div className={`${styles.signIn}`}>

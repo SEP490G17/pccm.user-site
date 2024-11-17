@@ -12,7 +12,7 @@ export default function ListCourtImage({ images }: IProps) {
           <Image
             src={images?.[0]}
             width="100%"
-            height="410px"
+            height="100%"
             className="rounded-lg object-cover"
           />
         </Col>
@@ -28,13 +28,13 @@ export default function ListCourtImage({ images }: IProps) {
             </Col>
             <Col span={24}>
               {images && images.length > 3 ? (
-                <div style={{ position: "relative" }}>
+                <div className={'relative p-0 m-0 h-full'}>
                   <Image
                     id="image-group-2"
                     src={images[2]}
                     width="100%"
-                    height="202.5px"
-                    className="rounded-lg object-cover"
+                    height="100%"
+                    className="rounded-lg object-cover "
                   />
                   <div
                     style={{
@@ -72,7 +72,7 @@ export default function ListCourtImage({ images }: IProps) {
                 <Image
                   src={images?.[2]}
                   width="100%"
-                  height="202.5px"
+                  height="100%"
                   className="rounded-lg object-cover"
                 />
               )}
