@@ -1,13 +1,13 @@
 import { useStore } from "@/app/stores/store";
-import { Button, Card, Row, Col, Typography, Select, Input, Tag, Image } from "antd";
+import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
+import Pagination from '@/feature/atoms/Pagination';
+import ListBanner from '@/feature/home/components/HomeBanner';
+import { Button, Card, Col, Image, Input, Row, Select, Tag, Typography } from "antd";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { IoMdRefresh } from "react-icons/io";
-import ListBanner from '@/feature/home/components/HomeBanner';
-import Pagination from '@/feature/atoms/Pagination';
 import "./CourtClusterList.scss";
-import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
@@ -47,56 +47,54 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
                 <ListBanner title="" />
             </div>
 
-            <Row justify="space-between" align="middle" className="filter-row" style={{ marginBottom: "32px" }}>
-                <Col span={3}>
-                    <Button type="primary" icon={<IoMdRefresh />} style={{ width: "100%", backgroundColor: 'green' }}>
+            <Row gutter={[16, 16]} justify="space-between" align="middle" className="filter-row">
+                <Col xs={24} sm={24} md={8} lg={6}>
+                    <Button type="primary" icon={<IoMdRefresh />} style={{ width: "100%", backgroundColor: 'green', marginBottom: '10px' }}>
                         Danh mục sân
                     </Button>
                 </Col>
-                <Col span={6}>
-                    <Search placeholder="Tìm sân" style={{ width: "100%" }} />
+                <Col xs={24} sm={24} md={16} lg={6}>
+                    <Search placeholder="Tìm sân" style={{ width: "100%", marginBottom: '10px' }} />
                 </Col>
-                <Col span={3}>
-                    <Select defaultValue="Tất cả" style={{ width: "100%" }}>
+                <Col xs={24} sm={12} md={6} lg={3}>
+                    <Select defaultValue="Tất cả" style={{ width: "100%", marginBottom: '10px' }}>
                         <Option value="all">Khu vực</Option>
                         <Option value="hanoi">Hà Nội</Option>
                         <Option value="hochiminh">Hồ Chí Minh</Option>
                         <Option value="danang">Đà Nẵng</Option>
                     </Select>
                 </Col>
-                <Col span={3}>
-                    <Select defaultValue="Tất cả" style={{ width: "100%" }}>
+                <Col xs={24} sm={12} md={6} lg={3}>
+                    <Select defaultValue="Tất cả" style={{ width: "100%", marginBottom: '10px' }}>
                         <Option value="all">Đánh giá</Option>
                         <Option value="5">5 sao</Option>
                         <Option value="4">4 sao</Option>
                     </Select>
                 </Col>
-                <Col span={3}>
-                    <Select defaultValue="Tất cả" style={{ width: "100%" }}>
+                <Col xs={24} sm={12} md={6} lg={3}>
+                    <Select defaultValue="Tất cả" style={{ width: "100%", marginBottom: '10px' }}>
                         <Option value="all">Mức giá</Option>
                         <Option value="low">Thấp</Option>
                         <Option value="medium">Trung bình</Option>
                         <Option value="high">Cao</Option>
                     </Select>
                 </Col>
-                <Col span={3}>
-                    <Button type="primary" style={{ width: "100%", backgroundColor: 'green' }}>
+                <Col xs={24} sm={12} md={6} lg={3}>
+                    <Button type="primary" style={{ width: "100%", backgroundColor: 'green', marginBottom: '10px' }}>
                         Tìm sân
                     </Button>
                 </Col>
             </Row>
 
-
-
             <Row gutter={[16, 16]} className="court-list">
                 {loadingInitial
                     ? Array.from({ length: 4 }).map((_, i) => (
-                        <Col key={i} span={5}>
+                        <Col key={i} xs={24} sm={12} md={8} lg={6}>
                             <Card loading={true} />
                         </Col>
                     ))
                     : currentItems.map((c) => (
-                        <Col key={c.id} span={6} className="court-col">
+                        <Col key={c.id} xs={24} sm={12} md={8} lg={6} className="court-col">
                             <Card hoverable className="court-card">
                                 <Image src={c.images[0]} width={"100%"} height={"200px"} />
                                 <div className="court-details">

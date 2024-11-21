@@ -1,11 +1,14 @@
-import { Modal, Button, Form, Typography, Space, Input, Row, Col, Skeleton, Table, TableColumnsType, Flex } from 'antd';
-import { useState, useEffect } from 'react';
+import './style/BookingForm.scss';
+
+import { Button, Col, Form, Input, Modal, Row, Skeleton, Table, TableColumnsType, Typography } from 'antd';
+import { CourtPrice, IBookingModel, ISlots } from '@/app/models/booking.model';
 import dayjs, { Dayjs } from 'dayjs';
+import { useEffect, useState } from 'react';
+
+import BookingDetail from './BookingDetail';
+import CourtSelection from './CourtSelection';
 import { observer } from "mobx-react-lite";
 import { useStore } from '@/app/stores/store';
-import { CourtPrice, IBookingModel, ISlots } from '@/app/models/booking.model';
-import CourtSelection from './CourtSelection';
-import BookingDetail from './BookingDetail';
 
 const { Title } = Typography;
 
@@ -32,6 +35,7 @@ const CourtBookingForm = ({ courtClusterId, loadingCourtId, setLoadingCourtId }:
   const { bookingStore } = useStore();
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const { availableSlot, loadingSlot, courtPrice } = bookingStore;
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const handleOpenModal = async () => {
     setLoadingCourtId(courtClusterId);
@@ -180,6 +184,14 @@ const CourtBookingForm = ({ courtClusterId, loadingCourtId, setLoadingCourtId }:
     calculateTotalPrice();
   }, [selectedTimeRange, selectedCourt]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <>
       <Button
@@ -193,101 +205,108 @@ const CourtBookingForm = ({ courtClusterId, loadingCourtId, setLoadingCourtId }:
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={null}
+        width={windowWidth < 768 ? '100%' : 800}
+        className="booking-form-modal"
+        style={{ top: windowWidth < 768 ? 0 : 20 }}
       >
-        <Form form={form} onFinish={handleBookCourt}>
-          <h2>ĐẶT SÂN NHANH</h2>
-          <Space direction="vertical" style={{ width: '100%', paddingBottom: '1rem' }}>
-            <Row gutter={[16, 16]} style={{ marginTop: '1rem' }}>
-              <Col span={12}>
-                <Title level={5} style={{ textAlign: 'left' }}>Số điện thoại:</Title>
+        <Form form={form} onFinish={handleBookCourt} className="booking-form">
+          <div className="form-header">
+            <h2>ĐẶT SÂN NHANH</h2>
+          </div>
+
+          <div className="section personal-info">
+            <Row gutter={[16, 16]}>
+              <Col xs={24} sm={12}>
+                <Title level={5}>Số điện thoại:</Title>
                 <Form.Item
                   name="phonenumber"
                   rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
                 >
-                  <Input className="input" placeholder="Nhập số điện thoại" />
+                  <Input placeholder="Nhập số điện thoại" />
                 </Form.Item>
               </Col>
-              <Col span={12}>
-                <Title level={5} style={{ textAlign: 'left' }}>Tên:</Title>
+              <Col xs={24} sm={12}>
+                <Title level={5}>Tên:</Title>
                 <Form.Item
                   name="fullname"
                   rules={[{ required: true, message: 'Vui lòng nhập tên!' }]}
                 >
-                  <Input className="input" placeholder="Nhập tên" />
+                  <Input placeholder="Nhập tên" />
                 </Form.Item>
               </Col>
             </Row>
+          </div>
 
-            {loadingSlot ? (
-              <Skeleton
-                paragraph={{ rows: 4 }}
-                active
-                style={{ height: "100%", width: '100%' }}
-              />
-            ) : (
-              <Row gutter={[16, 16]}>
-                <Col span={12}>
-                  <CourtSelection
-                    availableSlot={availableSlot}
-                    selectedCourt={selectedCourt}
-                    handleCourtSelect={handleCourtSelect}
-                  />
-                  {selectedCourt && (
-                    <BookingDetail
-                      availableSlots={availableSlots}
-                      setSelectedTimeRange={setSelectedTimeRange}
-                      disabledTime={disabledTime}
-                    />
-                  )}
-                </Col>
-                <Col span={12}>
-                  <Flex vertical>
-                    <h3>BẢNG GIÁ</h3>
-                    <Table<DataType>
-                      columns={columns}
-                      dataSource={selectedCourt ? datav1 : data}
-                      pagination={false}
-                      scroll={{ y: 250 }}
-                      size='small'
-                    />
-                  </Flex>
-                </Col>
-              </Row>
-            )}
-            {selectedTimeRange && selectedTimeRange[0] && selectedTimeRange[1] && (
-              <>
+          {loadingSlot ? (
+            <div className="section">
+              <Skeleton active paragraph={{ rows: 4 }} />
+            </div>
+          ) : (
+            <>
+              <div className="section court-selection">
+                <Row gutter={[16, 16]}>
+                  <Col span={24}>
+                    <div>
+                      <h3>CHỌN SÂN</h3>
+                      <CourtSelection
+                        availableSlot={availableSlot}
+                        selectedCourt={selectedCourt}
+                        handleCourtSelect={handleCourtSelect}
+                      />
+                      {selectedCourt && (
+                        <div style={{ marginTop: '20px' }}>
+                          <h3>CHỌN GIỜ</h3>
+                          <BookingDetail
+                            availableSlots={availableSlots}
+                            setSelectedTimeRange={setSelectedTimeRange}
+                            disabledTime={disabledTime}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </Col>
+                  <Col span={24}>
+                    <div>
+                      <h3>BẢNG GIÁ</h3>
+                      <Table<DataType>
+                        columns={columns}
+                        dataSource={selectedCourt ? datav1 : data}
+                        pagination={false}
+                        scroll={{ y: 250 }}
+                        size='small'
+                      />
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+            </>
+          )}
 
-                <Form.Item
-                  name="totalPrice"
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', textAlign: 'left', marginTop: '1rem' }}>
-                    <h3 style={{ margin: 0 }}>
-                      Tổng tiền:
-                    </h3>
-                    <h4 style={{ margin: '0 0 0 10px', color: '#ff4d4f' }}>
+          {selectedTimeRange && selectedTimeRange[0] && selectedTimeRange[1] && (
+            <div className="section">
+              <Form.Item name="totalPrice">
+                <div className="price-summary">
+                  <div className="price-row total">
+                    <h3 style={{ margin: 0 }}>Tổng tiền:</h3>
+                    <span className="amount">
                       {totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-                    </h4>
+                    </span>
                   </div>
-                </Form.Item>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  style={{
-                    width: '100%',
-                    backgroundColor: '#115363',
-                    color: 'white',
-                  }}
-                  loading={bookingStore.loadingCreate}
-                  disabled={!isTimeRangeValid()}
-                >
-                  Đặt sân
-                </Button>
-              </>
-
-            )}
-          </Space>
+                </div>
+              </Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="submit-button"
+                loading={bookingStore.loadingCreate}
+                disabled={!isTimeRangeValid()}
+              >
+                Đặt sân
+              </Button>
+            </div>
+          )}
         </Form>
-      </Modal >
+      </Modal>
     </>
   );
 };

@@ -1,12 +1,14 @@
-import { useStore } from "@/app/stores/store";
-import { Button, Card, Row, Col, Skeleton, Typography, Tag, Image, Space } from "antd";
-import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
-import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
 import './style/HomeCourtCluster.scss';
+
+import { Button, Card, Col, Image, Row, Skeleton, Space, Tag, Typography } from "antd";
+import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { useEffect, useState } from "react";
+
 import CourtBookingForm from "@/feature/booking/history/components/QuickBooking/BookingForm";
+import { observer } from "mobx-react-lite";
+import { useNavigate } from 'react-router-dom';
+import { useStore } from "@/app/stores/store";
 
 const { Title, Paragraph } = Typography;
 
@@ -26,19 +28,37 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [loadingCourtId, setLoadingCourtId] = useState<number | null>(null);
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentItems = listCourt.slice(startIndex, startIndex + itemsPerPage);
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // Determine items per page based on screen size
+    const getResponsiveItemsPerPage = () => {
+        if (windowWidth < 576) return 1; // xs
+        if (windowWidth < 992) return 2; // sm and md
+        if (windowWidth < 1024) return 2; // lg but smaller than 1024px
+        return 3; // xl and larger screens
+    };
+
+    const responsiveItemsPerPage = getResponsiveItemsPerPage();
+    const startIndex = (currentPage - 1) * responsiveItemsPerPage;
+    const currentItems = listCourt.slice(startIndex, startIndex + responsiveItemsPerPage);
 
     const hasPrevious = currentPage > 1;
-    const hasNext = startIndex + itemsPerPage < listCourt.length;
+    const hasNext = startIndex + responsiveItemsPerPage < listCourt.length;
 
     const handleNext = () => {
         setCurrentPage(hasNext ? currentPage + 1 : 1);
     };
 
     const handlePrevious = () => {
-        setCurrentPage(hasPrevious ? currentPage - 1 : Math.ceil(listCourt.length / itemsPerPage));
+        setCurrentPage(hasPrevious ? currentPage - 1 : Math.ceil(listCourt.length / responsiveItemsPerPage));
     };
 
     return (
@@ -61,7 +81,7 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
                         </Row>
                         <Row gutter={[16, 16]}>
                             {currentItems.map((c) => (
-                                <Col span={8} key={c.id}>
+                                <Col xs={24} sm={12} md={12} lg={windowWidth < 1024 ? 12 : 8} xl={8} key={c.id}>
                                     <Card hoverable className="court-card" >
                                         <Image src={c.images[0]} />
                                         <div className="court-details" style={{ height: '100%' }}>

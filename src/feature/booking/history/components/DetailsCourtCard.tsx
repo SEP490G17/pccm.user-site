@@ -1,19 +1,21 @@
-import { ICourtCluster } from "@/app/models/courtcluster.model";
-import { Card, Col, Divider, Row, Typography, Tag, Flex } from "antd";
+import { ICourtCluster } from '@/app/models/courtcluster.model';
+import { CarOutlined, CoffeeOutlined, ShopOutlined, WifiOutlined } from '@ant-design/icons';
+import { Card, Col, Divider, Flex, Row, Space, Typography } from 'antd';
+import { FaHamburger, FaMotorcycle } from 'react-icons/fa';
 
 interface IProps {
   court?: ICourtCluster;
 }
 
 const formatTime = (timeString: string) => {
-  if (!timeString) return "";
+  if (!timeString) return '';
   const [hours, minutes] = timeString.split(':');
   return `${hours}:${minutes}`;
 };
 
 const DetailsCourtCard = ({ court }: IProps) => {
   return (
-    <Card className="details-card" style={{ minHeight: "100%" }}>
+    <Card className="details-card" style={{ minHeight: '100%' }}>
       <Flex style={{ margin: '0.5rem 0' }}>
         <Typography.Text style={{ fontSize: '1.3rem' }}>
           <Divider type="vertical" className="divider" />
@@ -25,7 +27,7 @@ const DetailsCourtCard = ({ court }: IProps) => {
           <tr>
             <td>Giờ mở cửa:</td>
             <td style={{ textAlign: 'right' }}>
-              {formatTime(court ? court.openTime : "")} - {formatTime(court ? court.closeTime : "")}
+              {formatTime(court ? court.openTime : '')} - {formatTime(court ? court.closeTime : '')}
             </td>
           </tr>
           <tr>
@@ -33,35 +35,62 @@ const DetailsCourtCard = ({ court }: IProps) => {
             <td>{court?.numbOfCourts} Sân</td>
           </tr>
           <tr>
-            <td>Giá sân:</td>
-            <td>120.000 đ</td>
+            <td>Giá sân từ:</td>
+            <td>100.000 đ</td>
+          </tr>
+          <tr>
+            <td>Giá sân đến:</td>
+            <td>200.000 đ</td>
           </tr>
         </tbody>
       </table>
-      <Card style={{ background: "#f3f3f3", padding: '0 0.5rem', height: '210px' }} className="details-service">
+      <Card
+        style={{ background: '#f3f3f3', padding: '1rem', height: 'auto' }}
+        className="details-service"
+      >
         <Row>
           <Typography.Text style={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: '10px' }}>
             Dịch vụ tiện ích
           </Typography.Text>
         </Row>
-        {court && (
-          <Row gutter={[16, 32]}>
-            <Col span={12} className="details-service-body">
-              {court.services.slice(0, 10).slice(0, Math.ceil(Math.min(court.services.length, 10) / 2)).map((service, index) => (
-                <Tag key={index} style={{ marginBottom: '8px', backgroundColor: '#108554', color: '#fff' }}>
-                  {service.serviceName}
-                </Tag>
-              ))}
-            </Col>
-            <Col span={12} className="details-service-body">
-              {court.services.slice(0, 10).slice(Math.ceil(Math.min(court.services.length, 10) / 2)).map((service, index) => (
-                <Tag key={index} style={{ marginBottom: '8px', backgroundColor: '#108554', color: '#fff' }}>
-                  {service.serviceName}
-                </Tag>
-              ))}
-            </Col>
-          </Row>
-        )}
+        <Row gutter={[16, 16]}>
+          <Col span={12}>
+            <Space className="utility-item">
+              <WifiOutlined style={{ fontSize: '1.2rem', fontWeight: 600 }} />
+              <Typography.Text style={{ fontWeight: 600 }}>Wifi</Typography.Text>
+            </Space>
+          </Col>
+          <Col span={12}>
+            <Space className="utility-item">
+              <FaMotorcycle style={{ fontSize: '1.2rem', fontWeight: 600 }} />
+              <Typography.Text style={{ fontWeight: 600 }}>Bãi đỗ xe máy</Typography.Text>
+            </Space>
+          </Col>
+          <Col span={12}>
+            <Space className="utility-item">
+              <CarOutlined style={{ fontSize: '1.2rem', fontWeight: 600 }} />
+              <Typography.Text style={{ fontWeight: 600 }}>Bãi đỗ xe ô tô</Typography.Text>
+            </Space>
+          </Col>
+          <Col span={12}>
+            <Space className="utility-item">
+              <FaHamburger style={{ fontSize: '1.2rem', fontWeight: 600 }} />
+              <Typography.Text style={{ fontWeight: 600 }}>Đồ ăn</Typography.Text>
+            </Space>
+          </Col>
+          <Col span={12}>
+            <Space className="utility-item">
+              <CoffeeOutlined style={{ fontSize: '1.2rem', fontWeight: 600 }} />
+              <Typography.Text style={{ fontWeight: 600 }}>Đồ uống</Typography.Text>
+            </Space>
+          </Col>
+          <Col span={12}>
+            <Space className="utility-item">
+              <ShopOutlined style={{ fontSize: '1.2rem', fontWeight: 600 }} />
+              <Typography.Text style={{ fontWeight: 600 }}>Căng tin</Typography.Text>
+            </Space>
+          </Col>
+        </Row>
       </Card>
     </Card>
   );

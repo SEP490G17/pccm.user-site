@@ -1,4 +1,5 @@
-import { Col, Typography } from "antd"
+import { Col, Typography } from "antd";
+
 import CourtIcon from "./CourtIcon";
 import { IAvailableSlotModel } from "@/app/models/booking.model";
 const { Title } = Typography;
@@ -23,7 +24,6 @@ const CourtSelection = ({ availableSlot, selectedCourt, handleCourtSelect }: IPr
                                 flexDirection: 'column',
                                 alignItems: 'center',
                                 cursor: 'pointer',
-                                marginBottom: '1rem'
                             }}
                             onClick={() => handleCourtSelect(court.id)}
                         >

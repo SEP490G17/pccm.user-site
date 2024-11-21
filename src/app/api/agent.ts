@@ -1,14 +1,3 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
-import { router } from '../router/Routes';
-import { store } from '../stores/store';
-import { toast } from 'react-toastify';
-import { sleep } from '../helper/utils';
-import { Banner } from '../models/banner.model';
-import { ICourtCluster } from '../models/courtcluster.model';
-import { INews, INewsDto } from '../models/news.model';
-import { LoginDto, RegisterDto } from '../models/account.model';
-import { User } from '../models/user.model';
-import { ImageUpload } from '../models/upload.model';
 import {
   BookingDetails,
   BookingHistoryModel,
@@ -18,8 +7,20 @@ import {
   ISlots,
   PaymentType,
 } from '../models/booking.model';
+import { INews, INewsDto } from '../models/news.model';
 import { IReview, ReviewsDto } from '../models/review.model';
+import { LoginDto, RegisterDto } from '../models/account.model';
+import axios, { AxiosError, AxiosResponse } from 'axios';
+
+import { Banner } from '../models/banner.model';
+import { ICourtCluster } from '../models/courtcluster.model';
+import { ImageUpload } from '../models/upload.model';
 import { PaginationModel } from '../models/pagination.model';
+import { User } from '../models/user.model';
+import { router } from '../router/Routes';
+import { sleep } from '../helper/utils';
+import { store } from '../stores/store';
+import { toast } from 'react-toastify';
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 

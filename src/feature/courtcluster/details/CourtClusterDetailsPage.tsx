@@ -1,21 +1,21 @@
 import { Card, Col, Row, Spin, Typography } from 'antd';
 
-import './CourtClusterDetailsStyle.scss';
-import { FaLocationDot } from 'react-icons/fa6';
-import { FaStar } from 'react-icons/fa';
-import ListCourtImage from '../../booking/history/components/ListCourtImage';
-import DetailsCourtCard from '../../booking/history/components/DetailsCourtCard';
 import { useStore } from '@/app/stores/store';
-import ReviewCourtClusterComponent from './components/review/ReviewCourtClusterComponent';
 import ListCourtCluster from '@/feature/home/components/HomeCourtCluster';
-import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { observer } from 'mobx-react';
-import PageHeadingAtoms from '../../atoms/PageHeadingAtoms';
 import { LoadingOutlined } from '@ant-design/icons';
-import Title from 'antd/es/typography/Title';
 import Link from 'antd/es/typography/Link';
+import Title from 'antd/es/typography/Title';
+import { observer } from 'mobx-react';
+import { useEffect } from 'react';
+import { FaStar } from 'react-icons/fa';
+import { FaLocationDot } from 'react-icons/fa6';
+import { useParams } from 'react-router-dom';
+import PageHeadingAtoms from '../../atoms/PageHeadingAtoms';
+import DetailsCourtCard from '../../booking/history/components/DetailsCourtCard';
+import ListCourtImage from '../../booking/history/components/ListCourtImage';
+import ReviewCourtClusterComponent from './components/review/ReviewCourtClusterComponent';
 import BookingScheduleComponent from './components/schedule/BookingScheduleComponent';
+import './CourtClusterDetailsStyle.scss';
 
 const CourtClusterDetailsPage = observer(() => {
   const { id } = useParams();
@@ -67,12 +67,12 @@ const CourtClusterDetailsPage = observer(() => {
         <Col span={18}>
           <Typography.Title level={3}>{selectedCourt?.title}</Typography.Title>
           <Typography.Paragraph
-            className="flex items-center gap-2 text-md h-5"
+            className="flex gap-2 items-center h-5 text-md"
             style={{ marginBottom: '4px' }}
           ></Typography.Paragraph>
 
           <Typography.Text
-            className="flex items-center gap-1 cursor-pointer"
+            className="flex gap-1 items-center cursor-pointer"
             style={{ fontSize: '16px' }}
           >
             <FaLocationDot style={{ marginRight: '5px', width: '10px' }} />
@@ -93,7 +93,7 @@ const CourtClusterDetailsPage = observer(() => {
           span={6}
           style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}
         >
-          <Typography.Text className="flex items-center gap-1" style={{ fontSize: '16px' }}>
+          <Typography.Text className="flex gap-1 items-center" style={{ fontSize: '16px' }}>
             Đánh giá: 4.5/5{' '}
             <FaStar className="text-yellow-500" color="#f7d03f" style={{ marginBottom: '-1px' }} />
           </Typography.Text>
@@ -102,10 +102,10 @@ const CourtClusterDetailsPage = observer(() => {
 
       <div className="w-full">
         <Row gutter={[24, 1]}>
-          <Col span={16}>
+          <Col xs={24} xl={16}>
             <ListCourtImage images={selectedCourt?.images} />
           </Col>
-          <Col span={8}>
+          <Col xs={24} xl={8}>
             <DetailsCourtCard court={selectedCourt} />
           </Col>
         </Row>
@@ -113,11 +113,11 @@ const CourtClusterDetailsPage = observer(() => {
       <Title level={3} className="mt-10">
         Thông tin đặt lịch
       </Title>
-      <div className="w-full mt-4">
+      <div className="mt-4 w-full">
         <BookingScheduleComponent />
       </div>
       <Card className="py-6 mt-5">
-        <Title className="text-center mb-14" level={2}>
+        <Title className="mb-14 text-center" level={2}>
           Thông tin chi tiết cụm sân {selectedCourt.title}
         </Title>
         <div className="flex justify-center mt-20">
@@ -127,7 +127,7 @@ const CourtClusterDetailsPage = observer(() => {
           />
         </div>
       </Card>
-      <div className="w-full mt-2 mb-6" style={{ marginTop: '30px' }}></div>
+      <div className="mt-2 mb-6 w-full" style={{ marginTop: '30px' }}></div>
       <div style={{ marginBottom: '30px', marginTop: '20px' }}>
         <ListCourtCluster title="Sân pickleball khác" itemsPerPage={3} />
       </div>
