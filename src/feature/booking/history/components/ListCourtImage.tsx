@@ -79,7 +79,7 @@ export default function ListCourtImage({ images }: IProps) {
 
   return (
     <Row gutter={[8, 12]}>
-      <Image.PreviewGroup>
+      <Image.PreviewGroup items={images.map(img => ({ src: img }))}>
         <Col span={16}>
           <Image
             src={images[0]}
@@ -98,13 +98,33 @@ export default function ListCourtImage({ images }: IProps) {
                 className="object-cover rounded-lg"
               />
             </Col>
-            <Col span={24}>
+            <Col span={24} style={{ position: 'relative' }}>
               <Image
                 src={images[2]}
                 width="100%"
                 height={subHeight}
                 className="object-cover rounded-lg"
               />
+              {images.length > 3 && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    background: 'rgba(0, 0, 0, 0.5)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontSize: '20px',
+                    borderRadius: '8px'
+                  }}
+                >
+                  +{images.length - 3}
+                </div>
+              )}
             </Col>
           </Row>
         </Col>

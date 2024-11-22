@@ -1,7 +1,5 @@
-import logo from '@/assets/pickerball-icon.png';
-import listCourtIcon from '@/assets/san_the_thao1.gif';
-import LoginPopUp from '@/feature/auth/LoginPopUp';
-import ChangePasswordPopUp from '@/feature/profile/ChangePasswordPopUp';
+import './style/Header.scss';
+
 import {
   HistoryOutlined,
   KeyOutlined,
@@ -22,11 +20,15 @@ import {
   Space,
   Typography,
 } from 'antd';
-import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
+
+import logo from '@/assets/pickerball-icon.png';
+import listCourtIcon from '@/assets/san_the_thao1.gif';
+import LoginPopUp from '@/feature/auth/LoginPopUp';
+import ChangePasswordPopUp from '@/feature/profile/ChangePasswordPopUp';
+import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../stores/store';
-import './style/Header.scss';
 
 const { Text } = Typography;
 
@@ -116,7 +118,6 @@ const Header = () => {
           <Image preview={false} src={logo} width={'4.0345rem'} height={'2.677rem'} alt="Logo" />
           <Text className="header-title">Pickleball</Text>
         </Space>
-
         <Space align="center">
           <Input
             placeholder={placeholder}
