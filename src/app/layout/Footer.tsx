@@ -1,14 +1,14 @@
-import './style/Footer.scss';
-import { Layout, Row, Col, Typography, Space, Divider, Card, Tabs } from 'antd';
 import {
     FacebookFilled,
+    InstagramFilled,
+    LinkedinFilled,
+    SkypeFilled,
     TwitterCircleFilled,
     YoutubeFilled,
-    LinkedinFilled,
-    InstagramFilled,
-    SkypeFilled,
 } from '@ant-design/icons';
+import { Card, Col, Divider, Flex, Layout, Row, Tabs, Typography } from 'antd';
 import { SiZalo } from 'react-icons/si';
+import './style/Footer.scss';
 
 const { Footer } = Layout;
 const { Title, Text, Link } = Typography;
@@ -102,7 +102,7 @@ const AppFooter = () => {
                         <Col span={6}>
                             <div className="footer-c">
                                 <Text className="footer-col">Cộng đồng</Text>
-                                <Space size="small">
+                                <Flex>
                                     <Link href="#"><FacebookFilled className="icon" /></Link>
                                     <Link href="#"><TwitterCircleFilled className="icon" /></Link>
                                     <Link href="#"><YoutubeFilled className="icon" /></Link>
@@ -110,7 +110,7 @@ const AppFooter = () => {
                                     <Link href="#"><SiZalo className="icon" /></Link>
                                     <Link href="#"><SkypeFilled className="icon" /></Link>
                                     <Link href="#"><InstagramFilled className="icon" /></Link>
-                                </Space>
+                                </Flex>
                             </div>
                         </Col>
                     </Row>

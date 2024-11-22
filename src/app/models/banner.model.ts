@@ -7,6 +7,7 @@ export interface Banner {
   endDate: string;
   status: BannerStatus;
   linkUrl: string;
+  bannerType: number;
 }
 
 export enum BannerStatus {

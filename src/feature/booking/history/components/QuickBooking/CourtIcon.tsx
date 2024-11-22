@@ -7,7 +7,15 @@ interface IconProps {
 
 const CourtIcon: React.FC<IconProps> = ({ name, isSelected }) => {
     return (
-        <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto',
+            width: '100px',
+            padding: '10px'
+        }}>
             <div
                 style={{
                     width: '70px',
@@ -23,7 +31,9 @@ const CourtIcon: React.FC<IconProps> = ({ name, isSelected }) => {
                     fontSize: '24px',
                     fontWeight: 'bold',
                     boxShadow: isSelected ? '0 6px 12px rgba(0, 0, 0, 0.4)' : '0 4px 8px rgba(0, 0, 0, 0.2)',
-                    transition: 'transform 0.2s',
+                    transition: 'all 0.2s ease',
+                    transform: isSelected ? 'scale(1.05)' : 'scale(1)',
+                    cursor: 'pointer',
                 }}
             >
                 <div
@@ -43,9 +53,12 @@ const CourtIcon: React.FC<IconProps> = ({ name, isSelected }) => {
             </div>
             <div
                 style={{
-                    marginTop: '5px',
-                    color: isSelected ? 'red' : '#000',
-                    fontSize: '15px',
+                    marginTop: '8px',
+                    color: isSelected ? '#ff4d4f' : '#333',
+                    fontSize: '14px',
+                    fontWeight: isSelected ? '600' : '400',
+                    textAlign: 'center',
+                    transition: 'all 0.2s ease',
                 }}
             >
                 {name}

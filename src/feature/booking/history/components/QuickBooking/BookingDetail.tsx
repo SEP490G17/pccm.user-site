@@ -1,6 +1,7 @@
 import { Flex, Tag, TimePicker, Typography } from 'antd';
-const { Title } = Typography;
+
 import { Dayjs } from 'dayjs';
+const { Title } = Typography;
 
 interface IProps {
     availableSlots: string[];
@@ -14,34 +15,38 @@ const BookingDetail = ({
     disabledTime,
 }: IProps) => {
     return (
-        <>
-            <Title level={5} style={{ textAlign: 'left' }}>Các giờ còn trống:</Title>
-            <Flex wrap='wrap'>
-                {availableSlots.length > 0 ? (
-                    availableSlots.map((slot, index) => (
-                        <Tag key={index} color="green" style={{ cursor: 'pointer', margin: '1px' }}>
-                            {slot}
-                        </Tag>
-                    ))
-                ) : (
-                    <span>Không có giờ trống!</span>
-                )}
+        <Flex vertical gap="middle">
+            <Flex align="center" justify="space-between">
+                <Title level={5} style={{ margin: 0, minWidth: '150px' }}>Các giờ còn trống:</Title>
+                <Flex flex={1} wrap='wrap'>
+                    {availableSlots.length > 0 ? (
+                        availableSlots.map((slot, index) => (
+                            <Tag key={index} color="green" style={{ cursor: 'pointer', margin: '2px' }}>
+                                {slot}
+                            </Tag>
+                        ))
+                    ) : (
+                        <span>Không có giờ trống!</span>
+                    )}
+                </Flex>
             </Flex>
 
-            <Title level={5} style={{ textAlign: 'left', marginTop: '20px' }}>Chọn giờ thuê:</Title>
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                <TimePicker.RangePicker
-                    allowClear
-                    format="HH:00"
-                    inputReadOnly
-                    style={{ width: '70%' }}
-                    needConfirm={false}
-                    onChange={(value) => value && setSelectedTimeRange([value[0], value[1]])}
-                    disabledTime={disabledTime}
-                    placeholder={["Giờ bắt đầu", "Giờ kết thúc"]}
-                />
-            </div>
-        </>
+            <Flex align="center" justify="space-between">
+                <Title level={5} style={{ margin: 0, minWidth: '150px' }}>Chọn giờ thuê:</Title>
+                <Flex flex={1}>
+                    <TimePicker.RangePicker
+                        allowClear
+                        format="HH:00"
+                        inputReadOnly
+                        style={{ width: '100%' }}
+                        needConfirm={false}
+                        onChange={(value) => value && setSelectedTimeRange([value[0], value[1]])}
+                        disabledTime={disabledTime}
+                        placeholder={["Giờ bắt đầu", "Giờ kết thúc"]}
+                    />
+                </Flex>
+            </Flex>
+        </Flex>
     );
 };
 

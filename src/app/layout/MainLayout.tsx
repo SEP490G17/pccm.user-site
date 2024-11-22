@@ -23,7 +23,7 @@ const App = () => {
         <Header />
       </Layout.Header>
 
-      <Content className="container mx-auto mt-[8rem] mb-[1rem] min-h-[100vh] p-0">
+      <Content className="container mx-auto mt-[8rem] mb-[1rem] min-h-[100vh]">
         <Outlet />
       </Content>
 
