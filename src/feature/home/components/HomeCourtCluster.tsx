@@ -1,19 +1,19 @@
 import './style/HomeCourtCluster.scss';
 
 import { Button, Card, Col, Image, Row, Skeleton, Space, Tag, Typography } from "antd";
+import { useEffect, useState } from "react";
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { useEffect, useState } from "react";
 
+import { useStore } from "@/app/stores/store";
 import CourtBookingForm from "@/feature/booking/history/components/QuickBooking/BookingForm";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from 'react-router-dom';
-import { useStore } from "@/app/stores/store";
 
 const { Title, Paragraph } = Typography;
 
 interface IProps {
-    title: string;
+    title?: string;
     itemsPerPage: number;
 }
 

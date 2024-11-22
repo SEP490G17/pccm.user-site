@@ -1,14 +1,14 @@
 import './style/BookingForm.scss';
 
-import { Button, Col, Form, Input, Modal, Row, Skeleton, Table, TableColumnsType, Typography } from 'antd';
 import { CourtPrice, IBookingModel, ISlots } from '@/app/models/booking.model';
+import { Button, Col, Form, Input, Modal, Row, Skeleton, Table, TableColumnsType, Typography } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 
+import { useStore } from '@/app/stores/store';
+import { observer } from "mobx-react-lite";
 import BookingDetail from './BookingDetail';
 import CourtSelection from './CourtSelection';
-import { observer } from "mobx-react-lite";
-import { useStore } from '@/app/stores/store';
 
 const { Title } = Typography;
 

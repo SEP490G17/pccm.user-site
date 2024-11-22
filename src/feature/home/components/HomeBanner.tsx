@@ -4,8 +4,8 @@ import { Carousel, Skeleton, Typography } from "antd";
 import { useEffect, useMemo } from "react";
 
 import { Banner } from "@/app/models/banner.model";
-import { observer } from "mobx-react-lite";
 import { useStore } from "@/app/stores/store";
+import { observer } from "mobx-react-lite";
 
 interface IProps {
     title: string;
@@ -23,6 +23,8 @@ function ListBanner({ title }: IProps) {
         };
     }, [bannerArray]);
 
+    console.log('check bannerArray', bannerArray);
+
     useEffect(() => {
         loadListBanner();
     }, [loadListBanner]);
@@ -36,7 +38,7 @@ function ListBanner({ title }: IProps) {
                         <div
                             className="banner-overlay"
                             style={{
-                                backgroundImage: `url(${banner.imageUrl})`,
+                                backgroundImage: `url(${banner.imageUrl || 'https://res.cloudinary.com/dasy5hwz4/image/upload/v1732032348/pydcp3llda5h3soccnmr.jpg'})`,
                                 backgroundSize: 'cover',
                                 backgroundPosition: 'center',
                                 width: '100%',

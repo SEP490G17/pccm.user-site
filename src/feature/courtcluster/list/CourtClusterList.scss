@@ -1,5 +1,4 @@
 .list-court-cluster {
-  max-width: 85%;
   margin: auto;
   padding: 20px 0;
 
@@ -193,13 +192,44 @@
     }
   }
 
-  .banner-container {
-    margin-bottom: 50px;
+  .featured-courts {
+    margin: 30px 0;
     
-    @media (max-width: 768px) {
-      margin-bottom: 30px;
+    .court-card {
+      height: 100%;
+      
+      .court-details {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: calc(100% - 200px);
+      }
+
+      .court-info {
+        flex: 1;
+      }
+
+      .court-title {
+        margin-bottom: 8px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .rating-row {
+        margin-top: auto;
+      }
     }
   }
+
+  // .banner-container {
+  //   margin-bottom: 50px;
+    
+  //   @media (max-width: 768px) {
+  //     margin-bottom: 30px;
+  //   }
+  // }
 
   .court-list {
     margin-bottom: 24px;
