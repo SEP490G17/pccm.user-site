@@ -164,7 +164,7 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
                     <div
                       style={{
                         display: 'flex',
-                        flexDirection: windowWidth < 1280 ? 'column' : 'row',
+                        flexDirection: windowWidth < 1540 ? 'column' : 'row',
                         justifyContent: 'space-between',
                         gap: '8px',
                       }}
