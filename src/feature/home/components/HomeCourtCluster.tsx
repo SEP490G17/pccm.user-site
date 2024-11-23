@@ -1,12 +1,12 @@
-import './style/HomeCourtCluster.scss';
-import { Button, Card, Col, Image, Row, Skeleton, Space, Typography } from 'antd';
+import { useStore } from '@/app/stores/store';
+import CourtBookingForm from '@/feature/booking/history/components/QuickBooking/BookingForm';
+import { Button, Card, Col, Image, Row, Skeleton, Typography } from 'antd';
+import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
-import { useStore } from '@/app/stores/store';
-import CourtBookingForm from '@/feature/booking/history/components/QuickBooking/BookingForm';
-import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
+import './style/HomeCourtCluster.scss';
 
 const { Title, Paragraph } = Typography;
 
@@ -164,7 +164,7 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
                     <div
                       style={{
                         display: 'flex',
-                        flexDirection: windowWidth < 1540 ? 'column' : 'row',
+                        flexDirection: 'column',
                         justifyContent: 'space-between',
                         gap: '8px',
                       }}

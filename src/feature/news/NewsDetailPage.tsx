@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { observer } from 'mobx-react-lite';
 import { useStore } from '@/app/stores/store';
+import { observer } from 'mobx-react-lite';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './style/NewsDetailPage.scss';
 // import ListBanner from '@/feature/home/components/HomeBanner';
@@ -23,7 +23,7 @@ const NewsDetail: React.FC = () => {
     }
 
     return (
-        <div className="news-detail" style={{ maxWidth: '85%', margin: 'auto', padding: '20px 0px' }}>
+        <div className="news-detail" style={{ margin: 'auto', padding: '20px 0px' }}>
             <PageHeadingAtoms
                 breadCrumb={[
                     { title: "Trang chủ", to: "/home" },
