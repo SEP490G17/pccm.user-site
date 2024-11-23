@@ -1,5 +1,6 @@
 import { makeAutoObservable, reaction } from 'mobx';
 import { ServeError } from '../models/serverError.model';
+import { User } from '../models/user.model';
 
 export default class CommonStore {
   error: ServeError | null = null;
@@ -35,7 +36,20 @@ export default class CommonStore {
     this.appLoaded = true;
   };
 
+  setUserApp = (user: User) => {
+    localStorage.setItem('fullName', user.displayName);
+    localStorage.setItem('phoneNumber', user.phoneNumber);
+  };
+
+  getUserFullName = () => {
+    return localStorage.getItem('fullName') || '';
+  };
+
+  getPhoneNumber = () => {
+    return localStorage.getItem('phoneNumber') || '';
+  };
+
   toggleSidebar = () => {
-    this.isCollapsed =!this.isCollapsed;
+    this.isCollapsed = !this.isCollapsed;
   };
 }

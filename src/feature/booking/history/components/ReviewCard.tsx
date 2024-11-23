@@ -1,7 +1,6 @@
 import { IReview } from "@/app/models/review.model";
 import { useStore } from "@/app/stores/store";
-import { Avatar, Card, Rate, Space, Typography } from "antd";
-
+import { Avatar, Card, Modal, Rate, Space, Typography } from "antd";
 interface IProps {
     reviews: IReview;
 }
@@ -21,7 +20,21 @@ const formatDate = (dateString: string) => {
 
 
 const ReviewCard = ({ reviews }: IProps) => {
-    const { courtClusterStore, authStore } = useStore();
+    const { courtClusterDetailsStore, commonStore } = useStore();
+    const userLoginPhoneNumber = commonStore.getPhoneNumber()
+
+    const showDeleteConfirm = () => {
+        Modal.confirm({
+            title: 'Xác nhận xóa',
+            content: 'Bạn có chắc chắn muốn xóa đánh giá này không?',
+            okText: 'Xóa',
+            okType: 'danger',
+            cancelText: 'Hủy',
+            onOk: async () => {
+                await courtClusterDetailsStore.deleteReviews(reviews.id);
+            },
+        });
+    };
 
     return (
         <Card
@@ -48,9 +61,9 @@ const ReviewCard = ({ reviews }: IProps) => {
                 <Typography.Text>{reviews.comment}</Typography.Text>
                 <Space direction="horizontal" size={"middle"}>
                     <Typography.Text type="secondary" style={{ fontSize: '10px' }}> {formatDate(reviews.createdAt)}</Typography.Text>
-                    {authStore && (
+                    {(userLoginPhoneNumber === reviews.phoneNumber) && (
                         <Typography.Link
-                            onClick={() => { courtClusterStore.deleteReviews(reviews.id); }}
+                            onClick={showDeleteConfirm}
                             type="danger"
                             style={{ fontSize: '10px' }}
                         >

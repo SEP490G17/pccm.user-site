@@ -47,19 +47,10 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
       />
 
       <Row gutter={[16, 16]} justify="space-between" align="middle" className="filter-row">
-        <Col xs={24} sm={24} md={8} lg={6}>
-          <Button
-            type="primary"
-            icon={<IoMdRefresh />}
-            style={{ width: '100%', backgroundColor: 'green', marginBottom: '10px' }}
-          >
-            Danh mục sân
-          </Button>
-        </Col>
         <Col xs={24} sm={24} md={16} lg={6}>
           <Search placeholder="Tìm sân" style={{ width: '100%', marginBottom: '10px' }} />
         </Col>
-        <Col xs={24} sm={12} md={6} lg={3}>
+        <Col xs={24} sm={12} md={6} lg={5}>
           <Select defaultValue="Tất cả" style={{ width: '100%', marginBottom: '10px' }}>
             <Option value="all">Khu vực</Option>
             <Option value="hanoi">Hà Nội</Option>
@@ -67,14 +58,14 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
             <Option value="danang">Đà Nẵng</Option>
           </Select>
         </Col>
-        <Col xs={24} sm={12} md={6} lg={3}>
+        <Col xs={24} sm={12} md={6} lg={5}>
           <Select defaultValue="Tất cả" style={{ width: '100%', marginBottom: '10px' }}>
             <Option value="all">Đánh giá</Option>
             <Option value="5">5 sao</Option>
             <Option value="4">4 sao</Option>
           </Select>
         </Col>
-        <Col xs={24} sm={12} md={6} lg={3}>
+        <Col xs={24} sm={12} md={6} lg={5}>
           <Select defaultValue="Tất cả" style={{ width: '100%', marginBottom: '10px' }}>
             <Option value="all">Mức giá</Option>
             <Option value="low">Thấp</Option>

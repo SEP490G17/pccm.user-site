@@ -132,7 +132,7 @@ const PaymentAgent = {
 
 const Reviews = {
   listByCourtClusterId: (id: string): Promise<IReview[]> => requests.get(`/Review/${id}`),
-  create: (data: ReviewsDto): Promise<any> => requests.post(`/Review`, data),
+  create: (data: ReviewsDto): Promise<IReview> => requests.post(`/Review`, data),
   delete: (id: number): Promise<any> => requests.del(`/Review/${id}`),
 };
 

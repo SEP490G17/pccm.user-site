@@ -1,15 +1,15 @@
 export interface IReview {
-    id: number;
-    userId: string;
-    fullName: string;
-    courtClusterId: number;
-    rating: number;
-    comment: string;
-    createdAt: string;
-  }
+  id: number;
+  phoneNumber: string;
+  fullName: string;
+  courtClusterId: number;
+  rating: number;
+  comment: string;
+  createdAt: string;
+}
 
 export class ReviewsDto {
-  userId: string = '';
+  phoneNumber: string = '';
   courtclusterId: number = 0;
   rating: number = 0;
   comment: string = '';

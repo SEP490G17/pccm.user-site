@@ -22,7 +22,7 @@ const CourtClusterDetailsPage = observer(() => {
   const { courtClusterDetailsStore } = useStore();
   const {
     selectedCourt,
-    listReviews,
+    reviewArray,
     getDetailsCourtCluster,
     getListReviewByCourtClusterId,
     setLoadingInitialDetailsPage,
@@ -35,9 +35,9 @@ const CourtClusterDetailsPage = observer(() => {
       setLoadingInitialDetailsPage(true);
       Promise.all([
         (courtClusterDetailsStore.loadScheduleBookingList(),
-        courtClusterDetailsStore.loadCourtPrice(),
-        getDetailsCourtCluster(id),
-        getListReviewByCourtClusterId(id)),
+          courtClusterDetailsStore.loadCourtPrice(),
+          getDetailsCourtCluster(id),
+          getListReviewByCourtClusterId(id)),
       ]).finally(() => setLoadingInitialDetailsPage(false));
     }
   }, [
@@ -55,6 +55,23 @@ const CourtClusterDetailsPage = observer(() => {
       </div>
     );
   }
+  const ratingsData: { [key: string]: number } = {
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
+  };
+  let totalRating = 0;
+  reviewArray?.forEach((review) => {
+    const rating = review.rating;
+    totalRating += rating;
+    if (ratingsData[rating]) {
+      ratingsData[rating]++;
+    } else {
+      ratingsData[rating] = 1;
+    }
+  });
   return (
     <>
       <PageHeadingAtoms
@@ -94,7 +111,7 @@ const CourtClusterDetailsPage = observer(() => {
           style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}
         >
           <Typography.Text className="flex gap-1 items-center" style={{ fontSize: '16px' }}>
-            Đánh giá: 4.5/5{' '}
+            Đánh giá: {totalRating > 0 && reviewArray.length > 0 ? (totalRating / reviewArray.length).toFixed() : 0}/5{' '}
             <FaStar className="text-yellow-500" color="#f7d03f" style={{ marginBottom: '-1px' }} />
           </Typography.Text>
         </Col>
@@ -132,7 +149,7 @@ const CourtClusterDetailsPage = observer(() => {
         <ListCourtCluster title="Sân pickleball khác" itemsPerPage={3} />
       </div>
 
-      <ReviewCourtClusterComponent reviews={listReviews} courtClusterId={selectedCourt?.id} />
+      <ReviewCourtClusterComponent reviews={reviewArray} courtClusterId={selectedCourt?.id} />
     </>
   );
 });

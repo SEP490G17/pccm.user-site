@@ -114,10 +114,10 @@ const Header = () => {
   return (
     <>
       <div className="header-container" style={{ padding: '0 50px' }}>
-        <Space align="center" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
+        <Flex align="center" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
           <Image preview={false} src={logo} width={'4.0345rem'} height={'2.677rem'} alt="Logo" />
           <Text className="header-title">Pickleball</Text>
-        </Space>
+        </Flex>
         <Space align="center">
           <Input
             placeholder={placeholder}
