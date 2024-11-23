@@ -1,6 +1,7 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import { ICourtCluster } from '@/app/models/courtcluster.model';
 import agent from '@/app/api/agent';
+import { catchErrorHandle } from '@/app/helper/utils';
 
 export default class CourtClusterListStore {
   listCourt: ICourtCluster[] = [];
@@ -12,11 +13,12 @@ export default class CourtClusterListStore {
 
   loadListCourt = async () => {
     this.setLoadingInitial(true);
-    this.listCourt = await agent.CourtClusters.list();
-    console.log(this.listCourt);
-    await runInAction(async () => {
-      this.setLoadingInitial(false);
-    });
+    const [err, res] = await catchErrorHandle(agent.CourtClusters.list());
+    if (res) {
+      this.listCourt = res;
+    }
+    this.setLoadingInitial(false);
+    return { err, res };
   };
 
   setLoadingInitial = (isLoad: boolean) => (this.loadingInitial = isLoad);
