@@ -37,7 +37,13 @@ function HomeNews({ title, itemsPerPage }: IProps) {
         ) : (
           <>
             {currentItems.map((news, index) => (
-              <Col key={news.id} span={index === 1 ? 16 : 8}>
+              <Col 
+                key={news.id} 
+                xs={24}
+                sm={24}
+                md={index === 1 ? 16 : 8}
+                lg={index === 1 ? 16 : 8}
+              >
                 <Link to={`/news/${news.id}`} key={news.id}>
                   <Card
                     hoverable
@@ -85,7 +91,13 @@ function HomeNews({ title, itemsPerPage }: IProps) {
             ))}
             {currentItems.length < itemsPerPage &&
               Array.from({ length: itemsPerPage - currentItems.length }).map((_, index) => (
-                <Col key={index} span={6}>
+                <Col 
+                  key={index} 
+                  xs={24}
+                  sm={24}
+                  md={8}
+                  lg={8}
+                >
                   <div className="news-card empty-card" style={{ height: '300px' }}></div>
                 </Col>
               ))}

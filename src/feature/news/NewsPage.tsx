@@ -1,12 +1,12 @@
-import { useEffect } from 'react';
-import { observer } from 'mobx-react-lite';
-import { useStore } from '@/app/stores/store';
-import { Skeleton, Row, Col, Button } from 'antd';
-import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
-import { Link } from 'react-router-dom';
-import Pagination from '@/feature/atoms/Pagination';
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import './style/NewsPage.scss';
+
+import { Link } from 'react-router-dom';
+import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
+import Pagination from '@/feature/atoms/Pagination';
+import { Skeleton } from 'antd';
+import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
+import { useStore } from '@/app/stores/store';
 
 const NewsPage = () => {
     const { newsStore } = useStore();
@@ -18,25 +18,8 @@ const NewsPage = () => {
     const sortedNews = newsStore.paginatedNews.slice().sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     const recentPosts = sortedNews.slice(0, 5);
     const shuffledNews = [...newsStore.listNews].sort(() => 0.5 - Math.random());
-    const relatedPageSize = 4;
-    const { currentPage, pageSize, relatedNewsCurrentPage } = newsStore;
-
-
-    const hasRelatedPrevious = relatedNewsCurrentPage > 1;
-    const hasRelatedNext = relatedNewsCurrentPage < Math.ceil(shuffledNews.length / pageSize);
-
-
-    const handleRelatedNext = () => {
-        if (hasRelatedNext) {
-            newsStore.setRelatedNewsCurrentPage(relatedNewsCurrentPage + 1);
-        }
-    };
-
-    const handleRelatedPrevious = () => {
-        if (hasRelatedPrevious) {
-            newsStore.setRelatedNewsCurrentPage(relatedNewsCurrentPage - 1);
-        }
-    };
+    const { currentPage, pageSize } = newsStore;
+ 
 
     return (
         <div className="news-page">
@@ -78,7 +61,7 @@ const NewsPage = () => {
                 </div>
 
                 <div className="recent-posts">
-                    <h3 className="section-title recent-posts-title" style={{ marginTop: '30px' }}>Bài viết gần đây</h3>
+                    <h3 className="section-title recent-posts-title" >Bài viết gần đây</h3>
                     {newsStore.loadingInitial ? (
                         <Skeleton active title paragraph={{ rows: 3 }} />
                     ) : (
@@ -99,18 +82,13 @@ const NewsPage = () => {
             </div>
 
             <div className="related-news">
-                <h3 className="section-title" style={{ marginTop: '30px' }}>Tin liên quan</h3>
+                <h3 className="section-title">Tin liên quan</h3>
                 {newsStore.loadingInitial ? (
                     <Skeleton active title paragraph={{ rows: 3 }} />
                 ) : (
                     <div className="related-news-container">
-                        <Row justify="space-between" align="middle" style={{ marginTop: '16px' }}>
-                            <Col>
-                                <Button onClick={handleRelatedPrevious} type="primary" disabled={!hasRelatedPrevious} icon={<IoIosArrowBack />} />
-                            </Col>
-                        </Row>
                         <div className="related-news-list">
-                            {shuffledNews.slice((relatedNewsCurrentPage - 1) * relatedPageSize, relatedNewsCurrentPage * relatedPageSize).map((newsItem) => (
+                            {shuffledNews.map((newsItem) => (
                                 <Link key={newsItem.id} to={`/news/${newsItem.id}`} className="related-news-item">
                                     <img src={newsItem.thumbnail || '/default-thumbnail.jpg'} alt={newsItem.title} />
                                     <h4>{newsItem.title}</h4>
@@ -119,11 +97,6 @@ const NewsPage = () => {
                                 </Link>
                             ))}
                         </div>
-                        <Row justify="space-between" align="middle" style={{ marginTop: '16px' }}>
-                            <Col>
-                                <Button onClick={handleRelatedNext} type="primary" disabled={!hasRelatedNext} icon={<IoIosArrowForward />} />
-                            </Col>
-                        </Row>
                     </div>
                 )}
             </div>
