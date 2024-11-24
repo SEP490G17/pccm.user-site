@@ -2,19 +2,23 @@
   position: relative;
 
   .court-list-content {
-    display: flex;
-    align-items: center;
-    gap: 16px;
     position: relative;
+    padding: 0 48px;
 
     .courts-container {
-      flex: 1;
-      margin: 0 48px;
-      padding: 0 48px;
-    }
-    @media screen and (max-width: 576px) {
-      .courts-container {
-        padding: 0 32px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .courts-wrapper {
+        display: flex;
+        flex-wrap: nowrap;
+        margin: 0 -8px;
       }
     }
 
@@ -23,6 +27,28 @@
       top: 50%;
       transform: translateY(-50%);
       z-index: 2;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #115363;
+      border: none;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover:not(:disabled) {
+        background-color: #0d3f4a;
+        transform: translateY(-50%) scale(1.1);
+      }
+
+      &:disabled {
+        background-color: white;
+        color: #d9d9d9;
+        cursor: not-allowed;
+      }
 
       &.prev-button {
         left: 0;
@@ -39,11 +65,10 @@
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   background-color: #fff;
-  margin-bottom: 24px;
+  height: 100%;
+  margin: 8px;
 
   &:hover {
     transform: translateY(-5px);
@@ -59,39 +84,17 @@
     height: 180px;
     object-fit: cover;
     border-bottom: 1px solid #f0f0f0;
-    border-radius: 8px 8px 0 0;
   }
 
   .court-details {
-    margin-top: 10px;
+    padding: 16px;
 
-    .court-title {
-      margin-bottom: 8px;
-      color: #333;
-      font-weight: 600;
-    }
-
-    .service-paragraph,
-    .product-paragraph {
-      margin-bottom: 8px;
-      color: #777;
-      font-size: 14px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .court-info {
+      margin-bottom: 16px;
     }
 
     .rating-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       margin-top: 8px;
-
-      .rating-value {
-        margin-left: 5px;
-        font-size: 14px;
-        color: #333;
-      }
     }
   }
 }
@@ -101,15 +104,27 @@
   background-color: #115363;
   color: white;
   border: none;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 
   &:hover {
-    border-color: black !important;
-    color: black !important;
+    background-color: #0d3f4a;
   }
 }
 
 .slider-container {
   width: 100%;
   padding: 16px;
+}
+
+@media screen and (max-width: 576px) {
+  .court-cluster-container {
+    .court-list-content {
+      padding: 0 32px;
+
+      .nav-button {
+        width: 32px;
+        height: 32px;
+      }
+    }
+  }
 }
