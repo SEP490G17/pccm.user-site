@@ -1,15 +1,15 @@
 import './CourtClusterList.scss';
 
 import { Button, Card, Col, Image, Input, Row, Select, Typography } from 'antd';
-import { useEffect, useState } from 'react';
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
+import { useEffect, useState } from 'react';
 
-import { useStore } from '@/app/stores/store';
-import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
-import Pagination from '@/feature/atoms/Pagination';
 import ListBanner from '@/feature/home/components/HomeBanner';
 import ListCourtCluster from '@/feature/home/components/HomeCourtCluster';
+import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
+import Pagination from '@/feature/atoms/Pagination';
 import { observer } from 'mobx-react-lite';
+import { useStore } from '@/app/stores/store';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
@@ -96,47 +96,47 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
       <Row gutter={[16, 16]} className="court-list">
         {loadingInitial
           ? Array.from({ length: 4 }).map((_, i) => (
-            <Col key={i} xs={24} sm={12} md={8} lg={6}>
-              <Card loading={true} />
-            </Col>
-          ))
+              <Col key={i} xs={24} sm={12} md={8} lg={6}>
+                <Card loading={true} />
+              </Col>
+            ))
           : currentItems.map((c) => (
-            <Col key={c.id} xs={24} sm={12} md={8} lg={6} className="court-col">
-              <Card hoverable className="court-card">
-                <Image src={c.images[0]} width={'100%'} height={'200px'} />
-                <div className="court-details">
-                  <div className="court-info">
-                    <Title level={5} className="court-title">
-                      {c.title}
-                    </Title>
-                    <Paragraph>Khu vực: {c.address}</Paragraph>
-                    <Paragraph className="service-paragraph" style={{ height: '25px' }}>
-                      {/* {c.services.slice(0, 2).map((service) => (
+              <Col key={c.id} xs={24} sm={12} md={8} lg={6} className="court-col">
+                <Card hoverable className="court-card">
+                  <Image src={c.images[0]} width={'100%'} height={'200px'} />
+                  <div className="court-details">
+                    <div className="court-info">
+                      <Title level={5} className="court-title">
+                        {c.title}
+                      </Title>
+                      <Paragraph>Khu vực: {c.address}</Paragraph>
+                      <Paragraph className="service-paragraph" style={{ height: '25px' }}>
+                        {/* {c.services.slice(0, 2).map((service) => (
                           <Tag key={service.id}>{service.serviceName}</Tag>
                         ))} */}
-                    </Paragraph>
-                    {/* <Paragraph className="product-paragraph">
+                      </Paragraph>
+                      {/* <Paragraph className="product-paragraph">
                                             Sản phẩm: {c.products.slice(0, 2).map(product => product.productName).join(', ')}
                                         </Paragraph> */}
-                    <Row justify="space-between" align="middle" className="rating-row">
-                      <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>
-                      <Row>
-                        <FaStar className="text-yellow-500" color="#f7d03f" />
-                        <FaStar className="text-yellow-500" color="#f7d03f" />
-                        <FaStar className="text-yellow-500" color="#f7d03f" />
-                        <FaStar className="text-yellow-500" color="#f7d03f" />
-                        <FaStarHalfAlt className="text-yellow-500" color="#f7d03f" />
-                        <Typography.Paragraph className="rating-value">
-                          (4.5)
-                        </Typography.Paragraph>
+                      <Row justify="space-between" align="middle" className="rating-row">
+                        <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>
+                        <Row>
+                          <FaStar className="text-yellow-500" color="#f7d03f" />
+                          <FaStar className="text-yellow-500" color="#f7d03f" />
+                          <FaStar className="text-yellow-500" color="#f7d03f" />
+                          <FaStar className="text-yellow-500" color="#f7d03f" />
+                          <FaStarHalfAlt className="text-yellow-500" color="#f7d03f" />
+                          <Typography.Paragraph className="rating-value">
+                            (4.5)
+                          </Typography.Paragraph>
+                        </Row>
                       </Row>
-                    </Row>
+                    </div>
+                    <Button className="book-button">Chi tiết sân</Button>
                   </div>
-                  <Button className="book-button">Chi tiết sân</Button>
-                </div>
-              </Card>
-            </Col>
-          ))}
+                </Card>
+              </Col>
+            ))}
       </Row>
 
       <Row justify="center" className="pagination">
