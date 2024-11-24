@@ -90,7 +90,7 @@ const Banners = {
 };
 
 const CourtClusters = {
-  list: (): Promise<ICourtCluster[]> => requests.get(`/courtCluster/list-all-usersite`),
+  list: (): Promise<ICourtCluster[]> => requests.get(`/CourtCluster/list-all-usersite`),
   details: (id: string): Promise<ICourtCluster> => requests.get(`/CourtCluster/usersite/${id}`),
 };
 
