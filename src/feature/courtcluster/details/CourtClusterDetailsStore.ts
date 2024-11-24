@@ -12,8 +12,11 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 dayjs.extend(utc);
 dayjs.extend(timezone);
+import _ from 'lodash';
+import { store } from '@/app/stores/store';
 
 export default class CourtClusterDetailsStore {
+  reviewsRegistry = new Map<number, IReview>();
   listReviews: IReview[] = [];
   selectedCourtId: string | undefined;
   selectedCourt: ICourtCluster | undefined = undefined;
@@ -26,7 +29,7 @@ export default class CourtClusterDetailsStore {
     makeAutoObservable(this);
   }
 
-  clearSelectedCourt = () => this.selectedCourt = undefined;
+  clearSelectedCourt = () => (this.selectedCourt = undefined);
 
   loadCourtPrice = async () => {
     if (this.selectedCourtId) {
@@ -65,40 +68,56 @@ export default class CourtClusterDetailsStore {
 
   getListReviewByCourtClusterId = async (id: string) => {
     this.loadingReview = true;
+    const [err, res] = await catchErrorHandle(agent.Reviews.listByCourtClusterId(id));
     runInAction(async () => {
-      await agent.Reviews.listByCourtClusterId(id)
-        .then((data) => (this.listReviews = data))
-        .catch(() => {
-          notification.error({
-            message: 'Tải danh sách review thất bại',
-            type: 'error',
-            duration: 3,
-            placement: 'bottom',
-          });
+      if (err) {
+        notification.error({
+          message: 'Tải danh sách review thất bại',
+          type: 'error',
+          duration: 3,
+          placement: 'bottom',
         });
+      }
+      if (res) {
+        res.forEach(this.setReviews);
+      }
       this.loadingReview = false;
     });
   };
 
   createReviews = async (data: ReviewsDto) => {
     this.loadingReview = true;
-
-    runInAction(async () => {
-      await agent.Reviews.create(data)
-        .then(() => toast.success('Thêm đánh giá thành công'))
-        .catch(() => toast.error('Tạo review thất bại'));
+    if (!store.commonStore.getPhoneNumber()) {
+      toast.error('Bạn cần đăng nhập để dùng chức năng này');
       this.loadingReview = false;
-    });
+      return;
+    }
+    try {
+      const response = await agent.Reviews.create(data);
+      this.setReviews(response);
+      toast.success('Thêm đánh giá thành công');
+    } catch {
+      toast.error('Thêm đánh giá thất bại');
+    } finally {
+      this.loadingReview = false;
+    }
   };
 
   deleteReviews = async (data: number) => {
-    this.loadingReview = true;
-
+    const reviewToDelete = this.reviewsRegistry.get(data);
+    if (!reviewToDelete) {
+      toast.error('Không tìm thấy đánh giá');
+      return;
+    }
+    this.reviewsRegistry.delete(data);
     runInAction(async () => {
       await agent.Reviews.delete(data)
-        .then(() => toast.success('Xóa đánh giá thành công'))
-        .catch(() => toast.error('Tạo review thất bại'));
-      this.loadingReview = false;
+        .then(() => {
+        })
+        .catch(() => {
+          this.reviewsRegistry.set(data, reviewToDelete);
+          toast.error('Tạo review thất bại');
+        });
     });
   };
 
@@ -140,9 +159,18 @@ export default class CourtClusterDetailsStore {
     }
     this.bookingForScheduleRegistry.set(booking.id, booking);
   }
+
+  get reviewArray() {
+    return _.orderBy(Array.from(this.reviewsRegistry.values()), ['id'], ['desc']);
+  }
+
   get bookingScheduleArray() {
     return Array.from(this.bookingForScheduleRegistry.values());
   }
 
-  setLoadingBookingForSchedule = (load: boolean) => this.loadingBookingForSchedule  = load;
+  private setReviews = (review: IReview) => {
+    this.reviewsRegistry.set(review.id, review);
+  };
+
+  setLoadingBookingForSchedule = (load: boolean) => (this.loadingBookingForSchedule = load);
 }

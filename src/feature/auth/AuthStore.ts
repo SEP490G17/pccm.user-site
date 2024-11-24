@@ -25,7 +25,8 @@ export default class AuthStore {
     try {
       const user = await agent.Account.login(creds);
       // if (this.rememberMe) {
-        store.commonStore.setToken(user.token);
+      store.commonStore.setToken(user.token);
+      store.commonStore.setUserApp(user);
       // } else {
       //   store.commonStore.setTokenSession(user.token);
       // }
@@ -56,20 +57,18 @@ export default class AuthStore {
   };
 
   logout = () => {
-    store.commonStore.setToken(null);
-    localStorage.removeItem('jwt');
-    sessionStorage.removeItem('jwt');
+    localStorage.clear();
+    sessionStorage.clear();
     this.userApp = null;
     router.navigate('/');
   };
 
   getUser = async () => {
-      try {
-        const user = await agent.Account.current();
-        runInAction(() => (this.userApp = user));
-      } catch (error) {
-        console.log(error);
-      }
-    
+    try {
+      const user = await agent.Account.current();
+      runInAction(() => (this.userApp = user));
+    } catch (error) {
+      console.log(error);
+    }
   };
 }

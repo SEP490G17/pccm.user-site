@@ -1,19 +1,19 @@
 import {
-    Button,
-    Card,
-    Col,
-    Divider,
-    Flex,
-    Form,
-    Pagination,
-    Progress,
-    Rate,
-    Row,
-    Typography,
+  Button,
+  Card,
+  Col,
+  Divider,
+  Flex,
+  Form,
+  Pagination,
+  Progress,
+  Rate,
+  Row,
+  Typography,
 } from 'antd';
 import { IReview, ReviewsDto } from '@/app/models/review.model';
 import { useEffect, useState } from 'react';
-
+import { observer } from 'mobx-react-lite';
 import { FaStar } from 'react-icons/fa';
 import ReviewCard from '../../../../booking/history/components/ReviewCard';
 import TextArea from 'antd/es/input/TextArea';
@@ -29,7 +29,7 @@ const ReviewCourtClusterComponent = ({ reviews, courtClusterId }: IProps) => {
   const [value, setValue] = useState(0);
   const [comment, setComment] = useState('');
   const [isFormVisible, setIsFormVisible] = useState(false);
-  const { courtClusterDetailsStore } = useStore();
+  const { courtClusterDetailsStore, commonStore } = useStore();
   const [form] = Form.useForm();
   const ratingsData: { [key: string]: number } = {
     1: 0,
@@ -83,16 +83,17 @@ const ReviewCourtClusterComponent = ({ reviews, courtClusterId }: IProps) => {
       toast.error('Vui lòng đánh giá sao');
     } else {
       const data = new ReviewsDto({
-        userId: '612c71e2-a43e-426f-86c6-75820d61b36f',
+        phoneNumber: commonStore.getPhoneNumber(),
         comment: values.comment,
         courtclusterId: courtClusterId,
-        createAt: '',
         rating: values.star,
       });
-      await courtClusterDetailsStore.createReviews(data).then(() => {
-        setIsFormVisible(false);
+      try {
+        await courtClusterDetailsStore.createReviews(data);
         form.resetFields();
-      });
+      } catch (error) {
+        console.error("Error creating review:", error);
+      }
     }
   };
 
@@ -102,7 +103,7 @@ const ReviewCourtClusterComponent = ({ reviews, courtClusterId }: IProps) => {
       <Flex vertical>
         <Typography.Text style={{ fontSize: '1.3rem', fontWeight: 'bold' }}>
           Đánh giá sân thể thao
-          <Typography.Text style={{ fontWeight: 'normal' }}> (1 đánh giá)</Typography.Text>
+          <Typography.Text style={{ fontWeight: 'normal' }}> ({reviews?.length} đánh giá)</Typography.Text>
         </Typography.Text>
         <Divider type="horizontal" style={{ border: '1px solid rgb(200, 200, 200)' }} />
       </Flex>
@@ -146,11 +147,12 @@ const ReviewCourtClusterComponent = ({ reviews, courtClusterId }: IProps) => {
             <Button
               className="button"
               type="primary"
-              style={{ 
+              style={{
                 backgroundColor: '#115363',
                 fontSize: windowWidth < 768 ? '0.9rem' : '1rem',
                 height: windowWidth < 768 ? '32px' : '40px',
-                marginTop: windowWidth < 768 ? '4px' : '8px'
+                marginTop: windowWidth < 768 ? '4px' : '8px',
+                width: windowWidth < 768 ? '190px' : '200px'
               }}
               onClick={() => setIsFormVisible(!isFormVisible)}
             >
@@ -170,7 +172,7 @@ const ReviewCourtClusterComponent = ({ reviews, courtClusterId }: IProps) => {
               marginBottom: '30px',
             }}
           >
-            <Form onFinish={handleFinish}>
+            <Form form={form} onFinish={handleFinish}>
               <Flex vertical>
                 <Typography.Text
                   style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '10px' }}
@@ -220,22 +222,26 @@ const ReviewCourtClusterComponent = ({ reviews, courtClusterId }: IProps) => {
       <Row gutter={[16, 16]}>
         {currentItems?.map((review) => {
           return (
-            <Col xs={24} sm={24} md={12} lg={12} key={review.id}>
+            <Col xs={24} sm={24} md={12} lg={24} key={review.id}>
               <ReviewCard reviews={review} />
             </Col>
           );
         })}
       </Row>
       <Row justify="center" className="pagination" style={{ marginTop: '20px' }}>
-        <Pagination
-          current={currentPage}
-          pageSize={itemsPerPage}
-          total={reviews?.length}
-          onChange={onPageChange}
-        />
+        {
+          reviews && reviews.length > 0 && (
+            <Pagination
+              current={currentPage}
+              pageSize={itemsPerPage}
+              total={reviews?.length}
+              onChange={onPageChange}
+            />
+          )
+        }
       </Row>
     </Card>
   );
 };
 
-export default ReviewCourtClusterComponent;
+export default observer(ReviewCourtClusterComponent);

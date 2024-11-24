@@ -63,7 +63,7 @@
       // Small tablet styles (sm)
       @media (min-width: 576px) and (max-width: 767px) {
         padding: 16px;
-        
+
         .ant-row {
           margin: 0 -8px; // Tạo khoảng cách negative để bù lại padding của col
         }
@@ -81,7 +81,7 @@
       // Mobile styles
       @media (max-width: 575px) {
         padding: 16px;
-        
+
         .ant-col {
           padding: 0;
           margin-bottom: 12px;
@@ -97,7 +97,7 @@
         .ant-input {
           height: 40px;
           border-radius: 6px;
-          
+
           &:focus {
             border-color: #40a9ff;
             box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
@@ -139,16 +139,16 @@
         gap: 8px;
         transition: all 0.3s;
 
-        &[type="primary"] {
+        &[type='primary'] {
           background-color: #28a745;
           border: none;
 
           &:hover {
-            background-color: darken(#28a745, 8%);
+            background-color: (#28a745, 8%);
           }
 
           &:active {
-            background-color: darken(#28a745, 12%);
+            background-color: (#28a745, 12%);
           }
         }
 
@@ -172,7 +172,7 @@
         gap: 8px;
 
         &:hover {
-          background-color: darken(#28a745, 10%);
+          background-color: (#28a745, 10%);
         }
 
         .anticon {
@@ -184,7 +184,7 @@
     @media (max-width: 576px) {
       .ant-col {
         margin-bottom: 12px;
-        
+
         &:last-child {
           margin-bottom: 0;
         }
@@ -194,10 +194,10 @@
 
   .featured-courts {
     margin: 30px 0;
-    
+
     .court-card {
       height: 100%;
-      
+
       .court-details {
         padding: 16px;
         display: flex;
@@ -225,7 +225,7 @@
 
   // .banner-container {
   //   margin-bottom: 50px;
-    
+
   //   @media (max-width: 768px) {
   //     margin-bottom: 30px;
   //   }

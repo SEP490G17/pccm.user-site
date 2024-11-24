@@ -13,13 +13,19 @@ export default class UploadStore {
 
   upImage = async (file: File, fileName: string) => {
     this.loading = true;
-    await runInAction(async () => {
+    try {
       const formData = new FormData();
       formData.append('file', file);
-      await agent.Upload.post(formData)
-        .then((image) => this.setImageRegistry(image, fileName))
-        .finally(() => (this.loading = false));
-    });
+      const image = await agent.Upload.post(formData);
+      runInAction(() => {
+        this.setImageRegistry(image, fileName);
+      });
+      return image;
+    } finally {
+      runInAction(() => {
+        this.loading = false;
+      });
+    }
   };
 
   private setImageRegistry = (image: ImageUpload, fileName: string) => {

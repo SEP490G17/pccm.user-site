@@ -1,136 +1,253 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, DatePicker, Select, Upload, Avatar } from 'antd';
-import { userProfileMock, UserProfile } from '@/app/mocks/user.mocks';
+import { Form, Input, Button, DatePicker, Select, Upload, Avatar, Skeleton } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
 import './style/ProfilePage.scss';
 import { useStore } from '@/app/stores/store';
 import { RcFile } from 'antd/es/upload';
+import { observer } from 'mobx-react';
+import dayjs from 'dayjs';
+import { UpdateProfileDto } from '@/app/models/account.model';
+import { toast } from 'react-toastify';
 
 const { Option } = Select;
 
-const ProfilePage = () => {
-    const { uploadStore, accountStore } = useStore()
-    const { upImage } = uploadStore
+const ProfilePage: React.FC = () => {
+    const { uploadStore, accountStore } = useStore();
+    const { upImage } = uploadStore;
+    const { profileData, loadingProfile } = accountStore;
     const [isEditing, setEditing] = useState(false);
+    const [form] = Form.useForm();
+    const [imageUrl, setImageUrl] = useState<string | undefined>(profileData?.imageUrl);
+    const [tempImageFile, setTempImageFile] = useState<RcFile | null>(null);
+
     useEffect(() => {
-        accountStore.profile()
-    }, [])
-    const [userProfile, setUserProfile] = useState<UserProfile>(userProfileMock);
+        accountStore.profile();
+    }, [accountStore]);
+
+    useEffect(() => {
+        if (profileData) {
+            form.setFieldsValue({
+                firstName: profileData.firstName,
+                lastName: profileData.lastName,
+                email: profileData.email,
+                phone: profileData.phoneNumber,
+                imageUrl: profileData.imageUrl,
+                birthday: profileData.birthDate ? dayjs(profileData.birthDate) : null,
+                gender: profileData.gender ? 'male' : 'female',
+            });
+            setImageUrl(profileData.imageUrl);
+        }
+    }, [profileData, form]);
 
     const handleBeforeUpload = (file: RcFile) => {
-        if (file instanceof File) {
-            upImage(file, file.name);
-        } else {
-            console.error('File type is incorrect.');
-        }
+        setTempImageFile(file);
+        setImageUrl(URL.createObjectURL(file));
         return false;
     };
 
-    const handleUpdateProfile = () => {
-        console.log()
-    }
+    const handleUpdateProfile = async (values: any) => {
+        const data = new UpdateProfileDto({
+            birthDate: values.birthday,
+            email: values.email,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            phoneNumber: values.phone,
+            gender: values.gender === 'male',
+        });
+
+        try {
+            if (tempImageFile) {
+                accountStore.loadingUpdate = true;
+                const uploadedImage = await upImage(tempImageFile, tempImageFile.name);
+                data.imageUrl = uploadedImage.url;
+            }
+            else {
+                data.imageUrl = profileData ? profileData.imageUrl : null;
+            }
+
+            await accountStore.updateProfile(data);
+            toast.success('Cập nhật tài khoản thành công');
+        } catch {
+            toast.error('Cập nhật tài khoản thất bại');
+        }
+    };
 
     return (
-        <div className="profile-page-container" style={{ maxWidth: '85%', margin: 'auto', padding: '50px 0px' }}>
+        <div className="profile-page-container">
             <PageHeadingAtoms
                 breadCrumb={[
-                    { title: "Trang chủ", to: "/home" },
-                    { title: "Thông tin cá nhân", to: "/view-profile/" }
+                    { title: 'Trang chủ', to: '/home' },
+                    { title: 'Thông tin cá nhân', to: '/view-profile/' },
                 ]}
             />
             <div style={{ maxWidth: '70%', margin: 'auto' }}>
-
                 <div style={{ padding: '5%', backgroundColor: 'white', borderRadius: '8px' }}>
-                    <h1>Thay đổi thông tin</h1>
+                    <Form form={form} onFinish={handleUpdateProfile} className="form-container">
+                        {
+                            loadingProfile
+                                ?
+                                <Skeleton active paragraph={{ rows: 7 }} />
+                                :
+                                <>
+                                    <div className="avatar-section">
+                                        <Upload
+                                            accept="image/*"
+                                            name="avatar"
+                                            showUploadList={false}
+                                            beforeUpload={handleBeforeUpload}
+                                            disabled={!isEditing}
+                                        >
+                                            <div className="avatar-wrapper">
+                                                <Avatar
+                                                    size={100}
+                                                    src={imageUrl}
+                                                    style={{ cursor: isEditing ? 'pointer' : 'default' }}
+                                                />
+                                                {isEditing && (
+                                                    <div className="avatar-overlay">
+                                                        <EditOutlined style={{ fontSize: '24px', color: 'white' }} />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </Upload>
+                                    </div>
+                                    <div className="form-row">
+                                        <Form.Item
+                                            required
+                                            label="Họ"
+                                            name="firstName"
+                                            style={{ width: '100%' }}
+                                            labelCol={{ span: 24 }}
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: 'Vui lòng nhập họ',
+                                                },
+                                            ]}
+                                        >
+                                            <Input disabled={!isEditing} />
+                                        </Form.Item>
 
-                    <Form onFinish={handleUpdateProfile} className="form-container">
-                        <div className="avatar-section">
-                            <Upload
-                                accept='image/*'
-                                name="avatar"
-                                showUploadList={false}
-                                beforeUpload={handleBeforeUpload}
-                                disabled={!isEditing}
-                            >
-                                <div className="avatar-wrapper">
-                                    <Avatar
-                                        size={100}
-                                        src={userProfile.avatar || ''}
-                                        style={{ cursor: isEditing ? 'pointer' : 'default' }}
-                                    />
-                                    {isEditing && (
-                                        <div className="avatar-overlay">
-                                            <EditOutlined style={{ fontSize: '24px', color: 'white' }} />
-                                        </div>
-                                    )}
-                                </div>
-                            </Upload>
-                        </div>
-                        <Form.Item label="Tên Người Dùng">
-                            <Input
-                                name="userName"
-                                disabled={!isEditing}
-                            />
-                        </Form.Item>
-                        <div className="form-row compact">
-                            <Form.Item label="Email">
-                                <Input
-                                    name="email"
-                                    disabled={!isEditing}
-                                />
-                            </Form.Item>
-                            <Form.Item label="Số Điện Thoại" >
-                                <Input
-                                    name="phone"
-
-                                    disabled={!isEditing}
-
-                                />
-                            </Form.Item>
-                        </div>
-                        <div className="form-row compact">
-                            <Form.Item label="Ngày sinh" >
-                                <DatePicker
-                                    name="birthday"
-
-                                    disabled={!isEditing}
-                                />
-                            </Form.Item>
-                            <Form.Item label="Giới Tính" >
-                                <Select
-
-
-                                    disabled={!isEditing}
-                                >
-                                    <Option value="male">Male</Option>
-                                    <Option value="female">Female</Option>
-                                    <Option value="other">Other</Option>
-                                </Select>
-                            </Form.Item>
-                        </div>
-                        <Form.Item label="Địa Chỉ" >
-                            <Input
-                                name="address"
-
-
-                                disabled={!isEditing}
-
-                            />
-                        </Form.Item>
-
-                        <div className="edit-button">
-                            <Button type="default" onClick={() => setEditing(!isEditing)}>
-                                {isEditing ? 'Cancel' : 'Edit'}
-                            </Button>
-                            {isEditing && <Button type="primary" htmlType="submit">Save</Button>}
-                        </div>
+                                        <Form.Item
+                                            required
+                                            label="Tên"
+                                            name="lastName"
+                                            style={{ width: '100%' }}
+                                            labelCol={{ span: 24 }}
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: 'Vui lòng nhập tên',
+                                                },
+                                            ]}
+                                        >
+                                            <Input disabled={!isEditing} />
+                                        </Form.Item>
+                                    </div>
+                                    <div className="form-row">
+                                        <Form.Item
+                                            required
+                                            label="Email"
+                                            name="email"
+                                            style={{ width: '48%' }}
+                                            labelCol={{ span: 24 }}
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: 'Vui lòng nhập email'
+                                                },
+                                                {
+                                                    type: 'email',
+                                                    message: 'Email không hợp lệ'
+                                                }
+                                            ]}
+                                        >
+                                            <Input disabled={!isEditing} />
+                                        </Form.Item>
+                                        <Form.Item
+                                            required
+                                            label="Số Điện Thoại"
+                                            name="phone"
+                                            style={{ width: '48%' }}
+                                            labelCol={{ span: 24 }}
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: 'Vui lòng nhập số điện thoại'
+                                                },
+                                                {
+                                                    pattern: /^0\d{9}$/,
+                                                    message: 'Số điện thoại không hợp lệ'
+                                                }
+                                            ]}
+                                        >
+                                            <Input
+                                                disabled={!isEditing}
+                                                type="tel"
+                                                maxLength={10}
+                                                onKeyDown={(e) => {
+                                                    const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'];
+                                                    if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
+                                                        e.preventDefault();
+                                                    }
+                                                }}
+                                            />
+                                        </Form.Item>
+                                    </div>
+                                    <div className="form-row">
+                                        <Form.Item label="Ngày sinh" name="birthday" style={{ width: '48%' }} labelCol={{ span: 24 }}>
+                                            <DatePicker format={'DD/MM/YYYY'} disabled={!isEditing} placeholder="Chọn ngày sinh" />
+                                        </Form.Item>
+                                        <Form.Item label="Giới Tính" name="gender" style={{ width: '48%' }} labelCol={{ span: 24 }}>
+                                            <Select disabled={!isEditing} style={{ textAlign: 'left' }} placeholder="Chọn giới tính">
+                                                <Option value="male">Nam</Option>
+                                                <Option value="female">Nữ</Option>
+                                            </Select>
+                                        </Form.Item>
+                                    </div>
+                                    <div className="edit-button">
+                                        {!isEditing ? (
+                                            <Button
+                                                type='default'
+                                                style={{
+                                                    backgroundColor: '#115363',
+                                                    color: 'white',
+                                                }}
+                                                onClick={() => setEditing(!isEditing)}
+                                            >
+                                                Thay đổi
+                                            </Button>
+                                        ) : (
+                                            <>
+                                                <Button
+                                                    type='default'
+                                                    disabled={accountStore.loadingUpdate}
+                                                    style={{
+                                                        backgroundColor: 'red',
+                                                        color: 'white',
+                                                    }}
+                                                    onClick={() => setEditing(!isEditing)}
+                                                >
+                                                    Hủy
+                                                </Button>
+                                                <Button
+                                                    loading={accountStore.loadingUpdate}
+                                                    style={{ backgroundColor: '#115363', color: 'white' }}
+                                                    htmlType="submit"
+                                                >
+                                                    Lưu
+                                                </Button>
+                                            </>
+                                        )}
+                                    </div>
+                                </>
+                        }
                     </Form>
-
                 </div>
             </div>
         </div>
     );
 };
 
-export default ProfilePage;
+export default observer(ProfilePage);
