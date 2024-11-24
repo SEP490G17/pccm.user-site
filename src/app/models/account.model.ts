@@ -9,6 +9,22 @@ export class LoginDto {
   }
 }
 
+export class UpdateProfileDto {
+  birthDate: string | null = null;
+  email: string = '';
+  firstName: string = '';
+  imageUrl: string | null = null;
+  lastName: string = '';
+  phoneNumber: string = '';
+  gender: boolean | null = null;
+
+  constructor(data?: Partial<UpdateProfileDto>) {
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
+}
+
 export class RegisterDto {
   email: string = '';
   password: string = '';

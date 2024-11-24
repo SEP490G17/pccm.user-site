@@ -5,6 +5,17 @@ export interface User {
   image: string;
   phoneNumber: string;
 }
+
+export interface Profile {
+  firstName: string;
+  lastName: string;
+  email: string;
+  imageUrl: string;
+  phoneNumber: string;
+  birthDate: string;
+  gender: boolean;
+}
+
 export interface UserFormValues {
   username: string;
   password: string;
@@ -19,4 +30,3 @@ export interface UserManager {
   lockoutEnd: boolean;
   isDisabled: boolean;
 }
-
