@@ -6,7 +6,7 @@ import { CourtPriceBooking, ICourtCluster } from '@/app/models/courtcluster.mode
 import { IReview, ReviewsDto } from '@/app/models/review.model';
 import agent from '@/app/api/agent';
 import { notification } from 'antd';
-import { BookingModel } from '@/app/models/booking.model';
+import { BookingModel, IBookingByDay, IBookingWithCombo } from '@/app/models/booking.model';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -14,6 +14,9 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 import _ from 'lodash';
 import { store } from '@/app/stores/store';
+import { CreateToastFnReturn } from '@chakra-ui/react';
+import { CommonMessage } from '@/app/common/toastMessage/commonMessage';
+import { BookingMessage, DefaultBookingText } from '@/app/common/toastMessage/bookingMessage';
 
 export default class CourtClusterDetailsStore {
   reviewsRegistry = new Map<number, IReview>();
@@ -112,8 +115,7 @@ export default class CourtClusterDetailsStore {
     this.reviewsRegistry.delete(data);
     runInAction(async () => {
       await agent.Reviews.delete(data)
-        .then(() => {
-        })
+        .then(() => {})
         .catch(() => {
           this.reviewsRegistry.set(data, reviewToDelete);
           toast.error('Tạo review thất bại');
@@ -129,27 +131,25 @@ export default class CourtClusterDetailsStore {
   };
 
   loadScheduleBookingList = async (selectedDate?: string) => {
-    if (this.selectedCourtId) {
-      this.loadingBookingForSchedule = true;
+    this.loadingBookingForSchedule = true;
 
-      const [error, res] = await catchErrorHandle<BookingModel[]>(
-        agent.Booking.getListForSchedule({
-          courtClusterId: this.selectedCourtId,
-          selectedDate: selectedDate,
-        }),
-      );
-      runInAction(() => {
-        if (error) {
-          return;
-        }
-        if (res) {
-          res.forEach((booking) => {
-            this.setBooking(booking);
-          });
-        }
-        this.loadingBookingForSchedule = false;
-      });
-    }
+    const [error, res] = await catchErrorHandle<BookingModel[]>(
+      agent.Booking.getListForSchedule({
+        courtClusterId: this.selectedCourtId,
+        selectedDate: selectedDate,
+      }),
+    );
+    runInAction(() => {
+      if (error) {
+        return;
+      }
+      if (res) {
+        res.forEach((booking) => {
+          this.setBooking(booking);
+        });
+      }
+      this.loadingBookingForSchedule = false;
+    });
   };
   private setBooking(booking: BookingModel) {
     booking.startTime = dayjs(booking.startTime).format('YYYY-MM-DDTHH:mm:ss[Z]');
@@ -168,9 +168,39 @@ export default class CourtClusterDetailsStore {
     return Array.from(this.bookingForScheduleRegistry.values());
   }
 
-  private setReviews = (review: IReview) => {
+  setReviews = (review: IReview) => {
     this.reviewsRegistry.set(review.id, review);
   };
 
   setLoadingBookingForSchedule = (load: boolean) => (this.loadingBookingForSchedule = load);
+
+  bookingWithCombo = async (booking: IBookingWithCombo, toast: CreateToastFnReturn) => {
+    const pending = toast(CommonMessage.loadingMessage(DefaultBookingText.booking.title));
+    const [err, res] = await catchErrorHandle(agent.Booking.bookingWithCombo(booking));
+    runInAction(() => {
+      toast.close(pending);
+      if (err) {
+        toast(BookingMessage.bookingFailure(err?.response?.data));
+        return;
+      }
+      if (res) {
+        toast(BookingMessage.bookingSuccess());
+      }
+    });
+  };
+
+  bookingByDay = async (booking: IBookingByDay, toast: CreateToastFnReturn) => {
+    const pending = toast(CommonMessage.loadingMessage(DefaultBookingText.booking.title));
+    const [err, res] = await catchErrorHandle(agent.Booking.bookingByDay(booking));
+    runInAction(() => {
+      toast.close(pending);
+      if (err) {
+        toast(BookingMessage.bookingFailure(err?.response?.data));
+        return;
+      }
+      if (res) {
+        toast(BookingMessage.bookingSuccess());
+      }
+    });
+  };
 }

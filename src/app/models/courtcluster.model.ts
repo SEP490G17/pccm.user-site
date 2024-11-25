@@ -30,7 +30,23 @@ export interface CourtPriceBooking {
 export interface ICourt{
   courtId: number;
   courtName: string;
+  courtPrices: CourtPriceResponse[];
+  courtCombos: CourtCombo[];
 }
+export interface CourtPriceResponse {
+  price: number;
+  fromTime: string;
+  toTime: string;
+}
+
+
+export interface CourtCombo {
+  id?:number;
+  totalPrice: number;
+  displayName: string;
+  duration: number;
+}
+
 
 // export interface ILocation {
 //   tinh: string;

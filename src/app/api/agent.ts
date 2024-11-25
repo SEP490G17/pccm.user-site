@@ -3,7 +3,9 @@ import {
   BookingHistoryModel,
   BookingModel,
   CourtPrice,
+  IBookingByDay,
   IBookingModel,
+  IBookingWithCombo,
   ISlots,
   PaymentType,
 } from '../models/booking.model';
@@ -122,6 +124,11 @@ const Booking = {
   getHistoryBooking: (query: string = ''): Promise<PaginationModel<BookingHistoryModel>> =>
     requests.get('/booking/history' + query),
   getDetailsV1: (id: number): Promise<BookingDetails> => requests.get(`/booking/v1/${id}`),
+  bookingWithCombo: (bookingWithCombo: IBookingWithCombo): Promise<any> =>
+    requests.post(`/booking/combo`, bookingWithCombo),
+  bookingByDay: (bookingByDay: IBookingByDay): Promise<any> =>
+    requests.post(`/booking/byDay`, bookingByDay),
+
 };
 
 const PaymentAgent = {

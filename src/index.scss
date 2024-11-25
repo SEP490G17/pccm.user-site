@@ -13,33 +13,96 @@
 @import '../node_modules/@syncfusion/ej2-react-schedule/styles/material.css';
 
 .schedule-cell-dimension.e-schedule {
-    max-height: 500px !important;
-    overflow: auto;
-    width: 100%;
-    .e-vertical-view {
-      .e-date-header-wrap {
-        table {
-          col {
-            width: 150px;
-          }
+  max-height: 50rem !important;
+  overflow: auto;
+  width: 100%;
+
+  .e-resource-tree.e-control {
+    height: 100%;
+  }
+  .e-vertical-view {
+    .e-date-header-wrap {
+      table {
+        col {
+          width: 100px;
         }
       }
-      .e-content-wrap {
-        table {
-          col {
-            width: 150px;
-          }
+    }
+    .e-content-wrap {
+      table {
+        col {
+          width: 100px;
         }
       }
-      .e-time-cells-wrap {
-        table {
-          td {
-            height: 75px;
-          }
+    }
+    .e-time-cells-wrap {
+      table {
+        td {
+          height: 50px;
         }
       }
-      .e-work-cells {
-        height: 75px;
+    }
+    .e-work-cells {
+      height: 50px;
+    }
+  }
+}
+
+.container {
+  width: 100%;
+  padding-right: 1rem; /* 16px */
+  padding-left: 1rem; /* 16px */
+}
+@media (min-width: 640px) {
+  .container {
+      max-width: 800px; /* Tăng từ 640px lên 800px */
+      padding-right: 2rem; /* 32px */
+      padding-left: 2rem; /* 32px */
+  }
+}
+@media (min-width: 768px) {
+  .container {
+      max-width: 900px; /* Tăng từ 768px lên 900px */
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+      max-width: 1200px; /* Tăng từ 1024px lên 1200px */
+      padding-right: 5rem; /* 80px */
+      padding-left: 5rem; /* 80px */
+  }
+}
+@media (min-width: 1280px) {
+  .container {
+      max-width: 1400px; /* Tăng từ 1280px lên 1400px */
+      padding-right: 6rem; /* 96px */
+      padding-left: 6rem; /* 96px */
+  }
+}
+@media (min-width: 1536px) {
+  .container {
+      max-width: 1800px; /* Tăng từ 1536px lên 1800px */
+      padding-right: 8rem; /* 128px */
+      padding-left: 8rem; /* 128px */
+  }
+}
+.ant-tabs-tabpane-active{
+  background-color: white !important;
+  padding: 0 !important;
+}
+
+.ant-card-body{
+  height: 100% !important;
+  .ant-tabs{
+    height: 100% !important;
+    .ant-tabs-content{
+      height: 100% !important;
+      .ant-tabs-tabpane-active{
+        height: 100% !important;
+        form{
+          height: 100% !important;
+        }
       }
     }
   }
+}

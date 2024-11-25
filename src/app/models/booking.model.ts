@@ -146,3 +146,41 @@ export interface BookingModel {
   isSuccess: boolean;
   totalPrice: number;
 }
+
+export interface IBookingWithCombo {
+  comboId?: number;
+  courtId?: number;
+  fromDate: string;
+  fromTime: string;
+  toTime: string;
+  fullName: string;
+  phoneNumber: string;
+}
+
+export interface IBookingByDay {
+  courtId?: number;
+  fromDate: string;
+  fromTime: string;
+  toTime: string;
+  fullName: string;
+  phoneNumber: string;
+}
+
+export class BookingWithCombo implements IBookingWithCombo {
+  comboId?: number;
+  courtId?: number;
+  fromDate: string = '';
+  fromTime: string = '';
+  toTime: string = '';
+  fullName: string = '';
+  phoneNumber: string = '';
+}
+
+export class BookingByDay implements IBookingByDay {
+  courtId?: number ;
+  fromDate: string = '';
+  fromTime: string = '';
+  toTime: string = '';
+  fullName: string = '';
+  phoneNumber: string = '';
+}
