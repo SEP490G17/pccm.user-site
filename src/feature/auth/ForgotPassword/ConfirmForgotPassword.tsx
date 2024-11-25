@@ -5,7 +5,7 @@ import ForgotPopUp from './ForgotPopUp';
 const ConfirmForgotPassword = () => {
     // Lấy token từ URL bất kể môi trường hiện tại
     const currentUrl = window.location.href; // URL đầy đủ, ví dụ: https://argonaut.asia/confirm-forgot-password?token=...
-    const isArgonautDomain = currentUrl.startsWith("https://argonaut.asia");
+    const isArgonautDomain = currentUrl.startsWith("http://localhost:3000/");
     const urlParams = new URL(currentUrl).searchParams; // Parse URL
     const token = urlParams.get('token'); // Lấy token
     const navigate = useNavigate();
