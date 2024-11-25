@@ -11,18 +11,18 @@ import {
 } from '../models/booking.model';
 import { INews, INewsDto } from '../models/news.model';
 import { IReview, ReviewsDto } from '../models/review.model';
-import { LoginDto, RegisterDto } from '../models/account.model';
+import { LoginDto, RegisterDto, UpdateProfileDto } from '../models/account.model';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
 import { Banner } from '../models/banner.model';
 import { ICourtCluster } from '../models/courtcluster.model';
-import { ImageUpload } from '../models/upload.model';
 import { PaginationModel } from '../models/pagination.model';
-import { User } from '../models/user.model';
+import { Profile, User } from '../models/user.model';
 import { router } from '../router/Routes';
 import { sleep } from '../helper/utils';
 import { store } from '../stores/store';
 import { toast } from 'react-toastify';
+import { ImageUpload } from '../models/upload.model';
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
@@ -103,13 +103,15 @@ const News = {
 
 const Account = {
   current: () => requests.get<User>('/account'),
-  register: (value: RegisterDto): Promise<void> => requests.post(`/Account/register`, value),
-  login: (value: LoginDto): Promise<User> => requests.post(`/Account/login`, value),
-  profile: (): Promise<ImageUpload> => requests.post(`/Account/Profile`, {}),
+  register: (value: RegisterDto): Promise<void> => requests.post(`/account/register`, value),
+  login: (value: LoginDto): Promise<User> => requests.post(`/account/login`, value),
+  profile: (): Promise<Profile> => requests.get(`/account/profile`),
+  updateProfile: (value: UpdateProfileDto): Promise<LoginDto> =>
+    requests.post(`/account/updateProfile`, value),
 };
 
 const Upload = {
-  post: (file: FormData): Promise<any> => requests.post(`/upload`, file),
+  post: (file: FormData): Promise<ImageUpload> => requests.post(`/upload`, file),
 };
 
 const Booking = {
@@ -136,7 +138,6 @@ const PaymentAgent = {
     requests.post<string>(`/payment/${type}/${id}/process-payment`, {}),
 };
 
-
 const Reviews = {
   listByCourtClusterId: (id: string): Promise<IReview[]> => requests.get(`/Review/${id}`),
   create: (data: ReviewsDto): Promise<IReview> => requests.post(`/Review`, data),
@@ -152,7 +153,7 @@ const agent = {
   Upload,
   Booking,
   Reviews,
-  PaymentAgent
+  PaymentAgent,
 };
 
 export default agent;

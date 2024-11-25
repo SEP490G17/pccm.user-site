@@ -1,16 +1,15 @@
 import './CourtClusterList.scss';
 
-import { Button, Card, Col, Image, Input, Row, Select, Tag, Typography } from 'antd';
-import { useEffect, useState } from 'react';
+import { Button, Card, Col, Image, Input, Row, Select, Typography } from 'antd';
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
+import { useEffect, useState } from 'react';
 
-import { useStore } from '@/app/stores/store';
-import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
-import Pagination from '@/feature/atoms/Pagination';
 import ListBanner from '@/feature/home/components/HomeBanner';
 import ListCourtCluster from '@/feature/home/components/HomeCourtCluster';
+import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
+import Pagination from '@/feature/atoms/Pagination';
 import { observer } from 'mobx-react-lite';
-import { IoMdRefresh } from 'react-icons/io';
+import { useStore } from '@/app/stores/store';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
