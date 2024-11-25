@@ -9,7 +9,7 @@ import {
 } from '../models/booking.model';
 import { INews, INewsDto } from '../models/news.model';
 import { IReview, ReviewsDto } from '../models/review.model';
-import { LoginDto, RegisterDto } from '../models/account.model';
+import { ChangePasswordInput, LoginDto, RegisterDto } from '../models/account.model';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
 import { Banner } from '../models/banner.model';
@@ -104,6 +104,7 @@ const Account = {
   register: (value: RegisterDto): Promise<void> => requests.post(`/Account/register`, value),
   login: (value: LoginDto): Promise<User> => requests.post(`/Account/login`, value),
   profile: (): Promise<ImageUpload> => requests.post(`/Account/Profile`, {}),
+  changePassword: (value: ChangePasswordInput): Promise<void> => requests.post(`/Account/change-password`, value),
 };
 
 const Upload = {
