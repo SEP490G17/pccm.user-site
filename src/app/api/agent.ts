@@ -108,6 +108,10 @@ const Account = {
   profile: (): Promise<Profile> => requests.get(`/account/profile`),
   updateProfile: (value: UpdateProfileDto): Promise<LoginDto> =>
     requests.post(`/account/updateProfile`, value),
+  forgotPassword: (email: string): Promise<void> =>
+    requests.post(`/account/forgot-password`, { email }),
+  confirmForgotPassword: (data: { token: string; newPassword: string }): Promise<void> =>
+    requests.post('/account/confirm-forgot-password', data),
 };
 
 const Upload = {

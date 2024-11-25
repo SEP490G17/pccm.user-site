@@ -40,3 +40,22 @@ export class RegisterDto {
     }
   }
 }
+export class ForgotPasswordDto {
+  email: string = '';
+
+  constructor(data?: Partial<ForgotPasswordDto>) {
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
+}
+export class ConfirmForgotPasswordDto {
+  token: string = '';
+  newPassword: string = '';
+
+  constructor(data?: Partial<ConfirmForgotPasswordDto>) {
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
+}
