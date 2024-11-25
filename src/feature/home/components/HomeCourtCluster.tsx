@@ -154,8 +154,8 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
                 >
                   <Card hoverable className="court-card">
                     <Image src={c.images[0]} />
-                    <div className="court-details" style={{ height: '100%' }}>
-                      <div className="court-info" style={{ height: '100%' }}>
+                    <div className="court-details">
+                      <div className="court-info" >
                         <Title level={5} className="overflow-hidden">
                           {c.title}
                         </Title>
