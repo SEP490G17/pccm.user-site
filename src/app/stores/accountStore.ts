@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { RegisterDto, UpdateProfileDto } from '../models/account.model';
+import { ChangePasswordInput, RegisterDto, UpdateProfileDto } from '../models/account.model';
 import agent from '../api/agent';
 import { toast } from 'react-toastify';
 import { Profile } from '../models/user.model';
@@ -10,6 +10,7 @@ export default class AccountStore {
   loadingUpdate: boolean = false;
   loadingProfile: boolean = false;
   profileData: Profile | undefined = undefined;
+  loadingChangePassword: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -36,5 +37,13 @@ export default class AccountStore {
     await agent.Account.updateProfile(data)
       .then(() => store.authStore.getUser())
       .finally(() => (this.loadingUpdate = false));
+  };
+
+  changePassword = async (value: ChangePasswordInput) => {
+    this.loadingChangePassword = true;
+    await agent.Account.changePassword(value)
+      .then(() => toast.success('Thay đổi mật khẩu thành công'))
+      .catch((error: any) => toast.error(error[0]))
+      .finally(() => (this.loadingRegister = false));
   };
 }
