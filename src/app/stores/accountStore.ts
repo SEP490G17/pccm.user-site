@@ -1,12 +1,16 @@
 import { makeAutoObservable } from 'mobx';
-import { ChangePasswordInput, RegisterDto } from '../models/account.model';
+import { ChangePasswordInput, RegisterDto, UpdateProfileDto } from '../models/account.model';
 import agent from '../api/agent';
 import { toast } from 'react-toastify';
+import { Profile } from '../models/user.model';
+import { store } from './store';
 
 export default class AccountStore {
   loadingRegister: boolean = false;
+  loadingUpdate: boolean = false;
+  loadingProfile: boolean = false;
+  profileData: Profile | undefined = undefined;
   loadingChangePassword: boolean = false;
-  profileData: any;
 
   constructor() {
     makeAutoObservable(this);
@@ -21,7 +25,18 @@ export default class AccountStore {
   };
 
   profile = async () => {
-    this.profileData = await agent.Account.profile();
+    this.loadingProfile = true;
+    await agent.Account.profile()
+      .then((data) => (this.profileData = data))
+      .catch((error: any) => toast.error(error[0]))
+      .finally(() => (this.loadingProfile = false));
+  };
+
+  updateProfile = async (data: UpdateProfileDto) => {
+    this.loadingUpdate = true;
+    await agent.Account.updateProfile(data)
+      .then(() => store.authStore.getUser())
+      .finally(() => (this.loadingUpdate = false));
   };
 
   changePassword = async (value: ChangePasswordInput) => {

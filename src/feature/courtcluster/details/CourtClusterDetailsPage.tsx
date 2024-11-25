@@ -16,6 +16,7 @@ import ListCourtImage from '../../booking/history/components/ListCourtImage';
 import ReviewCourtClusterComponent from './components/review/ReviewCourtClusterComponent';
 import BookingScheduleComponent from './components/schedule/BookingScheduleComponent';
 import './CourtClusterDetailsStyle.scss';
+import BookingFormComponent from './components/bookingForm/BookingFormComponent';
 
 const CourtClusterDetailsPage = observer(() => {
   const { id } = useParams();
@@ -35,9 +36,9 @@ const CourtClusterDetailsPage = observer(() => {
       setLoadingInitialDetailsPage(true);
       Promise.all([
         (courtClusterDetailsStore.loadScheduleBookingList(),
-          courtClusterDetailsStore.loadCourtPrice(),
-          getDetailsCourtCluster(id),
-          getListReviewByCourtClusterId(id)),
+        courtClusterDetailsStore.loadCourtPrice(),
+        getDetailsCourtCluster(id),
+        getListReviewByCourtClusterId(id)),
       ]).finally(() => setLoadingInitialDetailsPage(false));
     }
   }, [
@@ -82,7 +83,7 @@ const CourtClusterDetailsPage = observer(() => {
       />
       <Row style={{ marginBottom: '1rem' }}>
         <Col span={18}>
-          <Typography.Title level={3}>{selectedCourt?.title}</Typography.Title>
+          <Typography.Title level={3}>{selectedCourt.title}</Typography.Title>
           <Typography.Paragraph
             className="flex gap-2 items-center h-5 text-md"
             style={{ marginBottom: '4px' }}
@@ -97,12 +98,12 @@ const CourtClusterDetailsPage = observer(() => {
               style={{ color: 'black' }}
               onClick={() =>
                 window.open(
-                  `https://www.google.com/maps/search/?q=${selectedCourt?.address}, ${selectedCourt.wardName}, ${selectedCourt.districtName}, ${selectedCourt.provinceName}`,
+                  `https://www.google.com/maps/search/?q=${selectedCourt.address}, ${selectedCourt.wardName}, ${selectedCourt.districtName}, ${selectedCourt.provinceName}`,
                   '_blank',
                 )
               }
             >
-              {`${selectedCourt?.address}, ${selectedCourt.wardName}, ${selectedCourt.districtName}, ${selectedCourt.provinceName}`}
+              {`${selectedCourt.address}, ${selectedCourt.wardName}, ${selectedCourt.districtName}, ${selectedCourt.provinceName}`}
             </Link>
           </Typography.Text>
         </Col>
@@ -111,7 +112,11 @@ const CourtClusterDetailsPage = observer(() => {
           style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}
         >
           <Typography.Text className="flex gap-1 items-center" style={{ fontSize: '16px' }}>
-            Đánh giá: {totalRating > 0 && reviewArray.length > 0 ? (totalRating / reviewArray.length).toFixed() : 0}/5{' '}
+            Đánh giá:{' '}
+            {totalRating > 0 && reviewArray.length > 0
+              ? (totalRating / reviewArray.length).toFixed()
+              : 0}
+            /5{' '}
             <FaStar className="text-yellow-500" color="#f7d03f" style={{ marginBottom: '-1px' }} />
           </Typography.Text>
         </Col>
@@ -120,7 +125,7 @@ const CourtClusterDetailsPage = observer(() => {
       <div className="w-full">
         <Row gutter={[24, 1]}>
           <Col xs={24} xl={16}>
-            <ListCourtImage images={selectedCourt?.images} />
+            <ListCourtImage images={selectedCourt.images} />
           </Col>
           <Col xs={24} xl={8}>
             <DetailsCourtCard court={selectedCourt} />
@@ -128,11 +133,16 @@ const CourtClusterDetailsPage = observer(() => {
         </Row>
       </div>
       <Title level={3} className="mt-10">
-        Thông tin đặt lịch
+        Thông lịch sân
       </Title>
-      <div className="mt-4 w-full">
-        <BookingScheduleComponent />
-      </div>
+      <Row className="mt-4" gutter={[16,16]}>
+        <Col xs={24} xl={16}>
+          <BookingScheduleComponent selectedCourtCluster={selectedCourt} />
+        </Col>
+        <Col xs={24} xl={8}>
+          <BookingFormComponent selectedCourt={selectedCourt} />
+        </Col>
+      </Row>
       <Card className="py-6 mt-5">
         <Title className="mb-14 text-center" level={2}>
           Thông tin chi tiết cụm sân {selectedCourt.title}
@@ -149,7 +159,7 @@ const CourtClusterDetailsPage = observer(() => {
         <ListCourtCluster title="Sân pickleball khác" itemsPerPage={3} />
       </div>
 
-      <ReviewCourtClusterComponent reviews={reviewArray} courtClusterId={selectedCourt?.id} />
+      <ReviewCourtClusterComponent reviews={reviewArray} courtClusterId={selectedCourt.id} />
     </>
   );
 });

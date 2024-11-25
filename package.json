@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^2.10.1",
+    "@emotion/react": "^11.13.3",
+    "framer-motion": "^11.11.1",
+    "@emotion/styled": "^11.13.0",
     "@syncfusion/ej2-react-calendars": "^27.1.57",
     "@syncfusion/ej2-react-dropdowns": "^27.1.58",
     "@syncfusion/ej2-react-inputs": "^27.1.55",
