@@ -9,6 +9,7 @@ import BookingHistoryPage from '@/feature/booking/history/BookingHistoryPage';
 import ProfilePage from '@/feature/profile/ProfilePage'
 import RegisterPage from '@/feature/auth/RegisterPage';
 import BookingDetailsPage from '@/feature/booking/details/BookingDetailsPage';
+import ConfirmForgotPassword from '@/feature/auth/ForgotPassword/ConfirmForgotPassword';
 
 
 
@@ -58,6 +59,10 @@ export const routes: RouteObject[] = [
         path: 'chi-tiet/:id',
         element: <CourtClusterDetailsPage />,
         children: [],
+      },
+      {
+        path: "/confirm-forgot-password",
+        element: < ConfirmForgotPassword />,
       }
     ],
   },
