@@ -1,5 +1,10 @@
 import { makeAutoObservable } from 'mobx';
-import { ChangePasswordInput, ConfirmForgotPasswordDto, RegisterDto, UpdateProfileDto } from '../models/account.model';
+import {
+  ChangePasswordInput,
+  ConfirmForgotPasswordDto,
+  RegisterDto,
+  UpdateProfileDto,
+} from '../models/account.model';
 import agent from '../api/agent';
 import { toast } from 'react-toastify';
 import { Profile } from '../models/user.model';
@@ -41,7 +46,6 @@ export default class AccountStore {
       .finally(() => (this.loadingUpdate = false));
   };
 
-
   forgotPassword = async (email: string) => {
     this.loadingForgotPassword = true;
     await agent.Account.forgotPassword(email)
@@ -57,7 +61,6 @@ export default class AccountStore {
       .catch((error: any) => toast.error(error[0]))
       .finally(() => (this.loadingConfirmPassword = false));
   };
-}
 
   changePassword = async (value: ChangePasswordInput) => {
     this.loadingChangePassword = true;
@@ -67,4 +70,3 @@ export default class AccountStore {
       .finally(() => (this.loadingRegister = false));
   };
 }
-
