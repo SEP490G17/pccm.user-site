@@ -40,6 +40,7 @@ export class RegisterDto {
     }
   }
 }
+
 export class ForgotPasswordDto {
   email: string = '';
 
@@ -49,11 +50,23 @@ export class ForgotPasswordDto {
     }
   }
 }
+
 export class ConfirmForgotPasswordDto {
   token: string = '';
   newPassword: string = '';
 
   constructor(data?: Partial<ConfirmForgotPasswordDto>) {
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
+}
+
+export class ChangePasswordInput {
+  currentPassword: string = '';
+  newPassword: string = '';
+
+  constructor(data?: Partial<ChangePasswordInput>) {
     if (data) {
       Object.assign(this, data);
     }

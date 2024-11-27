@@ -11,7 +11,7 @@ import {
 } from '../models/booking.model';
 import { INews, INewsDto } from '../models/news.model';
 import { IReview, ReviewsDto } from '../models/review.model';
-import { LoginDto, RegisterDto, UpdateProfileDto } from '../models/account.model';
+import { ChangePasswordInput, LoginDto, RegisterDto } from '../models/account.model';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
 import { Service } from '../models/service.model';
@@ -120,8 +120,8 @@ const Account = {
   register: (value: RegisterDto): Promise<void> => requests.post(`/account/register`, value),
   login: (value: LoginDto): Promise<User> => requests.post(`/account/login`, value),
   profile: (): Promise<Profile> => requests.get(`/account/profile`),
-  updateProfile: (value: UpdateProfileDto): Promise<LoginDto> =>
-    requests.post(`/account/updateProfile`, value),
+    updateProfile: (value: UpdateProfileDto): Promise<LoginDto> => requests.post(`/account/updateProfile`, value),
+  changePassword: (value: ChangePasswordInput): Promise<void> => requests.post(`/Account/change-password`, value),
   forgotPassword: (email: string): Promise<void> =>
     requests.post(`/account/forgot-password`, { email }),
   confirmForgotPassword: (data: { token: string; newPassword: string }): Promise<void> =>
