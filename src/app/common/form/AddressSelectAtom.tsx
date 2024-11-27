@@ -1,5 +1,19 @@
 import { useState, useEffect } from 'react';
-import { FormControl, Select, Grid, GridItem, FormErrorMessage, Box, Button, Popover, PopoverTrigger, PopoverContent, PopoverBody, Text, Flex } from '@chakra-ui/react';
+import {
+  FormControl,
+  Select,
+  Grid,
+  GridItem,
+  FormErrorMessage,
+  Box,
+  Button,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  Text,
+  Flex,
+} from '@chakra-ui/react';
 
 interface Province {
   id: string;
@@ -38,7 +52,12 @@ interface AddressSelectAtomProps {
   };
 }
 
-const AddressSelectAtom: React.FC<AddressSelectAtomProps> = ({ onChange, values, errors, touched }) => {
+const AddressSelectAtom: React.FC<AddressSelectAtomProps> = ({
+  onChange,
+  values,
+  errors,
+  touched,
+}) => {
   const [provinces, setProvinces] = useState<Province[]>([]);
   const [districts, setDistricts] = useState<District[]>([]);
   const [wards, setWards] = useState<Ward[]>([]);
@@ -102,9 +121,9 @@ const AddressSelectAtom: React.FC<AddressSelectAtomProps> = ({ onChange, values,
   };
 
   // Generate the address label in the requested format
-  const addressLabel = `${values.province ? provinces.find(p => p.id === values.province)?.full_name : 'Chưa chọn Tỉnh Thành'}, 
-    ${values.district ? districts.find(d => d.id === values.district)?.full_name : 'Chưa chọn Huyện'}, 
-    ${values.ward ? wards.find(w => w.id === values.ward)?.full_name : 'Chưa chọn Xã'}`;
+  const addressLabel = `${values.province ? provinces.find((p) => p.id === values.province)?.full_name : 'Chưa chọn Tỉnh Thành'}, 
+    ${values.district ? districts.find((d) => d.id === values.district)?.full_name : 'Chưa chọn Huyện'}, 
+    ${values.ward ? wards.find((w) => w.id === values.ward)?.full_name : 'Chưa chọn Xã'}`;
 
   return (
     <Box style={{ width: '100%', marginBottom: '10px' }}>
@@ -115,9 +134,9 @@ const AddressSelectAtom: React.FC<AddressSelectAtomProps> = ({ onChange, values,
 
         <Box display="flex" alignItems="center" mb={4}>
           <Box
-            width="100%" 
-            minWidth="350px" 
-            maxWidth="100%" 
+            width="100%"
+            minWidth="350px"
+            maxWidth="100%"
             whiteSpace="nowrap"
             overflow="hidden"
             textOverflow="ellipsis"
@@ -127,7 +146,7 @@ const AddressSelectAtom: React.FC<AddressSelectAtomProps> = ({ onChange, values,
             borderColor="gray.300"
             padding="4px 8px"
             borderRadius="md"
-            textAlign="left" 
+            textAlign="left"
           >
             {addressLabel}
           </Box>
