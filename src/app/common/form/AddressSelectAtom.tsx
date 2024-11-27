@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FormControl, Select, Grid, GridItem, FormErrorMessage, Box, Button, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody, Text } from '@chakra-ui/react';
+import { FormControl, Select, Grid, GridItem, FormErrorMessage, Box, Button, Popover, PopoverTrigger, PopoverContent, PopoverBody, Text, Flex } from '@chakra-ui/react';
 
 interface Province {
   id: string;
@@ -99,127 +99,144 @@ const AddressSelectAtom: React.FC<AddressSelectAtomProps> = ({ onChange, values,
   const handleReset = () => {
     onChange('province', '');
     onChange('district', '');
-    onChange('ward', '');
   };
 
-  // Generate the address label
-  const addressLabel = `${values.province ? provinces.find(p => p.id === values.province)?.full_name : 'Chưa chọn Tỉnh Thành'} ${values.district ? districts.find(d => d.id === values.district)?.full_name : 'Chưa chọn Quận Huyện'} ${values.ward ? wards.find(w => w.id === values.ward)?.full_name : 'Chưa chọn Phường Xã'}`;
+  // Generate the address label in the requested format
+  const addressLabel = `${values.province ? provinces.find(p => p.id === values.province)?.full_name : 'Chưa chọn Tỉnh Thành'}, 
+    ${values.district ? districts.find(d => d.id === values.district)?.full_name : 'Chưa chọn Huyện'}, 
+    ${values.ward ? wards.find(w => w.id === values.ward)?.full_name : 'Chưa chọn Xã'}`;
 
   return (
-    <Box width="280px">
-      {/* "Chọn Khu vực" Button */}
-      <Popover placement="bottom-start">
-        <PopoverTrigger>
-          <Button width="100%" size="sm" colorScheme="teal">
-            Chọn Khu vực
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent width="100%" maxWidth="350px" padding={4}>
-          <PopoverArrow />
-          <PopoverBody paddingBottom={4}>
-            <Grid templateColumns="1fr" rowGap={5}>
-              {/* Tỉnh Thành Dropdown */}
-              <GridItem colSpan={1}>
-                <FormControl isInvalid={!!(errors.province && touched.province)}>
-                  <Select
-                    value={values.province}
-                    onChange={(e) => handleChange('province', e.target.value)}
-                    title="Chọn Tỉnh Thành"
-                    isRequired
-                    placeholder="-- Chọn Tỉnh Thành --"
-                    maxHeight="200px" // Set a max height for dropdown
-                    overflowY="auto"  // Enable scrolling
-                    width="100%" // Make the dropdown take up the full width
-                    maxWidth="250px"  // Set a max width for the dropdown options
-                    menuPlacement="auto"  // Ensure it shows below
+    <Box style={{ width: '100%', marginBottom: '10px' }}>
+      <Flex direction="column" align="stretch" width="100%">
+        <Text fontSize="sm" fontWeight="bold" mt={4} mb={2}>
+          Địa chỉ đã chọn:
+        </Text>
+
+        <Box display="flex" alignItems="center" mb={4}>
+          <Box
+            width="100%" 
+            minWidth="350px" 
+            maxWidth="100%" 
+            whiteSpace="nowrap"
+            overflow="hidden"
+            textOverflow="ellipsis"
+            fontSize="sm"
+            color="gray.600"
+            border="1px solid"
+            borderColor="gray.300"
+            padding="4px 8px"
+            borderRadius="md"
+            textAlign="left" 
+          >
+            {addressLabel}
+          </Box>
+        </Box>
+
+        {/* Nút Chọn Khu Vực */}
+        <Popover placement="bottom-start">
+          <PopoverTrigger>
+            <Button width="auto" size="sm" colorScheme="teal">
+              Chọn khu vực
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent width="100%" maxWidth="350px" padding={4}>
+            <PopoverBody paddingBottom={4}>
+              <Grid templateColumns="1fr" rowGap={5}>
+                {/* Tỉnh Thành Dropdown */}
+                <GridItem colSpan={1}>
+                  <FormControl isInvalid={!!(errors.province && touched.province)}>
+                    <Select
+                      value={values.province}
+                      onChange={(e) => handleChange('province', e.target.value)}
+                      title="Chọn Tỉnh Thành"
+                      isRequired
+                      placeholder="-- Chọn Tỉnh Thành --"
+                      maxHeight="200px"
+                      overflowY="auto"
+                      width="100%"
+                      menuPlacement="auto"
+                    >
+                      {provinces.map((province) => (
+                        <option key={province.id} value={province.id}>
+                          {province.full_name}
+                        </option>
+                      ))}
+                    </Select>
+                    <FormErrorMessage>{errors.province}</FormErrorMessage>
+                  </FormControl>
+                </GridItem>
+
+                {/* Quận Huyện Dropdown */}
+                <GridItem colSpan={1}>
+                  <FormControl isInvalid={!!(errors.district && touched.district)}>
+                    <Select
+                      value={values.district}
+                      onChange={(e) => handleChange('district', e.target.value)}
+                      title="Chọn Quận Huyện"
+                      disabled={!values.province}
+                      isRequired
+                      placeholder="-- Chọn Quận Huyện --"
+                      maxHeight="200px"
+                      overflowY="auto"
+                      width="100%"
+                      maxWidth="250px"
+                      menuPlacement="auto"
+                    >
+                      {districts.map((district) => (
+                        <option key={district.id} value={district.id}>
+                          {district.full_name}
+                        </option>
+                      ))}
+                    </Select>
+                    <FormErrorMessage>{errors.district}</FormErrorMessage>
+                  </FormControl>
+                </GridItem>
+
+                {/* Phường Xã Dropdown */}
+                <GridItem colSpan={1}>
+                  <FormControl isInvalid={!!(errors.ward && touched.ward)}>
+                    <Select
+                      value={values.ward}
+                      onChange={(e) => handleChange('ward', e.target.value)}
+                      title="Chọn Phường Xã"
+                      disabled={!values.district}
+                      isRequired
+                      placeholder="-- Chọn Phường Xã --"
+                      maxHeight="200px"
+                      overflowY="auto"
+                      width="100%"
+                      maxWidth="250px"
+                      menuPlacement="auto"
+                    >
+                      {wards.map((ward) => (
+                        <option key={ward.id} value={ward.id}>
+                          {ward.full_name}
+                        </option>
+                      ))}
+                    </Select>
+                    <FormErrorMessage>{errors.ward}</FormErrorMessage>
+                  </FormControl>
+                </GridItem>
+
+                {/* Đặt lại button */}
+                <GridItem colSpan={1}>
+                  <Button
+                    size="sm"
+                    colorScheme="red"
+                    onClick={handleReset}
+                    position="absolute"
+                    bottom="10px"
+                    right="10px"
                   >
-                    {provinces.map((province) => (
-                      <option key={province.id} value={province.id}>
-                        {province.full_name}
-                      </option>
-                    ))}
-                  </Select>
-                  <FormErrorMessage>{errors.province}</FormErrorMessage>
-                </FormControl>
-              </GridItem>
-
-              {/* Quận Huyện Dropdown */}
-              <GridItem colSpan={1}>
-                <FormControl isInvalid={!!(errors.district && touched.district)}>
-                  <Select
-                    value={values.district}
-                    onChange={(e) => handleChange('district', e.target.value)}
-                    title="Chọn Quận Huyện"
-                    disabled={!values.province}
-                    isRequired
-                    placeholder="-- Chọn Quận Huyện --"
-                    maxHeight="200px"
-                    overflowY="auto"
-                    width="100%"
-                    maxWidth="250px"
-                    menuPlacement="auto"
-                  >
-                    {districts.map((district) => (
-                      <option key={district.id} value={district.id}>
-                        {district.full_name}
-                      </option>
-                    ))}
-                  </Select>
-                  <FormErrorMessage>{errors.district}</FormErrorMessage>
-                </FormControl>
-              </GridItem>
-
-              {/* Phường Xã Dropdown */}
-              <GridItem colSpan={1}>
-                <FormControl isInvalid={!!(errors.ward && touched.ward)}>
-                  <Select
-                    value={values.ward}
-                    onChange={(e) => handleChange('ward', e.target.value)}
-                    title="Chọn Phường Xã"
-                    disabled={!values.district}
-                    isRequired
-                    placeholder="-- Chọn Phường Xã --"
-                    maxHeight="200px"
-                    overflowY="auto"
-                    width="100%"
-                    maxWidth="250px"
-                    menuPlacement="auto"
-                  >
-                    {wards.map((ward) => (
-                      <option key={ward.id} value={ward.id}>
-                        {ward.full_name}
-                      </option>
-                    ))}
-                  </Select>
-                  <FormErrorMessage>{errors.ward}</FormErrorMessage>
-                </FormControl>
-              </GridItem>
-
-              {/* Đặt lại button */}
-              <GridItem colSpan={1}>
-                <Button 
-                  size="sm" 
-                  colorScheme="red" 
-                  onClick={handleReset} 
-                  position="absolute" 
-                  bottom="10px" 
-                  right="10px"
-                >
-                  Đặt lại
-                </Button>
-              </GridItem>
-            </Grid>
-          </PopoverBody>
-        </PopoverContent>
-      </Popover>
-
-      {/* Hiển thị địa chỉ đã chọn ngay dưới "Chọn Khu vực" */}
-      <Text fontSize="sm" mt={3} fontWeight="bold">
-        Địa chỉ đã chọn:
-      </Text>
-      <Text fontSize="sm">
-        {addressLabel}
-      </Text>
+                    Đặt lại
+                  </Button>
+                </GridItem>
+              </Grid>
+            </PopoverBody>
+          </PopoverContent>
+        </Popover>
+      </Flex>
     </Box>
   );
 };

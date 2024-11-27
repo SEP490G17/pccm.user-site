@@ -1,5 +1,5 @@
 import './CourtClusterList.scss';
-import { Button, Card, Col, Image, Input, Row, Select, Typography } from 'antd';
+import { Button, Card, Col, Image, Input, Row, Select, Slider, Typography } from 'antd';
 import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import ListBanner from '@/feature/home/components/HomeBanner';
@@ -9,6 +9,7 @@ import Pagination from '@/feature/atoms/Pagination';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/app/stores/store';
 import AddressSelectAtom from '@/app/common/form/AddressSelectAtom';
+import { SearchOutlined } from '@ant-design/icons';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
@@ -23,6 +24,7 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
   const { listCourt, loadListCourt, loadingInitial } = courtClusterStore;
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [priceRange, setPriceRange] = useState<[number, number]>([100, 1500000]);
 
   // State for form fields
   const [formValues, setFormValues] = useState({
@@ -31,7 +33,6 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
     ward: '',
     address: '',
   });
-  
   const [formErrors, setFormErrors] = useState<any>({});
   const [touched, setTouched] = useState<any>({});
 
@@ -43,41 +44,27 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
     }));
 
     // Mark field as touched
-    // setTouched((prevState) => ({
-    //   ...prevState,
-    //   [field]: true,
-    // }));
+    setTouched((prevState) => ({
+      ...prevState,
+      [field]: true,
+    }));
 
-    // Optionally, you can add validation logic here
+    // Validate the field
     validateField(field, value);
   };
 
   const validateField = (field: string, value: string) => {
     const errors: any = {};
-
-    if (field === 'province' && value === '') {
-      errors.province = 'Province is required';
+    if (value === '') {
+      errors[field] = `${field} is required`;
     }
-
-    if (field === 'district' && value === '') {
-      errors.district = 'District is required';
-    }
-
-    if (field === 'ward' && value === '') {
-      errors.ward = 'Ward is required';
-    }
-
-    if (field === 'address' && value === '') {
-      errors.address = 'Address is required';
-    }
-
     setFormErrors(errors);
   };
 
   useEffect(() => {
     window.scrollTo(0, 0);
     loadListCourt();
-  }, []);
+  }, [loadListCourt]);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentItems = listCourt.slice(startIndex, startIndex + itemsPerPage);
@@ -92,44 +79,64 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
         breadCrumb={[{ title: 'Trang chủ', to: '/home' }, { title: 'Sân thể thao', to: '/list-courtcluster' }]}
       />
 
-      <Row gutter={[16, 16]} justify="space-between" align="middle" className="filter-row">
-        <Col xs={24} sm={24} md={16} lg={6}>
-          <Search placeholder="Tìm sân" style={{ width: '100%', marginBottom: '10px' }} />
-        </Col>
+      <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
+        <Row gutter={[16, 16]} justify="space-between" align="middle" className="filter-row">
+          <Col xs={24} sm={24} md={8} lg={5}>
+            <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>Tìm sân</label>
+            <Input placeholder="Tìm sân" style={{ width: '100%', marginBottom: '40px' }} suffix={<SearchOutlined />} />
+          </Col>
 
-        {/* Pass formValues, formErrors, touched, and onChange to AddressSelectAtom */}
-        <Col xs={24} sm={12} md={6} lg={5}>
-          <AddressSelectAtom
-            onChange={handleFieldChange}
-            values={formValues}
-            errors={formErrors}  // Pass errors here
-            touched={touched}  // Pass touched here
-          />
-        </Col>
+          <Col xs={24} sm={24} md={10} lg={9}>
+            <AddressSelectAtom
+              onChange={handleFieldChange}
+              values={formValues}
+              errors={formErrors}
+              touched={touched}
+            />
+          </Col>
 
-        <Col xs={24} sm={12} md={6} lg={5}>
-          <Select defaultValue="Tất cả" style={{ width: '100%', marginBottom: '10px' }}>
-            <Option value="all">Đánh giá</Option>
-            <Option value="5">5 sao</Option>
-            <Option value="4">4 sao</Option>
-          </Select>
-        </Col>
-        <Col xs={24} sm={12} md={6} lg={5}>
-          <Select defaultValue="Tất cả" style={{ width: '100%', marginBottom: '10px' }}>
-            <Option value="all"> Từ 1 trăm đến 300 trăm </Option>
-            <Option value="low">Từ 500 trăm đến 1 triệu</Option>
-            <Option value="medium">Từ 1 triệu đến 1 triệu rưỡi</Option>
-          </Select>
-        </Col>
-        <Col xs={24} sm={12} md={6} lg={3}>
-          <Button
-            type="primary"
-            style={{ width: '100%', backgroundColor: 'green', marginBottom: '10px' }}
-          >
-            Tìm sân
-          </Button>
-        </Col>
-      </Row>
+          <Col xs={24} sm={12} md={3} lg={3}>
+            <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>Đánh giá</label>
+            <Select defaultValue="Tất cả" style={{ width: '100%', marginBottom: '40px' }}>
+              <Option value="all">Tất cả</Option>
+              <Option value="5">5 sao</Option>
+              <Option value="4">4 sao</Option>
+            </Select>
+          </Col>
+
+          <Col xs={24} sm={12} md={3} lg={5}>
+            <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>Mức giá</label>
+            <Slider
+              range
+              min={100}
+              max={1500000}
+              step={100}
+              value={priceRange}
+              onChange={(value: [number, number]) => setPriceRange(value)}
+              style={{ marginBottom: '25px' , marginTop: '15px' }}
+            />
+            <div style={{ textAlign: 'center', fontSize: '16px', fontWeight: 'bold', color: '#333' }}>
+              {`${priceRange[0]?.toLocaleString()} VND - ${priceRange[1]?.toLocaleString()} VND`}
+            </div>
+          </Col>
+
+          <Col xs={24} sm={12} md={1} lg={2}>
+            <Button
+              type="primary"
+              style={{
+                width: '100%',
+                backgroundColor: 'green',
+                color: 'white',
+                marginBottom: '15px',
+                borderRadius: '4px',
+                fontWeight: 'bold',
+              }}
+            >
+              Tìm kiếm
+            </Button>
+          </Col>
+        </Row>
+      </div>
 
       <div className="featured-courts">
         <ListCourtCluster itemsPerPage={4} />
@@ -141,38 +148,37 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
       <Row gutter={[16, 16]} className="court-list">
         {loadingInitial
           ? Array.from({ length: 4 }).map((_, i) => (
-              <Col key={i} xs={24} sm={12} md={8} lg={6}>
-                <Card loading={true} />
-              </Col>
-            ))
+            <Col key={i} xs={24} sm={12} md={8} lg={6}>
+              <Card loading={true} />
+            </Col>
+          ))
           : currentItems.map((c) => (
-              <Col key={c.id} xs={24} sm={12} md={8} lg={6} className="court-col">
-                <Card hoverable className="court-card">
-                  <Image src={c.images[0]} width={'100%'} height={'200px'} />
-                  <div className="court-details">
-                    <div className="court-info">
-                      <Title level={5} className="court-title">
-                        {c.title}
-                      </Title>
-                      <Paragraph>Khu vực: {c.address}</Paragraph>
-                      <Paragraph className="service-paragraph" style={{ height: '25px' }} />
-                      <Row justify="space-between" align="middle" className="rating-row">
-                        <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>
-                        <Row>
-                          <FaStar className="text-yellow-500" color="#f7d03f" />
-                          <FaStar className="text-yellow-500" color="#f7d03f" />
-                          <FaStar className="text-yellow-500" color="#f7d03f" />
-                          <FaStar className="text-yellow-500" color="#f7d03f" />
-                          <FaStarHalfAlt className="text-yellow-500" color="#f7d03f" />
-                          <Typography.Paragraph className="rating-value">(4.5)</Typography.Paragraph>
-                        </Row>
+            <Col key={c.id} xs={24} sm={12} md={8} lg={6} className="court-col">
+              <Card hoverable className="court-card">
+                <Image src={c.images[0]} width={'100%'} height={'200px'} />
+                <div className="court-details">
+                  <div className="court-info">
+                    <Title level={5} className="court-title">
+                      {c.title}
+                    </Title>
+                    <Paragraph>Khu vực: {c.address}</Paragraph>
+                    <Row justify="space-between" align="middle" className="rating-row">
+                      <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>
+                      <Row>
+                        <FaStar className="text-yellow-500" color="#f7d03f" />
+                        <FaStar className="text-yellow-500" color="#f7d03f" />
+                        <FaStar className="text-yellow-500" color="#f7d03f" />
+                        <FaStar className="text-yellow-500" color="#f7d03f" />
+                        <FaStarHalfAlt className="text-yellow-500" color="#f7d03f" />
+                        <Typography.Paragraph className="rating-value">(4.5)</Typography.Paragraph>
                       </Row>
-                    </div>
-                    <Button className="book-button">Chi tiết sân</Button>
+                    </Row>
                   </div>
-                </Card>
-              </Col>
-            ))}
+                  <Button className="book-button">Chi tiết sân</Button>
+                </div>
+              </Card>
+            </Col>
+          ))}
       </Row>
 
       <Row justify="center" className="pagination">
