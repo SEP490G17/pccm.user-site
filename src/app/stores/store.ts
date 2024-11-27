@@ -11,6 +11,9 @@ import CourtClusterDetailsStore from '@/feature/courtcluster/details/CourtCluste
 import PaymentStore from './paymentStore';
 import BookingHistoryStore from '@/feature/booking/history/bookingHistoryStore';
 import BookingDetailsStore from '@/feature/booking/details/BookingDetailsStore';
+import ProductStore from './productStore';
+import ServiceStore from './serviceStore';
+import CategoryStore from './categoryStore';
 
 interface Store {
   commonStore: CommonStore;
@@ -22,9 +25,12 @@ interface Store {
   accountStore: AccountStore;
   uploadStore: UploadStore;
   bookingStore: BookingStore;
-  courtClusterDetailsStore:CourtClusterDetailsStore;
-  paymentStore:PaymentStore;
-  bookingDetailsStore:BookingDetailsStore;
+  courtClusterDetailsStore: CourtClusterDetailsStore;
+  paymentStore: PaymentStore;
+  bookingDetailsStore: BookingDetailsStore;
+  productStore: ProductStore;
+  serviceStore: ServiceStore;
+  categoryStore: CategoryStore;
 }
 
 export const store: Store = {
@@ -40,7 +46,9 @@ export const store: Store = {
   courtClusterDetailsStore: new CourtClusterDetailsStore(),
   paymentStore: new PaymentStore(),
   bookingDetailsStore: new BookingDetailsStore(),
-
+  productStore: new ProductStore(),
+  serviceStore: new ServiceStore(),
+  categoryStore: new CategoryStore(),
 };
 
 export const StoreContext = createContext(store);

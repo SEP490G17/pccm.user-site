@@ -14,6 +14,9 @@ import { IReview, ReviewsDto } from '../models/review.model';
 import { LoginDto, RegisterDto, UpdateProfileDto } from '../models/account.model';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
+import { Service } from '../models/service.model';
+import { Product } from '../models/product.model';
+import { ICategory } from '../models/category.model';
 import { Banner } from '../models/banner.model';
 import { ICourtCluster } from '../models/courtcluster.model';
 import { PaginationModel } from '../models/pagination.model';
@@ -91,6 +94,17 @@ const Banners = {
   list: (): Promise<Banner[]> => requests.get(`/banner/usersite`),
 };
 
+const Categories = {
+  list: (): Promise<ICategory[]> => requests.get(`/category`),
+};
+const Products = {
+  list: (queryParams: string = ''): Promise<PaginationModel<Product>> =>
+    requests.get(`/product/${queryParams}`),
+};
+const Services = {
+  list: (queryParams: string = ''): Promise<PaginationModel<Service>> =>
+    requests.get(`/service${queryParams}`),
+};
 const CourtClusters = {
   list: (): Promise<ICourtCluster[]> => requests.get(`/CourtCluster/list-all-usersite`),
   details: (id: string): Promise<ICourtCluster> => requests.get(`/CourtCluster/usersite/${id}`),
@@ -158,6 +172,9 @@ const agent = {
   Booking,
   Reviews,
   PaymentAgent,
+  Services,
+  Products,
+  Categories,
 };
 
 export default agent;

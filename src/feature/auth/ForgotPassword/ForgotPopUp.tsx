@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { Modal, Form, Input, Button, Typography } from 'antd';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom'; 
 import agent from '../../../app/api/agent';
 
 const { Title } = Typography;
 
 interface ForgotPopUpProps {
     token: string;
+    onClose: () => void; 
 }
 
-const ForgotPopUp: React.FC<ForgotPopUpProps> = ({ token }) => {
+const ForgotPopUp: React.FC<ForgotPopUpProps> = ({ token, onClose }) => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleSubmit = async (values: { newPassword: string; confirmPassword: string }) => {
         if (values.newPassword !== values.confirmPassword) {
@@ -22,15 +25,14 @@ const ForgotPopUp: React.FC<ForgotPopUpProps> = ({ token }) => {
         setLoading(true);
         try {
             console.log("Token sử dụng để đặt lại mật khẩu:", token);
-            // Gửi yêu cầu đổi mật khẩu lên server
             await agent.Account.confirmForgotPassword({
                 token,
                 newPassword: values.newPassword,
             });
             toast.success('Mật khẩu đã được đặt lại thành công!');
             form.resetFields();
-        } catch (error: any) {
-            toast.error(error?.response?.data?.message || 'Có lỗi xảy ra!');
+            navigate('/');
+            onClose();
         } finally {
             setLoading(false);
         }
@@ -41,8 +43,9 @@ const ForgotPopUp: React.FC<ForgotPopUpProps> = ({ token }) => {
             visible={true}
             title={<Title level={4}>Đặt lại mật khẩu</Title>}
             footer={null}
-            closable={false}
+            onCancel={onClose} 
             centered
+            closable={true} 
         >
             <Form
                 form={form}
