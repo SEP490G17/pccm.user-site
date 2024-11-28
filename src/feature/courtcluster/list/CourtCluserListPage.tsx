@@ -9,6 +9,9 @@ import Pagination from '@/feature/atoms/Pagination';
 import { useStore } from '@/app/stores/store';
 import AddressSelectAtom from '@/app/common/form/AddressSelectAtom';
 import { SearchOutlined } from '@ant-design/icons';
+import { observer } from 'mobx-react-lite';
+import CourtClusterDetailsStore from '../details/CourtClusterDetailsStore';
+import { useNavigate } from 'react-router-dom';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
@@ -19,8 +22,9 @@ interface IProps {
 }
 
 function ListCourtClusterPage({ itemsPerPage }: IProps) {
-  const { courtClusterStore } = useStore();
+  const { courtClusterStore, courtClusterDetailsStore } = useStore();
   const { courtClusterArray, loadListCourt, loadingInitial } = courtClusterStore;
+  const navigate = useNavigate();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [priceRange, setPriceRange] = useState<[number, number]>([100, 1500000]);
@@ -45,7 +49,7 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
     }));
 
     // Mark field as touched
-    setTouched((prevState) => ({
+    setTouched((prevState: any) => ({
       ...prevState,
       [field]: true,
     }));
@@ -140,9 +144,11 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
               value={rating} // Liên kết với state
               onChange={(value) => setRating(value)} // Cập nhật state
             >
-              <Option value="all">Tất cả</Option>
+              <Option value="">Tất cả</Option>
               <Option value="5">5 sao</Option>
               <Option value="4">4 sao</Option>
+              <Option value="3">3 sao</Option>
+              <Option value="2">2 sao</Option>
             </Select>
           </Col>
 
@@ -192,7 +198,7 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
       <Title level={2} style={{ marginBottom: '24px' }}>
         Danh sách sân
       </Title>
-      {/* <Row gutter={[16, 16]} className="court-list">
+      <Row gutter={[16, 16]} className="court-list">
         {loadingInitial
           ? Array.from({ length: 4 }).map((_, i) => (
               <Col key={i} xs={24} sm={12} md={8} lg={6}>
@@ -223,23 +229,16 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
                         </Row>
                       </Row>
                     </div>
-                    <Button className="book-button">Chi tiết sân</Button>
+                    <Button
+                          className="book-button"
+                          onClick={() => {
+                            courtClusterDetailsStore.clearSelectedCourt();
+                            navigate(`/chi-tiet/${c.id}`);
+                          }}
+                        >
+                          Chi tiết sân
+                        </Button>
                   </div>
-                </Card>
-              </Col>
-            ))}
-      </Row> */}
-      <Row gutter={[16, 16]} className="court-list">
-        {loadingInitial
-          ? Array.from({ length: 4 }).map((_, i) => (
-              <Col key={i} xs={24} sm={12} md={8} lg={6}>
-                <Card loading={true} />
-              </Col>
-            ))
-          : currentItems.map((c) => (
-              <Col key={c.id} xs={24} sm={12} md={8} lg={6} className="court-col">
-                <Card hoverable className="court-card">
-                  {/* Render dữ liệu */}
                 </Card>
               </Col>
             ))}
@@ -257,4 +256,4 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
   );
 }
 
-export default ListCourtClusterPage;
+export default observer(ListCourtClusterPage);
