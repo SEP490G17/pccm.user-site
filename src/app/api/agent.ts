@@ -11,7 +11,7 @@ import {
 } from '../models/booking.model';
 import { INews, INewsDto } from '../models/news.model';
 import { IReview, ReviewsDto } from '../models/review.model';
-import { ChangePasswordInput, LoginDto, RegisterDto } from '../models/account.model';
+import { ChangePasswordInput, LoginDto, RegisterDto, UpdateProfileDto } from '../models/account.model';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
 import { Banner } from '../models/banner.model';
@@ -92,7 +92,7 @@ const Banners = {
 };
 
 const CourtClusters = {
-  list: (): Promise<ICourtCluster[]> => requests.get(`/CourtCluster/list-all-usersite`),
+   list: (queryParams: string = ''): Promise<PaginationModel<ICourtCluster>> => requests.get(`/CourtCluster/list-all-usersite/${queryParams}`),
   details: (id: string): Promise<ICourtCluster> => requests.get(`/CourtCluster/usersite/${id}`),
 };
 

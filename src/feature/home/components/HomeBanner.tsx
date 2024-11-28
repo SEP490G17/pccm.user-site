@@ -23,8 +23,6 @@ function ListBanner({ title }: IProps) {
         };
     }, [bannerArray]);
 
-    console.log('check bannerArray', bannerArray);
-
     useEffect(() => {
         loadListBanner();
     }, [loadListBanner]);
@@ -38,7 +36,7 @@ function ListBanner({ title }: IProps) {
                         <div
                             className="banner-overlay"
                             style={{
-                                backgroundImage: `url(${banner.imageUrl || 'https://res.cloudinary.com/dasy5hwz4/image/upload/v1732032348/pydcp3llda5h3soccnmr.jpg'})`,
+                                backgroundImage: `url(${banner.imageUrl || 'https://helio.vn/media/posts/pickleball-da-nang-236.jpg'})`,
                                 backgroundSize: 'cover',
                                 backgroundPosition: 'center',
                                 width: '100%',

@@ -19,7 +19,7 @@ interface IProps {
 
 function CourtClusterList({ title, itemsPerPage }: IProps) {
   const { courtClusterStore, courtClusterDetailsStore } = useStore();
-  const { listCourt, loadListCourt, loadingInitial } = courtClusterStore;
+  const { courtClusterArray, listCourt, loadListCourt, loadingInitial } = courtClusterStore;
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -113,7 +113,7 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
   };
 
   // Handle empty state
-  if (!loadingInitial && listCourt.length === 0) {
+  if (!loadingInitial && courtClusterArray.length === 0) {
     return (
       <Row justify="center" align="middle" style={{ minHeight: '200px' }}>
         <Typography.Text>Không có sân bóng nào</Typography.Text>
@@ -144,7 +144,7 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
 
           <div ref={containerRef} className="courts-container">
             <div className="courts-wrapper" style={{ display: 'flex' }}>
-              {listCourt.map((c) => (
+              {courtClusterArray.map((c) => (
                 <div
                   key={c.id}
                   style={{ 
