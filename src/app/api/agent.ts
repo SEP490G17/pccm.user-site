@@ -106,6 +106,7 @@ const Services = {
 };
 const CourtClusters = {
    list: (queryParams: string = ''): Promise<PaginationModel<ICourtCluster>> => requests.get(`/CourtCluster/list-all-usersite/${queryParams}`),
+   listTop: (queryParams: string = ''): Promise<PaginationModel<ICourtCluster>> => requests.get(`/CourtCluster/top-courtcluster/${queryParams}`),
   details: (id: string): Promise<ICourtCluster> => requests.get(`/CourtCluster/usersite/${id}`),
 };
 
