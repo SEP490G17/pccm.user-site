@@ -1,5 +1,5 @@
 import { Row, Col, Typography, Popover } from 'antd'; // Replace Grid with Row
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { useStore } from '@/app/stores/store';
 import { useEffect, useState } from 'react';
 
