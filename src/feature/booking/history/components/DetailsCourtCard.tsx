@@ -1,6 +1,7 @@
-import { ICourtCluster } from '@/app/models/courtcluster.model';
+import { ICourt, ICourtCluster } from '@/app/models/courtcluster.model';
 import { CarOutlined, CoffeeOutlined, ShopOutlined, WifiOutlined } from '@ant-design/icons';
 import { Card, Col, Divider, Flex, Row, Space, Typography } from 'antd';
+import { useEffect, useState } from 'react';
 import { FaHamburger, FaMotorcycle } from 'react-icons/fa';
 
 interface IProps {
@@ -13,7 +14,26 @@ const formatTime = (timeString: string) => {
   return `${hours}:${minutes}`;
 };
 
+const getMinMaxPrices = (courts: ICourt[]) => {
+  const prices = courts.flatMap(court => court.courtPrices.map(price => price.price));
+
+  const minPrice = Math.min(...prices);
+  const maxPrice = Math.max(...prices);
+
+  return { minPrice, maxPrice };
+};
+
 const DetailsCourtCard = ({ court }: IProps) => {
+  const [minPrice, setMinPrice] = useState<number | null>(null);
+  const [maxPrice, setMaxPrice] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (court) {
+      const { minPrice, maxPrice } = getMinMaxPrices(court.courts);
+      setMinPrice(minPrice);
+      setMaxPrice(maxPrice);
+    }
+  }, [court]);
   return (
     <Card className="details-card" style={{ minHeight: '100%' }}>
       <Flex style={{ margin: '0.5rem 0' }}>
@@ -36,11 +56,11 @@ const DetailsCourtCard = ({ court }: IProps) => {
           </tr>
           <tr>
             <td>Giá sân từ:</td>
-            <td>100.000 đ</td>
+            <td>{minPrice?.toLocaleString('vn')} đ</td>
           </tr>
           <tr>
             <td>Giá sân đến:</td>
-            <td>200.000 đ</td>
+            <td>{maxPrice?.toLocaleString('vn')} đ</td>
           </tr>
         </tbody>
       </table>
