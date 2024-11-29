@@ -10,12 +10,10 @@ import { useStore } from '@/app/stores/store';
 import AddressSelectAtom from '@/app/common/form/AddressSelectAtom';
 import { SearchOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react-lite';
-import CourtClusterDetailsStore from '../details/CourtClusterDetailsStore';
 import { useNavigate } from 'react-router-dom';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
-const { Search } = Input;
 
 interface IProps {
   itemsPerPage: number;
@@ -23,7 +21,13 @@ interface IProps {
 
 function ListCourtClusterPage({ itemsPerPage }: IProps) {
   const { courtClusterStore, courtClusterDetailsStore } = useStore();
-  const { courtClusterArray, loadListCourt, loadingInitial } = courtClusterStore;
+  const {
+    courtClusterArray,
+    topCourtClusterArray,
+    loadListCourt,
+    loadListTopCourt,
+    loadingInitial,
+  } = courtClusterStore;
   const navigate = useNavigate();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -69,7 +73,8 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
   useEffect(() => {
     window.scrollTo(0, 0);
     loadListCourt();
-  }, [loadListCourt]);
+    loadListTopCourt();
+  }, [loadListCourt, loadListTopCourt]);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentItems = courtClusterArray.slice(startIndex, startIndex + itemsPerPage);
@@ -87,7 +92,6 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
       minPrice: priceRange[0],
       maxPrice: priceRange[1],
     };
-    console.log('Dữ liệu nhập vào:', searchParams);
     // Gọi API
     loadListCourt(searchParams);
   };
@@ -185,7 +189,7 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
 
       <div className="featured-courts-wrapper">
         <div className="featured-courts">
-          <ListCourtCluster itemsPerPage={3} />
+          <ListCourtCluster itemsPerPage={3} courtClusters={topCourtClusterArray} />
         </div>
       </div>
 
@@ -224,14 +228,14 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
                       </Row>
                     </div>
                     <Button
-                          className="book-button"
-                          onClick={() => {
-                            courtClusterDetailsStore.clearSelectedCourt();
-                            navigate(`/chi-tiet/${c.id}`);
-                          }}
-                        >
-                          Chi tiết sân
-                        </Button>
+                      className="book-button"
+                      onClick={() => {
+                        courtClusterDetailsStore.clearSelectedCourt();
+                        navigate(`/chi-tiet/${c.id}`);
+                      }}
+                    >
+                      Chi tiết sân
+                    </Button>
                   </div>
                 </Card>
               </Col>

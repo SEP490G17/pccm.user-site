@@ -15,11 +15,11 @@ const { Title, Paragraph } = Typography;
 interface IProps {
   title?: string;
   itemsPerPage: number;
+  courtClusters: any[];  // Thêm prop này để truyền vào dữ liệu từ bên ngoài
 }
 
-function CourtClusterList({ title, itemsPerPage }: IProps) {
+function CourtClusterList({ title, itemsPerPage, courtClusters }: IProps) {
   const { courtClusterStore, courtClusterDetailsStore } = useStore();
-  const { courtClusterArray, listCourt, loadListCourt, loadingInitial } = courtClusterStore;
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -27,10 +27,6 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    loadListCourt();
-  }, [loadListCourt]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -45,7 +41,6 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
     if (containerRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
       setCanScrollLeft(scrollLeft > 0);
-      // Add a small buffer (1px) to account for rounding errors
       setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth - 1);
     }
   };
@@ -54,16 +49,14 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
     const container = containerRef.current;
     if (container) {
       container.addEventListener('scroll', checkScroll);
-      // Initial check
       checkScroll();
     }
-
     return () => {
       if (container) {
         container.removeEventListener('scroll', checkScroll);
       }
     };
-  }, [listCourt, windowWidth]);
+  }, [courtClusters, windowWidth]);
 
   const getResponsiveItemWidth = () => {
     if (windowWidth < 576) return '100%';
@@ -78,14 +71,8 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
       const itemWidth = container.offsetWidth;
       const currentScroll = container.scrollLeft;
       const maxScroll = container.scrollWidth - container.clientWidth;
-      
-      // Calculate the next scroll position
       const nextScroll = Math.min(currentScroll + itemWidth, maxScroll);
-      
-      container.scrollTo({
-        left: nextScroll,
-        behavior: 'smooth'
-      });
+      container.scrollTo({ left: nextScroll, behavior: 'smooth' });
     }
   };
 
@@ -94,14 +81,8 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
       const container = containerRef.current;
       const itemWidth = container.offsetWidth;
       const currentScroll = container.scrollLeft;
-      
-      // Calculate the previous scroll position
       const prevScroll = Math.max(currentScroll - itemWidth, 0);
-      
-      container.scrollTo({
-        left: prevScroll,
-        behavior: 'smooth'
-      });
+      container.scrollTo({ left: prevScroll, behavior: 'smooth' });
     }
   };
 
@@ -113,7 +94,7 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
   };
 
   // Handle empty state
-  if (!loadingInitial && courtClusterArray.length === 0) {
+  if (courtClusters.length === 0) {
     return (
       <Row justify="center" align="middle" style={{ minHeight: '200px' }}>
         <Typography.Text>Không có sân bóng nào</Typography.Text>
@@ -127,118 +108,79 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
         <Title level={3}>{title}</Title>
       </Row>
 
-      {loadingInitial ? (
-        <Skeleton active />
-      ) : (
-        <div className="court-list-content">
-          <Button
-            className="nav-button prev-button"
-            onClick={handlePrevious}
-            style={{
-              backgroundColor: !canScrollLeft ? 'white' : '#115363',
-              color: !canScrollLeft ? 'black' : 'white',
-            }}
-            disabled={!canScrollLeft}
-            icon={<IoIosArrowBack />}
-          />
+      <div className="court-list-content">
+        <Button
+          className="nav-button prev-button"
+          onClick={handlePrevious}
+          style={{
+            backgroundColor: !canScrollLeft ? 'white' : '#115363',
+            color: !canScrollLeft ? 'black' : 'white',
+          }}
+          disabled={!canScrollLeft}
+          icon={<IoIosArrowBack />}
+        />
 
-          <div ref={containerRef} className="courts-container">
-            <div className="courts-wrapper" style={{ display: 'flex' }}>
-              {courtClusterArray.map((c) => (
-                <div
-                  key={c.id}
-                  style={{ 
-                    flex: `0 0 ${getResponsiveItemWidth()}`,
-                    padding: '0 8px'
-                  }}
-                >
-                  <Card hoverable className="court-card">
-                    <Image src={c.images[0]} />
-                    <div className="court-details">
-                      <div className="court-info" >
-                        <Title level={5} className="overflow-hidden">
-                          {c.title}
-                        </Title>
-                        <Paragraph>Khu vực: {c.address}</Paragraph>
-                        <Paragraph className="service-paragraph" style={{ height: '25px' }}>
-                          
-                        </Paragraph>
-                        <Row justify="space-between" align="middle" className="rating-row">
-                          <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>
-                          <Row>
-                            <FaStar
-                              className="text-yellow-500"
-                              color="#f7d03f"
-                              style={{ marginTop: '3px' }}
-                            />
-                            <FaStar
-                              className="text-yellow-500"
-                              color="#f7d03f"
-                              style={{ marginTop: '3px' }}
-                            />
-                            <FaStar
-                              className="text-yellow-500"
-                              color="#f7d03f"
-                              style={{ marginTop: '3px' }}
-                            />
-                            <FaStar
-                              className="text-yellow-500"
-                              color="#f7d03f"
-                              style={{ marginTop: '3px' }}
-                            />
-                            <FaStarHalfAlt
-                              className="text-yellow-500"
-                              color="#f7d03f"
-                              style={{ marginTop: '3px' }}
-                            />
-                            <Typography.Paragraph style={{ marginLeft: '5px' }}>
-                              (4.5)
-                            </Typography.Paragraph>
-                          </Row>
+        <div ref={containerRef} className="courts-container">
+          <div className="courts-wrapper" style={{ display: 'flex' }}>
+            {courtClusters.map((c) => (
+              <div
+                key={c.id}
+                style={{ flex: `0 0 ${getResponsiveItemWidth()}`, padding: '0 8px' }}
+              >
+                <Card hoverable className="court-card">
+                  <Image src={c.images[0]} />
+                  <div className="court-details">
+                    <div className="court-info">
+                      <Title level={5} className="overflow-hidden">
+                        {c.title}
+                      </Title>
+                      <Paragraph>Khu vực: {c.address}</Paragraph>
+                      <Row justify="space-between" align="middle" className="rating-row">
+                        <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>
+                        <Row>
+                          <FaStar className="text-yellow-500" style={{ marginTop: '3px' }} />
+                          <FaStar className="text-yellow-500" style={{ marginTop: '3px' }} />
+                          <FaStar className="text-yellow-500" style={{ marginTop: '3px' }} />
+                          <FaStar className="text-yellow-500" style={{ marginTop: '3px' }} />
+                          <FaStarHalfAlt className="text-yellow-500" style={{ marginTop: '3px' }} />
+                          <Typography.Paragraph style={{ marginLeft: '5px' }}>(4.5)</Typography.Paragraph>
                         </Row>
-                      </div>
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'space-between',
-                          gap: '8px',
+                      </Row>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      <CourtBookingForm
+                        courtClusterId={c.id}
+                        loadingCourtId={loadingCourtId}
+                        setLoadingCourtId={setLoadingCourtId}
+                      />
+                      <Button
+                        className="book-button"
+                        onClick={() => {
+                          courtClusterDetailsStore.clearSelectedCourt();
+                          navigate(`/chi-tiet/${c.id}`);
                         }}
                       >
-                        <CourtBookingForm
-                          courtClusterId={c.id}
-                          loadingCourtId={loadingCourtId}
-                          setLoadingCourtId={setLoadingCourtId}
-                        />
-                        <Button
-                          className="book-button"
-                          onClick={() => {
-                            courtClusterDetailsStore.clearSelectedCourt();
-                            navigate(`/chi-tiet/${c.id}`);
-                          }}
-                        >
-                          Chi tiết sân
-                        </Button>
-                      </div>
+                        Chi tiết sân
+                      </Button>
                     </div>
-                  </Card>
-                </div>
-              ))}
-            </div>
+                  </div>
+                </Card>
+              </div>
+            ))}
           </div>
-
-          <Button
-            className="nav-button next-button"
-            onClick={handleNext}
-            style={{
-              backgroundColor: !canScrollRight ? 'white' : '#115363',
-              color: !canScrollRight ? 'black' : 'white',
-            }}
-            disabled={!canScrollRight}
-            icon={<IoIosArrowForward />}
-          />
         </div>
-      )}
+
+        <Button
+          className="nav-button next-button"
+          onClick={handleNext}
+          style={{
+            backgroundColor: !canScrollRight ? 'white' : '#115363',
+            color: !canScrollRight ? 'black' : 'white',
+          }}
+          disabled={!canScrollRight}
+          icon={<IoIosArrowForward />}
+        />
+      </div>
     </div>
   );
 }

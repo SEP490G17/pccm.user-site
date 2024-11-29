@@ -18,11 +18,12 @@ import BookingScheduleComponent from './components/schedule/BookingScheduleCompo
 import './CourtClusterDetailsStyle.scss';
 import BookingFormComponent from './components/bookingForm/BookingFormComponent';
 import CourtClusterServicesTab from './components/ServiceTab/CourtClusterServicesTab';
-import CourtClusterProductsTab from './components/ProductTab/CourtClusterProductsTab'
+import CourtClusterProductsTab from './components/ProductTab/CourtClusterProductsTab';
 
 const CourtClusterDetailsPage = observer(() => {
   const { id } = useParams();
-  const { courtClusterDetailsStore, signalRStore } = useStore();
+  const { courtClusterStore, courtClusterDetailsStore, signalRStore } = useStore();
+  const { courtClusterArray, listCourt, loadListCourt, loadingInitial } = courtClusterStore;
   const {
     selectedCourt,
     reviewArray,
@@ -32,6 +33,11 @@ const CourtClusterDetailsPage = observer(() => {
     loadingInitialDetailsPage,
   } = courtClusterDetailsStore;
   const isMounted = useRef(false);
+
+  // Gọi loadListCourt để lấy dữ liệu khi component mount
+  useEffect(() => {
+    loadListCourt(); // Gọi API để tải danh sách sân thể thao
+  }, [loadListCourt]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -190,7 +196,7 @@ const CourtClusterDetailsPage = observer(() => {
       </Card>
       <div className="mt-2 mb-6 w-full" style={{ marginTop: '30px' }}></div>
       <div style={{ marginBottom: '30px', marginTop: '20px' }}>
-        <ListCourtCluster title="Sân pickleball khác" itemsPerPage={3} />
+        <ListCourtCluster title="Sân pickleball khác" itemsPerPage={3} courtClusters={courtClusterArray} />
       </div>
 
       <ReviewCourtClusterComponent reviews={reviewArray} courtClusterId={selectedCourt.id} />

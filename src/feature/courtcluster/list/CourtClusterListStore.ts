@@ -8,7 +8,9 @@ import { toast } from 'react-toastify';
 
 export default class CourtClusterListStore {
   courtClusterRegistry = new Map<number, ICourtCluster>();
+  courtClusterTopRegistry = new Map<number, ICourtCluster>();
   listCourt: ICourtCluster[] = [];
+  listTopCourt: ICourtCluster[] = [];
   loadingInitial: boolean = false;
 
   // page param
@@ -23,11 +25,20 @@ export default class CourtClusterListStore {
     court.closeTime = customFormatTime(court.closeTime);
     this.courtClusterRegistry.set(court.id, court);
   };
+  setCourtClusterTop = (court: ICourtCluster) => {
+    court.openTime = customFormatTime(court.openTime);
+    court.closeTime = customFormatTime(court.closeTime);
+    this.courtClusterTopRegistry.set(court.id, court);
+  };
 
   get courtClusterArray() {
     return Array.from(this.courtClusterRegistry.values());
   }
 
+  // Hàm trả về danh sách top courts
+  get topCourtClusterArray() {
+    return Array.from(this.courtClusterTopRegistry.values());
+  }
 
   loadListCourt = async (filters: any = {}) => {
     this.loadingInitial = true;
@@ -70,6 +81,28 @@ export default class CourtClusterListStore {
       }
       if (response) {
         response.data.forEach(this.setCourtCluster);
+        this.courtPageParams.totalElement = response.count;
+      }
+      this.loadingInitial = false;
+    });
+  };
+
+  loadListTopCourt = async () => {
+    this.loadingInitial = true;
+
+    const queryParams = new URLSearchParams();
+
+    // Gọi API với các tham số đã được tạo ra
+    const [error, response] = await catchErrorHandle<PaginationModel<ICourtCluster>>(
+      agent.CourtClusters.listTop(`?${queryParams.toString()}`),
+    );
+
+    runInAction(() => {
+      if (error) {
+        toast.error('Tải danh sách cụm sân thất bại');
+      }
+      if (response) {
+        response.data.forEach(this.setCourtClusterTop);
         this.courtPageParams.totalElement = response.count;
       }
       this.loadingInitial = false;
