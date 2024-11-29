@@ -1,4 +1,3 @@
-
 export interface IPageParams {
   pageIndex?: number;
   skip?: number;

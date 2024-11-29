@@ -1,10 +1,11 @@
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { useStore } from '@/app/stores/store';
 import { Button, Col, Row, Tag, Typography } from 'antd';
 
 import dayjs from 'dayjs';
 import OrdersOfBookingComponent from './BookingOrderListComponent';
-import { BookingStatus, PaymentStatus } from '@/app/models/booking.model';
+import { BookingStatus, PaymentStatus, PaymentType } from '@/app/models/booking.model';
+import { useToast } from '@chakra-ui/react';
 export const getPaymentStatusText = (status: number) => {
   switch (status) {
     case PaymentStatus.Pending:
@@ -34,12 +35,22 @@ export const getPaymentStatusColor = (status: number) => {
 };
 
 const BookingInfoComponent = observer(() => {
-  const { bookingDetailsStore } = useStore();
-  const { selectedBooking: booking } = bookingDetailsStore;
-  if (!booking) {
+  const { bookingDetailsStore, paymentStore } = useStore();
+  const { selectedBooking } = bookingDetailsStore;
+  const { getPayment } = paymentStore;
+
+  if (!selectedBooking) {
     return;
   }
-  const { bookingDetails, ordersOfBooking } = booking;
+  const handlerPayment = async () => {
+    await getPayment(PaymentType.Booking, selectedBooking.bookingDetails.id).then((data) => {
+      if (data.res) {
+        window.location.href = data.res;
+      }
+    });
+  };
+  const toast = useToast();
+  const { bookingDetails, ordersOfBooking } = selectedBooking;
   return (
     <>
       <Row gutter={[16, 16]}>
@@ -87,9 +98,22 @@ const BookingInfoComponent = observer(() => {
                   </Typography.Text>
                 </Col>
                 <Col span={16}>
-                  <Tag className='px-2 py-4' color={getPaymentStatusColor(bookingDetails.paymentStatus)}>
-                    {getPaymentStatusText(bookingDetails.paymentStatus)}
-                  </Tag>
+                  {bookingDetails.status !== BookingStatus.Cancelled && (
+                    <Tag
+                      className="px-2 py-4"
+                      color={getPaymentStatusColor(bookingDetails.paymentStatus)}
+                    >
+                      {getPaymentStatusText(bookingDetails.paymentStatus)}
+                    </Tag>
+                  )}
+                  {bookingDetails.status === BookingStatus.Cancelled && (
+                    <Tag
+                      className="px-2 py-4 w-28 text-center"
+                      color={'red'}
+                    >
+                      Đã hủy
+                    </Tag>
+                  )}
                 </Col>
               </>
             )}
@@ -100,14 +124,26 @@ const BookingInfoComponent = observer(() => {
         </Col>
         <Col span={24}>
           <div className="float-end flex gap-2">
-            {!bookingDetails.isSuccess && (
-              <Button className="text-base p-4 py-5 w-32" variant="solid" color="danger">
+            {!bookingDetails.isSuccess && bookingDetails.status !== BookingStatus.Cancelled && (
+              <Button
+                className="text-base p-4 py-5 w-32"
+                variant="solid"
+                color="danger"
+                onClick={async () =>
+                  await bookingDetailsStore.cancelBooking(bookingDetails.id, toast)
+                }
+              >
                 Huỷ lịch
               </Button>
             )}
             {!(bookingDetails.paymentStatus === PaymentStatus.Success) &&
               bookingDetails.status === BookingStatus.Confirmed && (
-                <Button className="text-base p-4 py-5 w-32" variant="solid" color="primary">
+                <Button
+                  className="text-base p-4 py-5 w-32"
+                  variant="solid"
+                  color="primary"
+                  onClick={handlerPayment}
+                >
                   Thanh toán
                 </Button>
               )}

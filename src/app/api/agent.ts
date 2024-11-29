@@ -11,7 +11,12 @@ import {
 } from '../models/booking.model';
 import { INews, INewsDto } from '../models/news.model';
 import { IReview, ReviewsDto } from '../models/review.model';
-import { ChangePasswordInput, LoginDto, RegisterDto, UpdateProfileDto } from '../models/account.model';
+import {
+  ChangePasswordInput,
+  LoginDto,
+  RegisterDto,
+  UpdateProfileDto,
+} from '../models/account.model';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
 import { Service } from '../models/service.model';
@@ -19,18 +24,19 @@ import { Product } from '../models/product.model';
 import { ICategory } from '../models/category.model';
 import { Banner } from '../models/banner.model';
 import { ICourtCluster } from '../models/courtcluster.model';
-import { PaginationModel } from '../models/pagination.model';
+import { PaginationModel, PaginationNoti } from '../models/pagination.model';
 import { Profile, User } from '../models/user.model';
 import { router } from '../router/Routes';
 import { sleep } from '../helper/utils';
 import { store } from '../stores/store';
 import { toast } from 'react-toastify';
 import { ImageUpload } from '../models/upload.model';
+import { NotificationUser } from '../models/noti.model';
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 axios.interceptors.request.use((config) => {
-  const token = store.commonStore.token;
+  const token = localStorage.getItem('jwt');
   if (token && config.headers) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
@@ -42,8 +48,6 @@ axios.interceptors.response.use(
   },
   (error: AxiosError) => {
     const { data, status, config } = error.response as AxiosResponse;
-    console.group('check axios');
-
     switch (status) {
       case 400:
         if (config.method === 'get' && data.errors.hasOwnProperty.call(data.errors, 'id')) {
@@ -56,20 +60,17 @@ axios.interceptors.response.use(
               modalStateErrors.push(data.errors[key]);
             }
           }
-          console.log(modalStateErrors);
           throw modalStateErrors.flat();
         } else {
           toast.error(data);
         }
         break;
       case 401:
-        toast.error('unauthorized');
+        store.authStore.setVisible(true);
         break;
       case 403:
-        toast.error('forbidden');
         break;
       case 404:
-        console.log('error 404');
         router.navigate('/not-found');
         break;
       case 500:
@@ -77,7 +78,6 @@ axios.interceptors.response.use(
         router.navigate('/server-error');
         break;
     }
-    console.groupEnd();
     return Promise.reject(error);
   },
 );
@@ -119,8 +119,10 @@ const Account = {
   register: (value: RegisterDto): Promise<void> => requests.post(`/account/register`, value),
   login: (value: LoginDto): Promise<User> => requests.post(`/account/login`, value),
   profile: (): Promise<Profile> => requests.get(`/account/profile`),
-    updateProfile: (value: UpdateProfileDto): Promise<LoginDto> => requests.post(`/account/updateProfile`, value),
-  changePassword: (value: ChangePasswordInput): Promise<void> => requests.post(`/Account/change-password`, value),
+  updateProfile: (value: UpdateProfileDto): Promise<LoginDto> =>
+    requests.post(`/account/updateProfile`, value),
+  changePassword: (value: ChangePasswordInput): Promise<void> =>
+    requests.post(`/Account/change-password`, value),
   forgotPassword: (email: string): Promise<void> =>
     requests.post(`/account/forgot-password`, { email }),
   confirmForgotPassword: (data: { token: string; newPassword: string }): Promise<void> =>
@@ -147,7 +149,7 @@ const Booking = {
     requests.post(`/booking/combo`, bookingWithCombo),
   bookingByDay: (bookingByDay: IBookingByDay): Promise<any> =>
     requests.post(`/booking/byDay`, bookingByDay),
-
+  cancelBooking: (id: number): Promise<any> => requests.put(`/booking/cancel/${id}`, {}),
 };
 
 const PaymentAgent = {
@@ -159,6 +161,12 @@ const Reviews = {
   listByCourtClusterId: (id: string): Promise<IReview[]> => requests.get(`/Review/${id}`),
   create: (data: ReviewsDto): Promise<IReview> => requests.post(`/Review`, data),
   delete: (id: number): Promise<any> => requests.del(`/Review/${id}`),
+};
+
+const Notification = {
+  getList: (query: string = ''): Promise<PaginationNoti<NotificationUser>> =>
+    requests.get(`/notification${query}`),
+  updateState: (id: number): Promise<void> => requests.put(`/notification/${id}`, {}),
 };
 
 const agent = {
@@ -174,6 +182,7 @@ const agent = {
   Services,
   Products,
   Categories,
+  Notification,
 };
 
 export default agent;

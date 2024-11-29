@@ -62,7 +62,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: "/confirm-forgot-password",
-        element: < ConfirmForgotPassword />,
+        element: <ConfirmForgotPassword />,
       }
     ],
   },

@@ -1,6 +1,6 @@
 import { OrderOfBooking } from '@/app/models/booking.model';
 import { Table } from 'antd';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 interface IProps {
   orders: OrderOfBooking[];
 }
@@ -23,7 +23,7 @@ const OrdersOfBookingComponent = observer(({ orders }: IProps) => {
       dataIndex: 'totalPrice',
       key: 'totalPrice',
       render: (text: number) =>
-        `${text.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}`,
+        `${text?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}`,
     },
   ];
 

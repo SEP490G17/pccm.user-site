@@ -13,16 +13,16 @@ export default function ListCourtImage({ images }: IProps) {
     const handleResize = () => {
       const width = window.innerWidth;
       if (width <= 576) {
-        setMainHeight(280);
+        setMainHeight(298);
         setSubHeight(140);
       } else if (width <= 768) {
-        setMainHeight(320);
+        setMainHeight(338);
         setSubHeight(160);
       } else if (width <= 992) {
-        setMainHeight(380);
-        setSubHeight(186);
+        setMainHeight(398);
+        setSubHeight(190);
       } else {
-        setMainHeight(420);
+        setMainHeight(438);
         setSubHeight(210);
       }
     };

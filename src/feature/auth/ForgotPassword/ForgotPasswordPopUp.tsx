@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Button, Form, Input, Typography, Spin, Row, Col } from 'antd';
 import { LockOutlined } from '@ant-design/icons';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../app/stores/store'; // Đảm bảo rằng store có thể truy cập
 
 const { Text } = Typography;

@@ -11,6 +11,8 @@ import CourtClusterDetailsStore from '@/feature/courtcluster/details/CourtCluste
 import PaymentStore from './paymentStore';
 import BookingHistoryStore from '@/feature/booking/history/bookingHistoryStore';
 import BookingDetailsStore from '@/feature/booking/details/BookingDetailsStore';
+import SignalRStore from './signalrStore';
+import NotificationStore from './notificationStore';
 import ProductStore from './productStore';
 import ServiceStore from './serviceStore';
 import CategoryStore from './categoryStore';
@@ -31,6 +33,8 @@ interface Store {
   productStore: ProductStore;
   serviceStore: ServiceStore;
   categoryStore: CategoryStore;
+  signalRStore:SignalRStore;
+  notificationStore:NotificationStore;
 }
 
 export const store: Store = {
@@ -48,7 +52,8 @@ export const store: Store = {
   bookingDetailsStore: new BookingDetailsStore(),
   productStore: new ProductStore(),
   serviceStore: new ServiceStore(),
-  categoryStore: new CategoryStore(),
+  categoryStore: new CategoryStore(),  signalRStore: new SignalRStore(),
+  notificationStore:new NotificationStore()
 };
 
 export const StoreContext = createContext(store);
