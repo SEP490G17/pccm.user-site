@@ -11,7 +11,7 @@ export const customFormatDate = (date: Date): string => {
   return date.toLocaleString('vi-VN', dateFormatOptions).trim();
 };
 
-export const catchErrorHandle = async <T>(promise: Promise<T>) : Promise<[undefined, T] | [Error]> => {
+export const catchErrorHandle = async <T>(promise: Promise<T>) : Promise<[undefined, T] | [Error|any]> => {
   return promise
       .then(data => {
           return [undefined, data] as [undefined, T]

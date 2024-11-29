@@ -3,7 +3,7 @@ import styles from './LoginPopUp.module.scss';
 import { useStore } from '@/app/stores/store';
 import { RegisterDto } from '@/app/models/account.model';
 import 'react-toastify/dist/ReactToastify.css';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { useState } from 'react';
 import LoginPopUp from './LoginPopUp';
 
@@ -12,7 +12,7 @@ const RegisterPage = () => {
     const { register } = accountStore;
     const [form] = Form.useForm();
     const [isLoginModalVisible, setLoginModalVisible] = useState(false);
-
+    const [error, setError] = useState(null);
     const onFinish = async (values: any) => {
         const data = new RegisterDto({
             displayName: values.displayname,
@@ -26,7 +26,9 @@ const RegisterPage = () => {
 
 
         await register(data)
-            .then(() => form.resetFields())
+            .then((data)=>{
+               console.log(data.err?.response.data);
+            })
     };
 
     const validatePassword = (_: any, value: any) => {
@@ -116,14 +118,6 @@ const RegisterPage = () => {
                     </Row>
 
                     <Row gutter={[16, 16]}>
-                        <Col span={12}>
-                            <Form.Item
-                                name="displayname"
-                                rules={[{ required: true, message: 'Vui lòng nhập tên hiển thị' }]}
-                            >
-                                <Input className={styles.input} placeholder="Tên hiển thị *" />
-                            </Form.Item>
-                        </Col>
 
                         <Col span={12}>
                             <Form.Item

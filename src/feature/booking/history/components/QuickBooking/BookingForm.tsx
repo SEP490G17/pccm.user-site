@@ -25,19 +25,23 @@ export interface DataType {
   priceCourt: string;
 }
 
-const CourtBookingForm = ({ courtClusterId, loadingCourtId, setLoadingCourtId }: IProps) => {
+const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingCourtId }: IProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
   const [selectedCourt, setSelectedCourt] = useState<number | null>(null);
   const [availablePrices, setAvailablePrices] = useState<CourtPrice[]>([]);
   const [selectedTimeRange, setSelectedTimeRange] = useState<[Dayjs | null, Dayjs | null] | null>(null);
-  const { bookingStore } = useStore();
+  const { bookingStore, authStore } = useStore();
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const { availableSlot, loadingSlot, courtPrice } = bookingStore;
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
+  
   const handleOpenModal = async () => {
+    if(!authStore.isLoggedIn){
+      authStore.setVisible(true);
+      return;
+    }
     setLoadingCourtId(courtClusterId);
     setIsModalVisible(true);
     Promise.all([bookingStore.loadSlots(new ISlots({ date: dayjs().format('YYYY-MM-DD'), courtClusterId })),
@@ -309,6 +313,6 @@ const CourtBookingForm = ({ courtClusterId, loadingCourtId, setLoadingCourtId }:
       </Modal>
     </>
   );
-};
+});
 
-export default observer(CourtBookingForm);
+export default CourtBookingForm;

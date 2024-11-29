@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { FastField, Field, Form, Formik } from 'formik';
 import { useStore } from '@/app/stores/store';
 import { BookingWithCombo, IBookingWithCombo } from '@/app/models/booking.model';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { ICourtCluster } from '@/app/models/courtcluster.model';
 import {
   Button,
@@ -62,7 +62,7 @@ const BookingByComboComponent = observer(({ selectedCourt }: IBookingByComboComp
       ),
   });
   const toast = useToast();
-  const { courtClusterDetailsStore } = useStore();
+  const { courtClusterDetailsStore, authStore } = useStore();
   return (
     <Flex direction={'column'}>
       <Heading size={'lg'} className="mb-5">
@@ -71,6 +71,10 @@ const BookingByComboComponent = observer(({ selectedCourt }: IBookingByComboComp
       <Formik
       
         onSubmit={async (value) => {
+          if(!authStore.isLoggedIn){
+            authStore.setVisible(true);
+            return;
+          }
           const newCombo: IBookingWithCombo = {
             comboId: Number(value.comboId),
             courtId: Number(value.courtId),

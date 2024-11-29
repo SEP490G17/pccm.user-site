@@ -1,6 +1,9 @@
 import agent from '@/app/api/agent';
+import { BookingMessage } from '@/app/common/toastMessage/bookingMessage';
+import { CommonMessage } from '@/app/common/toastMessage/commonMessage';
 import { catchErrorHandle } from '@/app/helper/utils';
-import { BookingDetails } from '@/app/models/booking.model';
+import { BookingDetails, BookingStatus } from '@/app/models/booking.model';
+import { CreateToastFnReturn } from '@chakra-ui/react';
 import { makeAutoObservable, runInAction } from 'mobx';
 
 export default class BookingDetailsStore {
@@ -22,6 +25,26 @@ export default class BookingDetailsStore {
         this.selectedBooking = res;
       }
       this.loadingInitial = false;
+    });
+  };
+
+  cancelBooking = async (id: number, toast: CreateToastFnReturn) => {
+    const pending = toast(CommonMessage.loadingMessage('Hủy lịch'));
+    const [err, res] = await catchErrorHandle(agent.Booking.cancelBooking(id));
+    runInAction(() => {
+      toast.close(pending);
+      if (err) {
+        toast(BookingMessage.cancelFailure());
+      }
+      if (res) {
+        toast(BookingMessage.cancelSuccess());
+        if (this.selectedBooking) {
+          this.selectedBooking.bookingDetails = {
+            ...this.selectedBooking.bookingDetails,
+            status: BookingStatus.Cancelled,
+          };
+        }
+      }
     });
   };
 }

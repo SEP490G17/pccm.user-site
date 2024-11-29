@@ -21,7 +21,7 @@ const BookingHistoryPage: React.FC = observer(() => {
   const handlerPayment = async (bookingId: number) => {
     await getPayment(PaymentType.Booking, bookingId).then((data) => {
       if (data.res) {
-        window.open(data.res, '_blank');
+        window.location.href =data.res;
       }
     });
   };
@@ -93,6 +93,15 @@ const BookingHistoryPage: React.FC = observer(() => {
               color="processing"
             >
               Chờ xác nhận
+            </Tag>
+          )}
+          {record.status === BookingStatus.Confirmed &&  record.paymentStatus === PaymentStatus.Success && (
+            <Tag
+              icon={<CheckCircleOutlined />}
+              className="w-36 h-10 text-sm items-center justify-center flex"
+              color="success"
+            >
+              Đã thanh toán
             </Tag>
           )}
           {record.status === BookingStatus.Confirmed && record.paymentStatus === undefined && (

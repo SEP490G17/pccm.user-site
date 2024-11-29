@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons';
 import {
   Avatar,
+  Button,
   Col,
   Divider,
   Dropdown,
@@ -29,10 +30,13 @@ import ChangePasswordPopUp from '@/feature/profile/ChangePasswordPopUp';
 import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../stores/store';
+import { router } from '../router/Routes';
+import { Link } from '@chakra-ui/react';
+import NotificationAtom from '../common/NotificationAtom';
 
 const { Text } = Typography;
 
-const Header = () => {
+const Header = observer(() => {
   const phrases = ['Tìm sân thể thao', 'Từ khóa tìm kiếm'];
   const [placeholder, setPlaceholder] = useState('');
   const [phraseIndex, setPhraseIndex] = useState(0);
@@ -46,7 +50,7 @@ const Header = () => {
     if (commonStore.token) {
       authStore.getUser();
     }
-  }, []);
+  }, [authStore, commonStore]);
   useEffect(() => {
     const interval = setInterval(() => {
       if (charIndex < phrases[phraseIndex].length) {
@@ -62,7 +66,7 @@ const Header = () => {
     }, 250);
 
     return () => clearInterval(interval);
-  }, [charIndex, phraseIndex]);
+  }, [charIndex, phraseIndex, phrases]);
 
   const handleSearch = () => {
     console.log('Searching for:', placeholder);
@@ -76,7 +80,7 @@ const Header = () => {
         setLoginModalVisible(true);
       }
     } else if (key === 'login') {
-      setLoginModalVisible(true);
+      authStore.setVisible(true);
     } else if (key === 'viewHistory') {
       navigate('/booking-history');
     } else if (key === 'changePassword') {
@@ -98,11 +102,6 @@ const Header = () => {
         Đổi mật khẩu
       </Menu.Item>
       <Divider style={{ margin: '4px 0' }} />
-      {!userApp && (
-        <Menu.Item key="login" icon={<UserOutlined />}>
-          Đăng nhập
-        </Menu.Item>
-      )}
       {userApp && (
         <Menu.Item key="logout" icon={<LogoutOutlined />}>
           Đăng xuất
@@ -126,63 +125,65 @@ const Header = () => {
           />
         </Space>
         <Space size={40} align="center">
-          <Row gutter={[16, 16]}>
-            <Col span={24}>
-              <div
-                className="header-item"
-                onClick={() => navigate('/list-courtcluster')}
-                style={{ cursor: 'pointer' }}
-              >
-                <Flex vertical align="center">
-                  <Image
-                    preview={false}
-                    src={listCourtIcon}
-                    width={30}
-                    height={24}
-                    alt="Sân thể thao"
-                  />
-                  <Text className="header-text">Sân thể thao</Text>
-                </Flex>
-              </div>
-            </Col>
-          </Row>
-          <Col span={24}>
-            <Dropdown
-              className="dropdown"
-              overlay={menu}
-              trigger={['hover']}
-              getPopupContainer={(triggerNode) => {
-                const container = document.querySelector('.header-container') as HTMLElement;
-                return container || triggerNode;
-              }}
-            >
-              <div className="header-item" style={{ cursor: 'pointer', width: '100%' }}>
-                <Flex vertical align="center">
-                  {!userApp && (
-                    <>
-                      <Avatar size={24} alt="Tài khoản" />
-                      <Text className="header-text">Tài khoản</Text>
-                    </>
-                  )}
-                  {userApp && (
-                    <>
-                      <Avatar size={24} alt="Tài khoản" src={userApp.image} />
+          <div
+            className="header-item"
+            onClick={() => navigate('/list-courtcluster')}
+            style={{ cursor: 'pointer' }}
+          >
+            <Flex align="center">
+              <Image
+                preview={false}
+                src={listCourtIcon}
+                width={30}
+                height={24}
+                alt="Sân thể thao"
+              />
+            </Flex>
+          </div>
+
+          {userApp && <NotificationAtom />}
+
+            {userApp && (
+              <>
+                <Dropdown
+                  className="dropdown"
+                  overlay={menu}
+                  trigger={['hover']}
+                  getPopupContainer={(triggerNode) => {
+                    const container = document.querySelector('.header-container') as HTMLElement;
+                    return container || triggerNode;
+                  }}
+                >
+                  <div className="header-item" style={{ cursor: 'pointer', width: '100%' }}>
+                    <Flex className="flex-row gap-2" align="center">
+                      <Avatar size={32} alt="Tài khoản" src={userApp.image} />
                       <Text className="header-text">{userApp.displayName}</Text>
-                    </>
-                  )}
-                </Flex>
-              </div>
-            </Dropdown>
-          </Col>
+                    </Flex>
+                  </div>
+                </Dropdown>
+              </>
+            )}
+            {!userApp && (
+              <Flex gap={10}>
+                <Link onClick={() => authStore.setVisible(true)}>Đăng nhập</Link>/
+                <Link
+                  onClick={() => {
+                    router.navigate('/register');
+                  }}
+                >
+                  Đăng kí
+                </Link>
+              </Flex>
+            )}
         </Space>
       </div>
-      <LoginPopUp visible={isLoginModalVisible} onClose={() => setLoginModalVisible(false)} />
+      <LoginPopUp visible={isLoginModalVisible} onClose={() => authStore.setVisible(false)} />
       <ChangePasswordPopUp
         visible={isChangePasswordModalVisible}
         onClose={() => setChangePasswordModalVisible(false)}
       />
     </>
   );
-};
+});
 
-export default observer(Header);
+export default Header;

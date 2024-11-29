@@ -5,8 +5,8 @@ import ListCourtCluster from '@/feature/home/components/HomeCourtCluster';
 import { LoadingOutlined } from '@ant-design/icons';
 import Link from 'antd/es/typography/Link';
 import Title from 'antd/es/typography/Title';
-import { observer } from 'mobx-react';
-import { useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useRef } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { FaLocationDot } from 'react-icons/fa6';
 import { useParams } from 'react-router-dom';
@@ -20,7 +20,7 @@ import BookingFormComponent from './components/bookingForm/BookingFormComponent'
 
 const CourtClusterDetailsPage = observer(() => {
   const { id } = useParams();
-  const { courtClusterDetailsStore } = useStore();
+  const { courtClusterDetailsStore, signalRStore } = useStore();
   const {
     selectedCourt,
     reviewArray,
@@ -29,10 +29,18 @@ const CourtClusterDetailsPage = observer(() => {
     setLoadingInitialDetailsPage,
     loadingInitialDetailsPage,
   } = courtClusterDetailsStore;
+  const isMounted = useRef(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    if (!isMounted.current) {
+      isMounted.current = true;
+    }
+
     if (id) {
+      signalRStore.createConnection().then(async () => {
+        await signalRStore.joinCourtClusterConnection(Number(id));
+      });
       setLoadingInitialDetailsPage(true);
       Promise.all([
         (courtClusterDetailsStore.loadScheduleBookingList(),
@@ -41,6 +49,12 @@ const CourtClusterDetailsPage = observer(() => {
         getListReviewByCourtClusterId(id)),
       ]).finally(() => setLoadingInitialDetailsPage(false));
     }
+
+    return () => {
+      if (isMounted.current) {
+        signalRStore.leaveCourtCLusterGroup(Number(id));
+      }
+    };
   }, [
     id,
     setLoadingInitialDetailsPage,
@@ -48,6 +62,7 @@ const CourtClusterDetailsPage = observer(() => {
     getListReviewByCourtClusterId,
     courtClusterDetailsStore.loadScheduleBookingList,
     courtClusterDetailsStore,
+    signalRStore,
   ]);
   if (!selectedCourt || loadingInitialDetailsPage) {
     return (
@@ -135,7 +150,7 @@ const CourtClusterDetailsPage = observer(() => {
       <Title level={3} className="mt-10">
         Thông lịch sân
       </Title>
-      <Row className="mt-4" gutter={[16,16]}>
+      <Row className="mt-4" gutter={[16, 16]}>
         <Col xs={24} xl={16}>
           <BookingScheduleComponent selectedCourtCluster={selectedCourt} />
         </Col>

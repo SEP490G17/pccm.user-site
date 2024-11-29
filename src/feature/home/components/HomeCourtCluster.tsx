@@ -6,9 +6,9 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { useEffect, useRef, useState } from 'react';
 
 import CourtBookingForm from '@/feature/booking/history/components/QuickBooking/BookingForm';
-import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '@/app/stores/store';
+import { observer } from 'mobx-react-lite';
 
 const { Title, Paragraph } = Typography;
 
@@ -161,9 +161,7 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
                         </Title>
                         <Paragraph>Khu vực: {c.address}</Paragraph>
                         <Paragraph className="service-paragraph" style={{ height: '25px' }}>
-                          {/* {c.services.slice(0, 2).map((service) => (
-                                                  <Tag key={service.id}>{service.serviceName}</Tag>
-                                              ))} */}
+                          
                         </Paragraph>
                         <Row justify="space-between" align="middle" className="rating-row">
                           <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>

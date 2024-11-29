@@ -5,7 +5,7 @@ import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
 import './style/ProfilePage.scss';
 import { useStore } from '@/app/stores/store';
 import { RcFile } from 'antd/es/upload';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import dayjs from 'dayjs';
 import { UpdateProfileDto } from '@/app/models/account.model';
 import { toast } from 'react-toastify';

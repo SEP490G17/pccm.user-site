@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { useStore } from '@/app/stores/store';
 import BookingInfoComponent from './components/BookingInfoComponent';
 import { Badge, Card, Spin } from 'antd';
@@ -13,10 +13,11 @@ const BookingDetailsPage = observer(() => {
   const { bookingDetailsStore } = useStore();
   const { getDetailsBooking, selectedBooking, loadingInitial } = bookingDetailsStore;
   useEffect(() => {
+    window.scroll(0,0);
     if (id && !isNaN(Number(id))) {
       getDetailsBooking(Number(id));
     }
-  }, []);
+  }, [id,getDetailsBooking]);
   if (!selectedBooking || loadingInitial) {
     return (
       <div className=" flex min-h-[100vh] justify-center items-center">

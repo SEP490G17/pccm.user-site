@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import {
   ChangePasswordInput,
   ConfirmForgotPasswordDto,
@@ -9,6 +9,7 @@ import agent from '../api/agent';
 import { toast } from 'react-toastify';
 import { Profile } from '../models/user.model';
 import { store } from './store';
+import { catchErrorHandle } from '../helper/utils';
 
 export default class AccountStore {
   loadingRegister: boolean = false;
@@ -24,11 +25,8 @@ export default class AccountStore {
   }
 
   register = async (value: RegisterDto) => {
-    this.loadingRegister = true;
-    await agent.Account.register(value)
-      .then(() => toast.success('Tạo tài khoản thành công'))
-      .catch((error: any) => toast.error(error[0]))
-      .finally(() => (this.loadingRegister = false));
+    const [err, res] = await catchErrorHandle(agent.Account.register(value));
+    return { err, res };
   };
 
   profile = async () => {

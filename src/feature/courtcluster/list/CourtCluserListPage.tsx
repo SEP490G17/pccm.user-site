@@ -10,6 +10,7 @@ import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
 import Pagination from '@/feature/atoms/Pagination';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@/app/stores/store';
+import { router } from '@/app/router/Routes';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
@@ -26,7 +27,7 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
   useEffect(() => {
     window.scrollTo(0, 0);
     loadListCourt();
-  }, []);
+  }, [loadListCourt]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -132,7 +133,14 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
                         </Row>
                       </Row>
                     </div>
-                    <Button className="book-button">Chi tiết sân</Button>
+                    <Button
+                      className="book-button"
+                      onClick={() => {
+                        router.navigate(`/chi-tiet/${c.id}`);
+                      }}
+                    >
+                      Chi tiết sân
+                    </Button>
                   </div>
                 </Card>
               </Col>
