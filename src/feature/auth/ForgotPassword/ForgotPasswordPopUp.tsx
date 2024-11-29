@@ -1,5 +1,6 @@
 import React from 'react';
-import { Modal, Button, Form, Input, Typography, Spin } from 'antd';
+import { Modal, Button, Form, Input, Typography, Spin, Row, Col } from 'antd';
+import { LockOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react';
 import { useStore } from '../../../app/stores/store'; // Đảm bảo rằng store có thể truy cập
 
@@ -30,6 +31,12 @@ const ForgotPasswordPopUp: React.FC<ForgotPasswordPopUpProps> = ({ visible, onCl
             centered
         >
             <div>
+                <Row justify="center" style={{ marginBottom: 20 }}>
+                    <Col>
+                        {/* Icon Lock */}
+                        <LockOutlined style={{ fontSize: '48px', color: '#1890ff' }} />
+                    </Col>
+                </Row>
                 <Form
                     form={form}
                     name="forgotPassword"
@@ -47,9 +54,17 @@ const ForgotPasswordPopUp: React.FC<ForgotPasswordPopUpProps> = ({ visible, onCl
                         <Input placeholder="Nhập email của bạn" />
                     </Form.Item>
 
-                    <Button type="primary" htmlType="submit" loading={loadingForgotPassword}>
-                        Gửi mã xác nhận
-                    </Button>
+                    <Row justify="center" style={{ marginBottom: 10 }}>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            block
+                            style={{ width: '40%' }}
+                            loading={loadingForgotPassword}
+                        >
+                            {loadingForgotPassword ? 'Đang gửi...' : 'Gửi mã xác nhận'}
+                        </Button>
+                    </Row>
                 </Form>
                 {loadingForgotPassword && <Spin tip="Đang gửi email..." />}
             </div>

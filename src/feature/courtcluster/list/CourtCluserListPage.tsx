@@ -174,15 +174,7 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
 
           <Col xs={24} sm={12} md={1} lg={2}>
             <Button
-              type="primary"
-              style={{
-                width: '100%',
-                backgroundColor: 'green',
-                color: 'white',
-                marginBottom: '15px',
-                borderRadius: '4px',
-                fontWeight: 'bold',
-              }}
+              className="book-button"
               onClick={handleSearch} // Gọi hàm khi nhấn nút
             >
               Tìm kiếm
@@ -191,8 +183,10 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
         </Row>
       </div>
 
-      <div className="featured-courts">
-        <ListCourtCluster itemsPerPage={4} />
+      <div className="featured-courts-wrapper">
+        <div className="featured-courts">
+          <ListCourtCluster itemsPerPage={3} />
+        </div>
       </div>
 
       <Title level={2} style={{ marginBottom: '24px' }}>

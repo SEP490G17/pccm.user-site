@@ -28,3 +28,7 @@ export class PageParams implements IPageParams {
   };
 }
 
+export class ProductPageParams extends PageParams {
+  courtCluster?: number;
+  category?: number;
+}

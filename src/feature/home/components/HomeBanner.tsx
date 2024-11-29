@@ -36,7 +36,7 @@ function ListBanner({ title }: IProps) {
                         <div
                             className="banner-overlay"
                             style={{
-                                backgroundImage: `url(${banner.imageUrl || 'https://helio.vn/media/posts/pickleball-da-nang-236.jpg'})`,
+                                backgroundImage: `url(${banner.imageUrl || 'https://tuyetkypowerpoint.com/wp-content/uploads/2024/09/240905A002-Backdrop-Pickleball-2-Tuyetkypowerpoint-scaled.jpg'})`,
                                 backgroundSize: 'cover',
                                 backgroundPosition: 'center',
                                 width: '100%',

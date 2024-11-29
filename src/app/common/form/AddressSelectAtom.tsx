@@ -155,7 +155,7 @@ const AddressSelectAtom: React.FC<AddressSelectAtomProps> = ({
         {/* Nút Chọn Khu Vực */}
         <Popover placement="bottom-start">
           <PopoverTrigger>
-            <Button width="auto" size="sm" colorScheme="teal">
+            <Button className="book-button" width="auto" size="sm" colorScheme="teal">
               Chọn khu vực
             </Button>
           </PopoverTrigger>

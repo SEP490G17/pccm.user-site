@@ -1,4 +1,4 @@
-import { Card, Col, Row, Spin, Typography } from 'antd';
+import { Card, Col, Row, Spin, Typography, Tabs } from 'antd';
 
 import { useStore } from '@/app/stores/store';
 import ListCourtCluster from '@/feature/home/components/HomeCourtCluster';
@@ -17,6 +17,8 @@ import ReviewCourtClusterComponent from './components/review/ReviewCourtClusterC
 import BookingScheduleComponent from './components/schedule/BookingScheduleComponent';
 import './CourtClusterDetailsStyle.scss';
 import BookingFormComponent from './components/bookingForm/BookingFormComponent';
+import CourtClusterServicesTab from './components/ServiceTab/CourtClusterServicesTab';
+import CourtClusterProductsTab from './components/ProductTab/CourtClusterProductsTab'
 
 const CourtClusterDetailsPage = observer(() => {
   const { id } = useParams();
@@ -147,12 +149,29 @@ const CourtClusterDetailsPage = observer(() => {
         <Title className="mb-14 text-center" level={2}>
           Thông tin chi tiết cụm sân {selectedCourt.title}
         </Title>
-        <div className="flex justify-center mt-20">
-          <div
-            className="w-[50rem]"
-            dangerouslySetInnerHTML={{ __html: selectedCourt.description }}
-          />
-        </div>
+        <Tabs defaultActiveKey="1" centered>
+          {/* Tab List */}
+          <Tabs.TabPane tab="Thông tin" key="1">
+            <div className="flex justify-center mt-20">
+              <div
+                className="w-[50rem]"
+                dangerouslySetInnerHTML={{ __html: selectedCourt.description }}
+              />
+            </div>
+          </Tabs.TabPane>
+
+          <Tabs.TabPane tab="Sản phẩm" key="2">
+            <div className="mt-6">
+              {id && <CourtClusterProductsTab courtClusterId={Number(id)} />}
+            </div>
+          </Tabs.TabPane>
+
+          <Tabs.TabPane tab="Dịch vụ" key="3">
+            <div className="mt-6">
+              {id && <CourtClusterServicesTab courtClusterId={Number(id)} />}
+            </div>
+          </Tabs.TabPane>
+        </Tabs>
       </Card>
       <div className="mt-2 mb-6 w-full" style={{ marginTop: '30px' }}></div>
       <div style={{ marginBottom: '30px', marginTop: '20px' }}>
