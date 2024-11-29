@@ -3,7 +3,7 @@ import './style/BookingForm.scss';
 import { CourtPrice, IBookingModel, ISlots } from '@/app/models/booking.model';
 import { Button, Col, Form, Input, Modal, Row, Skeleton, Table, TableColumnsType, Typography } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { useStore } from '@/app/stores/store';
 import { observer } from "mobx-react-lite";
@@ -57,13 +57,21 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
       priceCourt: price.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
     }));
 
-  const datav1: DataType[] = (availablePrices ?? [])
+  const dataSelected: DataType[] = (availablePrices ?? [])
     .map((price, index) => ({
       key: index + 1,
       courtName: price.courtName,
       time: price.time,
       priceCourt: price.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
     }));
+
+  const courtPrices = (availablePrices ?? [])
+    .map((price) => ({
+      fromTime: price.time.split(' - ')[0] + ':00',
+      toTime: price.time.split(' - ')[1] + ':00',
+      price: price.price
+    }))
+
 
   const columns: TableColumnsType<DataType> = [
     { title: 'Tên sân', dataIndex: 'courtName', key: 'courtName', width: '30%' },
@@ -128,13 +136,44 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
       return false;
     }
 
-    const selectedStart = selectedTimeRange[0].format("HH:mm");
-    const selectedEnd = selectedTimeRange[1].format("HH:mm");
+    const selectedStart = selectedTimeRange[0];
+    const selectedEnd = selectedTimeRange[1];
+
+    const duration = selectedEnd.diff(selectedStart, 'hour');
+
+    if (duration < 1) {
+      form.setFields([
+        {
+          name: 'totalPrice',
+          errors: ['Thời gian đặt sân phải dài hơn 1 tiếng!'],
+        },
+      ]);
+      return false;
+    }
+
+    form.setFields([
+      {
+        name: 'totalPrice',
+        errors: [],
+      },
+    ]);
+
+    const selectedStartFormatted = selectedStart.format("HH:mm");
+    const selectedEndFormatted = selectedEnd.format("HH:mm");
     return availableSlots.some((slot) => {
       const [slotStart, slotEnd] = slot.split(" - ").map((time) => time.trim());
-      return (
-        selectedStart >= slotStart && selectedEnd <= slotEnd
-      );
+      if(selectedStartFormatted >= slotStart && selectedEndFormatted <= slotEnd){
+        return true
+      }
+      else{
+        form.setFields([
+          {
+            name: 'totalPrice',
+            errors: ['Thời gian đặt sân không hợp lệ!'],
+          },
+        ]);
+        return false;
+      }
     });
   };
 
@@ -151,43 +190,39 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
     },
   });
 
-  const calculateTotalPrice = () => {
-    if (!selectedTimeRange || !selectedTimeRange[0] || !selectedTimeRange[1] || !selectedCourt) return;
-    const selectedCourtPrice = availablePrices.filter((price) => price.courtId === selectedCourt);
-    const timeRates = selectedCourtPrice.map(item => {
-      const [start, end] = item.time.split(" - ");
-      return {
-        start: dayjs().hour(parseInt(start.split(":")[0])).minute(parseInt(start.split(":")[1])).second(parseInt(start.split(":")[1])),
-        end: dayjs().hour(parseInt(end.split(":")[0])).minute(parseInt(end.split(":")[1])).second(parseInt(start.split(":")[1])),
-        rate: item.price
-      };
-    });
+  const calculatePrice = useCallback(
+    (
+      fromTime: string,
+      toTime: string,
+      courtPrices?: Array<{ fromTime: string; toTime: string; price: number }>
+    ) => {
+      const start = dayjs(`1970-01-01T${fromTime}`).add(7, 'hour');
+      const end = dayjs(`1970-01-01T${toTime}`).add(7, 'hour');
+      let totalPrice = 0;
+      if (!courtPrices) return 0;
+      courtPrices.forEach(({ fromTime, toTime, price }) => {
+        const priceStart = dayjs(`1970-01-01T${fromTime}`);
+        const priceEnd = dayjs(`1970-01-01T${toTime}`);
 
-    const start = selectedTimeRange[0];
-    const end = selectedTimeRange[1];
-    let totalPrice = 0;
+        const overlapStart = start.isAfter(priceStart) ? start : priceStart;
+        const overlapEnd = end.isBefore(priceEnd) ? end : priceEnd;
 
-    timeRates.forEach(rate => {
-      const rateStart = rate.start;
-      const rateEnd = rate.end;
-      const ratePrice = rate.rate;
+        if (overlapStart.isBefore(overlapEnd)) {
+          const overlapDuration = overlapEnd.diff(overlapStart, 'minute') / 60;
+          totalPrice += overlapDuration * price;
+        }
+      });
 
-      if (start.isBefore(rateEnd) && end.isAfter(rateStart)) {
-        const actualStart = start.isBefore(rateStart) ? rateStart : start;
-        const actualEnd = end.isAfter(rateEnd) ? rateEnd : end;
-        const duration = Math.round(actualEnd.diff(actualStart, 'hour', true));
-
-        totalPrice += duration * ratePrice;
-      }
-    });
-
-    setTotalPrice(totalPrice);
-    form.setFieldsValue({ totalPrice: totalPrice });
-  };
+      setTotalPrice(totalPrice);
+      form.setFieldsValue({ totalPrice: totalPrice });
+    },
+    [form]
+  );
 
   useEffect(() => {
-    calculateTotalPrice();
-  }, [selectedTimeRange, selectedCourt]);
+    if (selectedTimeRange && selectedTimeRange[0] && selectedTimeRange[1])
+      calculatePrice(selectedTimeRange[0].toISOString().split('T')[1].split('.')[0], selectedTimeRange[1].toISOString().split('T')[1].split('.')[0], courtPrices)
+  }, [selectedTimeRange, selectedCourt, courtPrices, calculatePrice]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -285,7 +320,7 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
                       <h3>BẢNG GIÁ</h3>
                       <Table<DataType>
                         columns={columns}
-                        dataSource={selectedCourt ? datav1 : data}
+                        dataSource={selectedCourt ? dataSelected : data}
                         pagination={false}
                         scroll={{ y: 250 }}
                         size='small'

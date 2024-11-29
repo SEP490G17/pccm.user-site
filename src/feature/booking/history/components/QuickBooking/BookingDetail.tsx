@@ -36,7 +36,9 @@ const BookingDetail = ({
                 <Flex flex={1}>
                     <TimePicker.RangePicker
                         allowClear
-                        format="HH:00"
+                        minuteStep={15}
+                        format={'HH:mm'}
+                        hourStep={1}
                         inputReadOnly
                         style={{ width: '100%' }}
                         needConfirm={false}
