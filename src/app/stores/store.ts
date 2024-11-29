@@ -13,6 +13,9 @@ import BookingHistoryStore from '@/feature/booking/history/bookingHistoryStore';
 import BookingDetailsStore from '@/feature/booking/details/BookingDetailsStore';
 import SignalRStore from './signalrStore';
 import NotificationStore from './notificationStore';
+import ProductStore from './productStore';
+import ServiceStore from './serviceStore';
+import CategoryStore from './categoryStore';
 
 interface Store {
   commonStore: CommonStore;
@@ -24,9 +27,12 @@ interface Store {
   accountStore: AccountStore;
   uploadStore: UploadStore;
   bookingStore: BookingStore;
-  courtClusterDetailsStore:CourtClusterDetailsStore;
-  paymentStore:PaymentStore;
-  bookingDetailsStore:BookingDetailsStore;
+  courtClusterDetailsStore: CourtClusterDetailsStore;
+  paymentStore: PaymentStore;
+  bookingDetailsStore: BookingDetailsStore;
+  productStore: ProductStore;
+  serviceStore: ServiceStore;
+  categoryStore: CategoryStore;
   signalRStore:SignalRStore;
   notificationStore:NotificationStore;
 }
@@ -44,7 +50,9 @@ export const store: Store = {
   courtClusterDetailsStore: new CourtClusterDetailsStore(),
   paymentStore: new PaymentStore(),
   bookingDetailsStore: new BookingDetailsStore(),
-  signalRStore: new SignalRStore(),
+  productStore: new ProductStore(),
+  serviceStore: new ServiceStore(),
+  categoryStore: new CategoryStore(),  signalRStore: new SignalRStore(),
   notificationStore:new NotificationStore()
 };
 
