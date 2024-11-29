@@ -36,9 +36,9 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const { availableSlot, loadingSlot, courtPrice } = bookingStore;
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  
+
   const handleOpenModal = async () => {
-    if(!authStore.isLoggedIn){
+    if (!authStore.isLoggedIn) {
       authStore.setVisible(true);
       return;
     }
@@ -119,8 +119,9 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
       setAvailableSlots([]);
       setSelectedTimeRange(null)
       setTotalPrice(0);
+      authStore.getUser();
     }
-  }, [isModalVisible, form]);
+  }, [isModalVisible, form, authStore]);
 
   const isTimeRangeValid = () => {
     if (!selectedTimeRange || !selectedTimeRange[0] || !selectedTimeRange[1]) {
@@ -213,8 +214,16 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
         className="booking-form-modal"
         style={{ top: windowWidth < 768 ? 0 : 20 }}
       >
-        <Form form={form} onFinish={handleBookCourt} className="booking-form">
-          <div className="form-header">
+        <Form
+          initialValues={{
+            phonenumber: authStore.userApp?.phoneNumber,
+            fullname: authStore.userApp?.displayName,
+          }}
+          form={form}
+          onFinish={handleBookCourt}
+          className="booking-form">
+          <div className="form-header"
+          >
             <h2>ĐẶT SÂN NHANH</h2>
           </div>
 
@@ -227,6 +236,7 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
                   rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
                 >
                   <Input placeholder="Nhập số điện thoại" />
+
                 </Form.Item>
               </Col>
               <Col xs={24} sm={12}>
@@ -235,7 +245,8 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
                   name="fullname"
                   rules={[{ required: true, message: 'Vui lòng nhập tên!' }]}
                 >
-                  <Input placeholder="Nhập tên" />
+                  <Input type='tel' placeholder="Nhập số điện thoại" />
+
                 </Form.Item>
               </Col>
             </Row>
