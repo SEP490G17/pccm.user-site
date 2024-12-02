@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, DatePicker, Select, Upload, Avatar, Skeleton } from 'antd';
+import { Form, Input, Button, DatePicker, Select, Upload, Avatar, Skeleton, Row, Col } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
 import './style/ProfilePage.scss';
@@ -76,20 +76,15 @@ const ProfilePage: React.FC = () => {
     return (
         <div className="profile-page-container">
             <PageHeadingAtoms
-                breadCrumb={[
-                    { title: 'Trang chủ', to: '/home' },
-                    { title: 'Thông tin cá nhân', to: '/view-profile/' },
-                ]}
+                breadCrumb={[{ title: 'Trang chủ', to: '/home' }, { title: 'Thông tin cá nhân', to: '/view-profile/' }]}
             />
             <div style={{ maxWidth: '70%', margin: 'auto' }}>
                 <div style={{ padding: '5%', backgroundColor: 'white', borderRadius: '8px' }}>
                     <Form form={form} onFinish={handleUpdateProfile} className="form-container">
                         {
                             loadingProfile
-                                ?
-                                <Skeleton active paragraph={{ rows: 7 }} />
-                                :
-                                <>
+                                ? <Skeleton active paragraph={{ rows: 7 }} />
+                                : <>
                                     <div className="avatar-section">
                                         <Upload
                                             accept="image/*"
@@ -112,100 +107,89 @@ const ProfilePage: React.FC = () => {
                                             </div>
                                         </Upload>
                                     </div>
-                                    <div className="form-row">
-                                        <Form.Item
-                                            required
-                                            label="Họ"
-                                            name="firstName"
-                                            style={{ width: '100%' }}
-                                            labelCol={{ span: 24 }}
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: 'Vui lòng nhập họ',
-                                                },
-                                            ]}
-                                        >
-                                            <Input disabled={!isEditing} />
-                                        </Form.Item>
+                                    <Row gutter={[16, 0]} className="form-row">
+                                        <Col xs={24} sm={24} md={24}>
+                                            <Form.Item
+                                                required
+                                                label="Họ"
+                                                name="firstName"
+                                                labelCol={{ span: 24 }}
+                                                rules={[{ required: true, message: 'Vui lòng nhập họ' }]}
+                                            >
+                                                <Input disabled={!isEditing} />
+                                            </Form.Item>
+                                        </Col>
+                                        <Col xs={24} sm={24} md={24}>
+                                            <Form.Item
+                                                required
+                                                label="Tên"
+                                                name="lastName"
+                                                labelCol={{ span: 24 }}
+                                                rules={[{ required: true, message: 'Vui lòng nhập tên' }]}
+                                            >
+                                                <Input disabled={!isEditing} />
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
 
-                                        <Form.Item
-                                            required
-                                            label="Tên"
-                                            name="lastName"
-                                            style={{ width: '100%' }}
-                                            labelCol={{ span: 24 }}
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: 'Vui lòng nhập tên',
-                                                },
-                                            ]}
-                                        >
-                                            <Input disabled={!isEditing} />
-                                        </Form.Item>
-                                    </div>
-                                    <div className="form-row">
-                                        <Form.Item
-                                            required
-                                            label="Email"
-                                            name="email"
-                                            style={{ width: '48%' }}
-                                            labelCol={{ span: 24 }}
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: 'Vui lòng nhập email'
-                                                },
-                                                {
-                                                    type: 'email',
-                                                    message: 'Email không hợp lệ'
-                                                }
-                                            ]}
-                                        >
-                                            <Input disabled={!isEditing} />
-                                        </Form.Item>
-                                        <Form.Item
-                                            required
-                                            label="Số Điện Thoại"
-                                            name="phone"
-                                            style={{ width: '48%' }}
-                                            labelCol={{ span: 24 }}
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: 'Vui lòng nhập số điện thoại'
-                                                },
-                                                {
-                                                    pattern: /^0\d{9}$/,
-                                                    message: 'Số điện thoại không hợp lệ'
-                                                }
-                                            ]}
-                                        >
-                                            <Input
-                                                disabled={!isEditing}
-                                                type="tel"
-                                                maxLength={10}
-                                                onKeyDown={(e) => {
-                                                    const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'];
-                                                    if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
-                                            />
-                                        </Form.Item>
-                                    </div>
-                                    <div className="form-row">
-                                        <Form.Item label="Ngày sinh" name="birthday" style={{ width: '48%' }} labelCol={{ span: 24 }}>
-                                            <DatePicker format={'DD/MM/YYYY'} disabled={!isEditing} placeholder="Chọn ngày sinh" />
-                                        </Form.Item>
-                                        <Form.Item label="Giới Tính" name="gender" style={{ width: '48%' }} labelCol={{ span: 24 }}>
-                                            <Select disabled={!isEditing} style={{ textAlign: 'left' }} placeholder="Chọn giới tính">
-                                                <Option value="male">Nam</Option>
-                                                <Option value="female">Nữ</Option>
-                                            </Select>
-                                        </Form.Item>
-                                    </div>
+                                    <Row gutter={[16, 16]} className="form-row">
+                                        <Col xs={24} sm={24} md={24} lg={12}>
+                                            <Form.Item
+                                                required
+                                                label="Email"
+                                                name="email"
+                                                labelCol={{ span: 24 }}
+                                                rules={[
+                                                    { required: true, message: 'Vui lòng nhập email' },
+                                                    { type: 'email', message: 'Email không hợp lệ' }
+                                                ]}
+                                            >
+                                                <Input disabled={!isEditing} />
+                                            </Form.Item>
+                                        </Col>
+                                        <Col xs={24} sm={24} md={24} lg={12}>
+                                            <Form.Item
+                                                required
+                                                label="Số Điện Thoại"
+                                                labelCol={{ span: 24 }}
+                                                name="phone"
+                                                rules={[
+                                                    { required: true, message: 'Vui lòng nhập số điện thoại' },
+                                                    { pattern: /^0\d{9}$/, message: 'Số điện thoại không hợp lệ' }
+                                                ]}
+                                            >
+                                                <Input
+                                                    disabled={!isEditing}
+                                                    type="tel"
+                                                    maxLength={10}
+                                                    onKeyDown={(e) => {
+                                                        const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'];
+                                                        if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
+                                                            e.preventDefault();
+                                                        }
+                                                    }}
+                                                />
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+
+
+                                    <Row gutter={[16, 16]} className="form-row">
+                                        <Col xs={24} sm={24} md={24} lg={12}>
+                                            <Form.Item labelCol={{ span: 24 }} label="Ngày sinh" name="birthday">
+                                                <DatePicker format={'DD/MM/YYYY'} disabled={!isEditing} />
+                                            </Form.Item>
+                                        </Col>
+                                        <Col xs={24} sm={24} md={24} lg={12}>
+                                            <Form.Item labelCol={{ span: 24 }} label="Giới Tính" name="gender">
+                                                <Select disabled={!isEditing}>
+                                                    <Option value="male">Nam</Option>
+                                                    <Option value="female">Nữ</Option>
+                                                </Select>
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+
                                     <div className="edit-button">
                                         {!isEditing ? (
                                             <Button

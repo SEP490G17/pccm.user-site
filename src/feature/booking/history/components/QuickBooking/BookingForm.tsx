@@ -1,6 +1,6 @@
 import './style/BookingForm.scss';
 
-import { CourtPrice, IBookingModel, ISlots } from '@/app/models/booking.model';
+import { BookingByDay, CourtPrice, ISlots } from '@/app/models/booking.model';
 import { Button, Col, Form, Input, Modal, Row, Skeleton, Table, TableColumnsType, Typography } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
@@ -97,20 +97,27 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
     setLoadingCourtId(null);
   };
 
-  const handleBook = async (values: any) => {
-    const startTime = selectedTimeRange?.[0]?.toISOString();
-    const endTime = selectedTimeRange?.[1]?.toISOString();
+  const formatTime = (date: Dayjs | null | undefined) => {
+    if (!date) return '';
+    const hours = date.hour().toString().padStart(2, '0');
+    const minutes = date.minute().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
 
-    const bookingDetails = new IBookingModel({
-      totalPrice: values.totalPrice,
+  const handleBook = async (values: any) => {
+    const startTime = formatTime(selectedTimeRange?.[0]);
+    const endTime = formatTime(selectedTimeRange?.[1]);
+
+    const newBooking: BookingByDay = {
+      courtId: selectedCourt ?? 0,
+      fromDate: new Date().toISOString(),
+      fromTime: startTime ? startTime + ':00' : '',
+      toTime: endTime ? endTime + ':00' : '',
       fullName: values.fullname,
       phoneNumber: values.phonenumber,
-      courtId: selectedCourt ?? 0,
-      startTime: startTime,
-      endTime: endTime,
-    });
+    };
 
-    bookingStore.createBooking(bookingDetails)
+    bookingStore.createBooking(newBooking)
       .then(() => {
         setIsModalVisible(false);
         form.resetFields();
@@ -162,10 +169,10 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
     const selectedEndFormatted = selectedEnd.format("HH:mm");
     return availableSlots.some((slot) => {
       const [slotStart, slotEnd] = slot.split(" - ").map((time) => time.trim());
-      if(selectedStartFormatted >= slotStart && selectedEndFormatted <= slotEnd){
+      if (selectedStartFormatted >= slotStart && selectedEndFormatted <= slotEnd) {
         return true
       }
-      else{
+      else {
         form.setFields([
           {
             name: 'totalPrice',
@@ -242,7 +249,7 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
         Đặt sân ngay
       </Button>
       <Modal
-        visible={isModalVisible}
+        open={isModalVisible}
         onCancel={handleCancel}
         footer={null}
         width={windowWidth < 768 ? '100%' : 800}

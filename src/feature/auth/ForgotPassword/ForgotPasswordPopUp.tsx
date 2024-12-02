@@ -25,7 +25,7 @@ const ForgotPasswordPopUp: React.FC<ForgotPasswordPopUpProps> = ({ visible, onCl
     return (
         <Modal
             title="Quên mật khẩu"
-            visible={visible}
+            open={visible}
             onCancel={onClose}
             footer={null}
             centered

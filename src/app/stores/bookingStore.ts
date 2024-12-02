@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { CourtPrice, IAvailableSlotModel, IBookingModel, ISlots } from '../models/booking.model';
+import { CourtPrice, IAvailableSlotModel, IBookingByDay, ISlots } from '../models/booking.model';
 import agent from '../api/agent';
 import { toast } from 'react-toastify';
 
@@ -31,7 +31,7 @@ export default class BookingStore {
     });
   };
 
-  createBooking = async (value: IBookingModel) => {
+  createBooking = async (value: IBookingByDay) => {
     this.loadingCreate = true;
     await runInAction(async () => {
       await agent.Booking.create(value)

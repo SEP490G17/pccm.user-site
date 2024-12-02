@@ -9,15 +9,12 @@ import {
 } from '@ant-design/icons';
 import {
   Avatar,
-  Button,
-  Col,
   Divider,
   Dropdown,
   Flex,
   Image,
   Input,
   Menu,
-  Row,
   Space,
   Typography,
 } from 'antd';
@@ -143,38 +140,38 @@ const Header = observer(() => {
 
           {userApp && <NotificationAtom />}
 
-            {userApp && (
-              <>
-                <Dropdown
-                  className="dropdown"
-                  overlay={menu}
-                  trigger={['hover']}
-                  getPopupContainer={(triggerNode) => {
-                    const container = document.querySelector('.header-container') as HTMLElement;
-                    return container || triggerNode;
-                  }}
-                >
-                  <div className="header-item" style={{ cursor: 'pointer', width: '100%' }}>
-                    <Flex className="flex-row gap-2" align="center">
-                      <Avatar size={32} alt="Tài khoản" src={userApp.image} />
-                      <Text className="header-text">{userApp.displayName}</Text>
-                    </Flex>
-                  </div>
-                </Dropdown>
-              </>
-            )}
-            {!userApp && (
-              <Flex gap={10}>
-                <Link onClick={() => authStore.setVisible(true)}>Đăng nhập</Link>/
-                <Link
-                  onClick={() => {
-                    router.navigate('/register');
-                  }}
-                >
-                  Đăng kí
-                </Link>
-              </Flex>
-            )}
+          {userApp && (
+            <>
+              <Dropdown
+                className="dropdown"
+                overlay={menu}
+                trigger={['hover']}
+                getPopupContainer={(triggerNode) => {
+                  const container = document.querySelector('.header-container') as HTMLElement;
+                  return container || triggerNode;
+                }}
+              >
+                <div className="header-item" style={{ cursor: 'pointer', width: '100%' }}>
+                  <Flex className="flex-row gap-2" align="center">
+                    <Avatar size={32} alt="Tài khoản" src={userApp.image} />
+                    <Text className="header-text">{userApp.displayName}</Text>
+                  </Flex>
+                </div>
+              </Dropdown>
+            </>
+          )}
+          {!userApp && (
+            <Flex gap={10}>
+              <Link onClick={() => authStore.setVisible(true)}>Đăng nhập</Link>/
+              <Link
+                onClick={() => {
+                  router.navigate('/register');
+                }}
+              >
+                Đăng kí
+              </Link>
+            </Flex>
+          )}
         </Space>
       </div>
       <LoginPopUp visible={isLoginModalVisible} onClose={() => authStore.setVisible(false)} />

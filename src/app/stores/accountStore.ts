@@ -25,7 +25,11 @@ export default class AccountStore {
   }
 
   register = async (value: RegisterDto) => {
+    this.loadingRegister = true;
     const [err, res] = await catchErrorHandle(agent.Account.register(value));
+    runInAction(() => {
+      this.loadingRegister = false;
+    });
     return { err, res };
   };
 

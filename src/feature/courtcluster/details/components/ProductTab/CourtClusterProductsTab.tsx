@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Select, Typography, Row, Col, Card } from 'antd'; // Import necessary components from Ant Design
+import { Select, Typography, Row, Col, Card, Skeleton } from 'antd'; // Import necessary components from Ant Design
 import { useStore } from '@/app/stores/store.ts';
 import { Image } from 'antd'; // Import Image from antd
 
@@ -55,24 +55,22 @@ const CourtClusterProductsTab: React.FC<Props> = ({ courtClusterId }) => {
                     }
                     style={{ width: 200 }}
                 >
-                    <Select.Option value="">Tất cả</Select.Option> 
-                    {categoryArray.length > 0 ? (
+                    <Select.Option value="">Tất cả</Select.Option>
+                    {
                         categoryArray.map((category) => (
                             <Select.Option key={category.id} value={category.id}>
                                 {category.categoryName}
                             </Select.Option>
                         ))
-                    ) : (
-                        <Select.Option value="" disabled>
-                            Không có danh mục nào
-                        </Select.Option>
-                    )}
+                    }
                 </Select>
             </div>
 
             {/* Loading state */}
             {loadingProducts || loadingCategories ? (
-                <Text style={{ fontSize: '16px' }}>Đang tải danh sách sản phẩm và danh mục...</Text>
+                <div className="section">
+                    <Skeleton active paragraph={{ rows: 4 }} />
+                </div>
             ) : (
                 <Row gutter={[16, 16]}>
                     {productArray.length > 0 ? (
@@ -87,7 +85,7 @@ const CourtClusterProductsTab: React.FC<Props> = ({ courtClusterId }) => {
                                                 alt={product.productName}
                                                 height={200}
                                                 width="100%"
-                                                style={{ objectFit: 'cover', borderRadius: 8 }}
+                                                style={{ objectFit: 'contain', borderTopRightRadius: 8, borderTopLeftRadius: 8 }}
                                                 preview={{ src: product.thumbnailUrl }}
                                             />
                                         ) : null

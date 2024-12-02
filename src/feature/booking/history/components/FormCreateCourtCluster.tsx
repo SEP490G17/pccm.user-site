@@ -32,7 +32,7 @@ const FormCreateCourtCluster: React.FC<MyModalProps> = ({ visible, onClose }) =>
 
     return (
         <Modal
-            visible={visible}
+            open={visible}
             onCancel={onClose}
             footer={null}
             width={600}

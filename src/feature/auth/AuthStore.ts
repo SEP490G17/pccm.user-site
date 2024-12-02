@@ -31,6 +31,7 @@ export default class AuthStore {
   };
 
   login = async (creds: LoginDto) => {
+    this.loadingLogin = true;
     const [err, res] = await catchErrorHandle(agent.Account.login(creds));
     runInAction(() => {
       if (res) {
@@ -39,6 +40,7 @@ export default class AuthStore {
         this.userApp = res;
       }
     });
+    this.loadingLogin = false;
     return {err,res}
   };
 

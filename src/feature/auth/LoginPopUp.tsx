@@ -21,7 +21,7 @@ const LoginPopUp = observer(({ onClose }: LoginPopUpProps) => {
 
   const [forgotPasswordVisible, setForgotPasswordVisible] = useState(false);
   const isMobile = window.matchMedia('(max-width: 768px)').matches;
-  const { visible } = authStore;
+  const { visible, loadingLogin } = authStore;
   useEffect(() => {
     if (!visible) {
       form.resetFields();
@@ -37,7 +37,7 @@ const LoginPopUp = observer(({ onClose }: LoginPopUpProps) => {
       .login(data)
       .then((value) => {
         if (value.err) {
-          setError(value.err?.response.data);
+          setError(value.err);
         }
         if (value.res) {
           setError(null);
@@ -52,7 +52,7 @@ const LoginPopUp = observer(({ onClose }: LoginPopUpProps) => {
     <>
       <Modal
         title={null}
-        visible={visible}
+        open={visible}
         onCancel={onClose}
         footer={null}
         centered
@@ -89,7 +89,7 @@ const LoginPopUp = observer(({ onClose }: LoginPopUpProps) => {
                 <Checkbox className={styles.checkboxWrapper}>Ghi nhớ đăng nhập</Checkbox>
               </Form.Item>
               <Button
-                loading={authStore.loadingLogin}
+                loading={loadingLogin}
                 type="primary"
                 htmlType="submit"
                 className={styles.submitButton}

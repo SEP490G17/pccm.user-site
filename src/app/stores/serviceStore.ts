@@ -54,7 +54,6 @@ export default class ServiceStore {
       }
       if (res) {
         const { count, data } = res;
-        console.log('Dữ liệu trả về từ API:', data);
 
         if (!Array.isArray(data)) {
           console.error('API trả về dữ liệu sai định dạng:', data);

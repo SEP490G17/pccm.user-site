@@ -1,5 +1,6 @@
 import { OrderOfBooking } from '@/app/models/booking.model';
 import { Table } from 'antd';
+import dayjs from 'dayjs';
 import { observer } from 'mobx-react-lite';
 interface IProps {
   orders: OrderOfBooking[];
@@ -15,13 +16,13 @@ const OrdersOfBookingComponent = observer(({ orders }: IProps) => {
       title: 'Ngày tạo',
       dataIndex: 'createdAt',
       key: 'createdAt',
-      render: (text: number) => `${text}`,
+      render: (text: string) => `${dayjs(text).format('DD/MM/YYYY')}`,
     },
 
     {
       title: 'Tổng giá',
-      dataIndex: 'totalPrice',
-      key: 'totalPrice',
+      dataIndex: 'totalAmount',
+      key: 'totalAmount',
       render: (text: number) =>
         `${text?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}`,
     },

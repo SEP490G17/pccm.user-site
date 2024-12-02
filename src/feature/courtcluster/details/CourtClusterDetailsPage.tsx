@@ -23,7 +23,7 @@ import CourtClusterProductsTab from './components/ProductTab/CourtClusterProduct
 const CourtClusterDetailsPage = observer(() => {
   const { id } = useParams();
   const { courtClusterStore, courtClusterDetailsStore, signalRStore } = useStore();
-  const { courtClusterArray, listCourt, loadListCourt, loadingInitial } = courtClusterStore;
+  const { loadListCourt } = courtClusterStore;
   const {
     selectedCourt,
     reviewArray,
@@ -52,9 +52,9 @@ const CourtClusterDetailsPage = observer(() => {
       setLoadingInitialDetailsPage(true);
       Promise.all([
         (courtClusterDetailsStore.loadScheduleBookingList(),
-        courtClusterDetailsStore.loadCourtPrice(),
-        getDetailsCourtCluster(id),
-        getListReviewByCourtClusterId(id)),
+          courtClusterDetailsStore.loadCourtPrice(),
+          getDetailsCourtCluster(id),
+          getListReviewByCourtClusterId(id)),
       ]).finally(() => setLoadingInitialDetailsPage(false));
     }
 
@@ -146,7 +146,7 @@ const CourtClusterDetailsPage = observer(() => {
       </Row>
 
       <div className="w-full">
-        <Row gutter={[24, 1]}>
+        <Row gutter={[16, 16]}>
           <Col xs={24} xl={16}>
             <ListCourtImage images={selectedCourt.images} />
           </Col>
@@ -156,7 +156,7 @@ const CourtClusterDetailsPage = observer(() => {
         </Row>
       </div>
       <Title level={3} className="mt-10">
-        Thông lịch sân
+        Thông tin lịch sân
       </Title>
       <Row className="mt-4" gutter={[16, 16]}>
         <Col xs={24} xl={16}>
@@ -196,7 +196,7 @@ const CourtClusterDetailsPage = observer(() => {
       </Card>
       <div className="mt-2 mb-6 w-full" style={{ marginTop: '30px' }}></div>
       <div style={{ marginBottom: '30px', marginTop: '20px' }}>
-        <ListCourtCluster title="Sân pickleball khác" itemsPerPage={3} courtClusters={courtClusterArray} />
+        <ListCourtCluster title="Sân pickleball khác" itemsPerPage={3} />
       </div>
 
       <ReviewCourtClusterComponent reviews={reviewArray} courtClusterId={selectedCourt.id} />

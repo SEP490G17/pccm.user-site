@@ -4,7 +4,6 @@ import {
   BookingModel,
   CourtPrice,
   IBookingByDay,
-  IBookingModel,
   IBookingWithCombo,
   ISlots,
   PaymentType,
@@ -66,7 +65,7 @@ axios.interceptors.response.use(
         }
         break;
       case 401:
-        store.authStore.setVisible(true);
+        // store.authStore.setVisible(true);
         break;
       case 403:
         break;
@@ -105,8 +104,10 @@ const Services = {
     requests.get(`/service${queryParams}`),
 };
 const CourtClusters = {
-   list: (queryParams: string = ''): Promise<PaginationModel<ICourtCluster>> => requests.get(`/CourtCluster/list-all-usersite/${queryParams}`),
-   listTop: (queryParams: string = ''): Promise<PaginationModel<ICourtCluster>> => requests.get(`/CourtCluster/top-courtcluster/${queryParams}`),
+  list: (queryParams: string = ''): Promise<PaginationModel<ICourtCluster>> =>
+    requests.get(`/CourtCluster/list-all-usersite/${queryParams}`),
+  listTop: (queryParams: string = ''): Promise<PaginationModel<ICourtCluster>> =>
+    requests.get(`/CourtCluster/top-courtcluster/${queryParams}`),
   details: (id: string): Promise<ICourtCluster> => requests.get(`/CourtCluster/usersite/${id}`),
 };
 
@@ -139,7 +140,7 @@ const Booking = {
     requests.get(
       `/Booking/available-slots?date=${data.date}&courtClusterId=${data.courtClusterId}`,
     ),
-  create: (data: IBookingModel): Promise<any> => requests.post(`/booking`, data),
+  create: (data: IBookingByDay): Promise<any> => requests.post(`/booking/byDay`, data),
   priceCourt: (data: number): Promise<CourtPrice[]> =>
     requests.get(`/Booking/priceCourt?courtClusterId=${data}`),
   getListForSchedule: (body: object): Promise<BookingModel[]> => requests.post('/booking/v1', body),

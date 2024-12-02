@@ -1,10 +1,9 @@
 import React from 'react';
-import { Modal, Form, Input, Button } from 'antd';
+import { Modal, Form, Input, Button, Row, Col } from 'antd';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import './style/ChangePasswordPopUp.scss';
 import { ChangePasswordInput } from '@/app/models/account.model';
-import AccountStore from '@/app/stores/accountStore';
 import { useStore } from '@/app/stores/store';
 
 interface ChangePasswordPopUpProps {
@@ -26,11 +25,13 @@ const ChangePasswordPopUp: React.FC<ChangePasswordPopUpProps> = ({ visible, onCl
 
   return (
     <Modal
-      title="Change Password"
-      visible={visible}
+      title="Đổi mật khẩu"
+      open={visible}
       onCancel={onClose}
       footer={null}
       className="change-password-modal"
+      width="60%"
+      destroyOnClose
     >
       <Formik
         initialValues={{ currentPassword: '', newPassword: '', confirmPassword: '' }}
@@ -47,53 +48,63 @@ const ChangePasswordPopUp: React.FC<ChangePasswordPopUpProps> = ({ visible, onCl
       >
         {({ values, handleChange, handleSubmit, errors, touched }) => (
           <form onSubmit={handleSubmit} className="modal-body">
-            <Form.Item
-              label="Mật khẩu cũ"
-              help={
-                errors.currentPassword && touched.currentPassword ? errors.currentPassword : null
-              }
-              validateStatus={touched.currentPassword && errors.currentPassword ? 'error' : ''}
-            >
-              <Input.Password
-                name="currentPassword"
-                onChange={handleChange}
-                value={values.currentPassword}
-              />
-            </Form.Item>
+            <Row gutter={16}>
+              <Col xs={24} sm={24} >
+                <Form.Item
+                  label="Mật khẩu hiện tại"
+                  help={errors.currentPassword && touched.currentPassword ? errors.currentPassword : null}
+                  validateStatus={touched.currentPassword && errors.currentPassword ? 'error' : ''}
+                >
+                  <Input.Password
+                    name="currentPassword"
+                    onChange={handleChange}
+                    value={values.currentPassword}
+                  />
+                </Form.Item>
+              </Col>
 
-            <Form.Item
-              label="Mật khẩu mới"
-              help={errors.newPassword && touched.newPassword ? errors.newPassword : null}
-              validateStatus={touched.newPassword && errors.newPassword ? 'error' : ''}
-            >
-              <Input.Password
-                name="newPassword"
-                onChange={handleChange}
-                value={values.newPassword}
-              />
-            </Form.Item>
+              <Col xs={24} sm={24} >
+                <Form.Item
+                  label="Mật khẩu mới"
+                  help={errors.newPassword && touched.newPassword ? errors.newPassword : null}
+                  validateStatus={touched.newPassword && errors.newPassword ? 'error' : ''}
+                >
+                  <Input.Password
+                    name="newPassword"
+                    onChange={handleChange}
+                    value={values.newPassword}
+                  />
+                </Form.Item>
+              </Col>
 
-            <Form.Item
-              label="Nhập lại mật khẩu mới"
-              help={
-                errors.confirmPassword && touched.confirmPassword ? errors.confirmPassword : null
-              }
-              validateStatus={touched.confirmPassword && errors.confirmPassword ? 'error' : ''}
-            >
-              <Input.Password
-                name="confirmPassword"
-                onChange={handleChange}
-                value={values.confirmPassword}
-              />
-            </Form.Item>
+              <Col xs={24} sm={24} >
+                <Form.Item
+                  label="Xác nhận mật khẩu mới"
+                  help={errors.confirmPassword && touched.confirmPassword ? errors.confirmPassword : null}
+                  validateStatus={touched.confirmPassword && errors.confirmPassword ? 'error' : ''}
+                >
+                  <Input.Password
+                    name="confirmPassword"
+                    onChange={handleChange}
+                    value={values.confirmPassword}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
 
             <div className="modal-footer">
-              <Button type="default" onClick={onClose}>
-                Cancel
-              </Button>
-              <Button type="primary" htmlType="submit">
-                Change Password
-              </Button>
+              <Row gutter={16}>
+                <Col xs={24} sm={12}>
+                  <Button type="default" onClick={onClose} block>
+                    Hủy
+                  </Button>
+                </Col>
+                <Col xs={24} sm={12}>
+                  <Button type="default" style={{ backgroundColor: '#115363', color: 'white' }} htmlType="submit" block>
+                    Xác nhận
+                  </Button>
+                </Col>
+              </Row>
             </div>
           </form>
         )}

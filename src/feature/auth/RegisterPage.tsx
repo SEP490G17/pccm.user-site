@@ -4,15 +4,14 @@ import { useStore } from '@/app/stores/store';
 import { RegisterDto } from '@/app/models/account.model';
 import 'react-toastify/dist/ReactToastify.css';
 import { observer } from 'mobx-react-lite';
-import { useState } from 'react';
-import LoginPopUp from './LoginPopUp';
+
+import { toast } from 'react-toastify';
 
 const RegisterPage = () => {
-    const { accountStore } = useStore();
+    const { accountStore,authStore } = useStore();
     const { register } = accountStore;
     const [form] = Form.useForm();
-    const [isLoginModalVisible, setLoginModalVisible] = useState(false);
-    const [error, setError] = useState(null);
+
     const onFinish = async (values: any) => {
         const data = new RegisterDto({
             displayName: values.displayname,
@@ -24,11 +23,15 @@ const RegisterPage = () => {
             username: values.username
         });
 
-
         await register(data)
-            .then((data)=>{
-               console.log(data.err?.response.data);
+            .then((value) => {
+                if (value.err !== undefined) {
+                    toast.error(value.err.toString());
+                } else {
+                    toast.success("Tạo tài khoản thành công");
+                }
             })
+            .catch(() => toast.error("Đã xảy ra lỗi"));
     };
 
     const validatePassword = (_: any, value: any) => {
@@ -47,7 +50,6 @@ const RegisterPage = () => {
             const messages = failedRules.map(rule => rule.message).join(', ');
             return Promise.reject(new Error(`Mật khẩu phải chứa ${messages}`));
         }
-
         return Promise.resolve();
     };
 
@@ -57,128 +59,109 @@ const RegisterPage = () => {
     ];
 
     return (
-        <>
-            <div className="registration-form-container"
-                style={{ width: '50%', margin: '50px auto', padding: '20px', border: '1px solid #d9d9d9', borderRadius: '8px', backgroundColor: '#fff' }}>
-                <Form
-                    form={form}
-                    name="register"
-                    onFinish={onFinish}
-                    scrollToFirstError
-                >
-                    <h1 style={{ margin: '0 auto 30px' }}>ĐĂNG KÝ</h1>
+        <div
+            className={styles['registration-form-container']}
+        >
+            <Form
+                form={form}
+                name="register"
+                onFinish={onFinish}
+                layout="vertical"
+                scrollToFirstError
+            >
+                <h2 className={styles['form-title']}>ĐĂNG KÝ</h2>
 
-                    <Row gutter={[16, 16]}>
-                        <Col span={12}>
-                            <Form.Item
-                                name="phone"
-                                rules={phoneRules}
-                            >
-                                <Input className={styles.input} placeholder="Số điện thoại *" />
-                            </Form.Item>
-                        </Col>
+                <Row gutter={[16, 16]}>
+                    <Col xs={24} sm={12}>
+                        <Form.Item name="phone" rules={phoneRules}>
+                            <Input className={styles.input} placeholder="Số điện thoại *" />
+                        </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={12}>
+                        <Form.Item
+                            name="email"
+                            rules={[
+                                { type: 'email', message: 'Vui lòng nhập email hợp lệ' },
+                                { required: true, message: 'Vui lòng nhập email' }
+                            ]}
+                        >
+                            <Input className={styles.input} placeholder="Email *" />
+                        </Form.Item>
+                    </Col>
+                </Row>
 
-                        <Col span={12}>
-                            <Form.Item
-                                name="email"
-                                rules={[
-                                    { type: 'email', message: 'Vui lòng nhập email hợp lệ' },
-                                    { required: true, message: 'Vui lòng nhập email' }
-                                ]}
-                            >
-                                <Input className={styles.input} placeholder="Email *" />
-                            </Form.Item>
-                        </Col>
+                <Row gutter={[16, 16]}>
+                    <Col xs={24} sm={12}>
+                        <Form.Item name="firstname" rules={[{ required: true, message: 'Vui lòng nhập họ' }]}>
+                            <Input className={styles.input} placeholder="Họ *" />
+                        </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={12}>
+                        <Form.Item name="lastname" rules={[{ required: true, message: 'Vui lòng nhập tên' }]}>
+                            <Input className={styles.input} placeholder="Tên *" />
+                        </Form.Item>
+                    </Col>
+                </Row>
 
-                    </Row>
+                <Row gutter={[16, 16]}>
+                    <Col xs={24}>
+                        <Form.Item name="username" rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập' }]}>
+                            <Input className={styles.input} placeholder="Tên đăng nhập *" />
+                        </Form.Item>
+                    </Col>
+                </Row>
 
-                    <Row gutter={[16, 16]}>
-                        <Col span={12}>
-                            <Form.Item
-                                name="firstname"
-                                rules={[
-                                    { required: true, message: 'Vui lòng nhập họ' }
-                                ]}
-                            >
-                                <Input className={styles.input} placeholder="Họ *" />
-                            </Form.Item>
-                        </Col>
+                <Row gutter={[16, 16]}>
+                    <Col xs={24} sm={12}>
+                        <Form.Item name="password" rules={[{ validator: validatePassword }]} hasFeedback>
+                            <Input.Password className={styles.input} placeholder="Mật khẩu *" />
+                        </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={12}>
+                        <Form.Item
+                            name="confirm"
+                            dependencies={['password']}
+                            hasFeedback
+                            rules={[
+                                { required: true, message: 'Xác nhận mật khẩu là bắt buộc' },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || getFieldValue('password') === value) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error('Hai mật khẩu không khớp nhau!'));
+                                    },
+                                }),
+                            ]}
+                        >
+                            <Input.Password className={styles.input} placeholder="Xác nhận mật khẩu *" />
+                        </Form.Item>
+                    </Col>
+                </Row>
 
-                        <Col span={12}>
-                            <Form.Item
-                                name="lastname"
-                                rules={[
-                                    { required: true, message: 'Vui lòng nhập tên' }
-                                ]}
-                            >
-                                <Input className={styles.input} placeholder="Tên *" />
-                            </Form.Item>
-                        </Col>
+                <Form.Item>
+                    <Button
+                        loading={accountStore.loadingRegister}
+                        className={styles.button}
+                        htmlType="submit"
+                        block
+                    >
+                        Đăng ký
+                    </Button>
+                </Form.Item>
 
-                    </Row>
-
-                    <Row gutter={[16, 16]}>
-
-                        <Col span={12}>
-                            <Form.Item
-                                name="username"
-                                rules={[
-                                    { required: true, message: 'Vui lòng nhập tên đăng nhập' }
-                                ]}
-                            >
-                                <Input className={styles.input} placeholder="Tên đăng nhập *" />
-                            </Form.Item>
-                        </Col>
-
-                    </Row>
-
-                    <Row gutter={[16, 16]}>
-                        <Col span={12}>
-                            <Form.Item
-                                name="password"
-                                rules={[{ validator: validatePassword }]}
-                                hasFeedback
-                            >
-                                <Input.Password className={styles.input} placeholder="Mật khẩu *" />
-                            </Form.Item>
-                        </Col>
-
-                        <Col span={12}>
-                            <Form.Item
-                                name="confirm"
-                                dependencies={['password']}
-                                hasFeedback
-                                rules={[
-                                    { required: true, message: 'Xác nhận mật khẩu là bắt buộc' },
-                                    ({ getFieldValue }) => ({
-                                        validator(_, value) {
-                                            if (!value || getFieldValue('password') === value) {
-                                                return Promise.resolve();
-                                            }
-                                            return Promise.reject(new Error('Hai mật khẩu không khớp nhau!'));
-                                        },
-                                    }),
-                                ]}
-                            >
-                                <Input.Password className={styles.input} placeholder="Xác nhận mật khẩu *" />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-
-                    <Form.Item>
-                        <Button loading={accountStore.loadingRegister} className={styles.button} htmlType="submit" block>
-                            Đăng ký
-                        </Button>
-                    </Form.Item>
-
-                    <Form.Item>
-                        Bạn đã có tài khoản? &nbsp;<Button onClick={() => (setLoginModalVisible(true))} type="link" style={{ color: 'black', fontSize: '15px', border: '0', padding: '0', fontWeight: 'bold' }}>Đăng nhập</Button>
-                    </Form.Item>
-                </Form>
-                <LoginPopUp visible={isLoginModalVisible} onClose={() => setLoginModalVisible(false)} />
-            </div >
-
-        </>
+                <Form.Item>
+                    Bạn đã có tài khoản? &nbsp;
+                    <Button
+                        onClick={() => authStore.setVisible(true)}
+                        type="link"
+                        className={styles['login-link']}
+                    >
+                        Đăng nhập
+                    </Button>
+                </Form.Item>
+            </Form>
+        </div>
     );
 };
 

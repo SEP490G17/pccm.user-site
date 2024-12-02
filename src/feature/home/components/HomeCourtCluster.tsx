@@ -15,14 +15,17 @@ const { Title, Paragraph } = Typography;
 interface IProps {
   title?: string;
   itemsPerPage: number;
-  courtClusters: any[];  // Thêm prop này để truyền vào dữ liệu từ bên ngoài
 }
 
-function CourtClusterList({ title, itemsPerPage, courtClusters }: IProps) {
-  const { courtClusterStore, courtClusterDetailsStore } = useStore();
+function CourtClusterList({ title, itemsPerPage }: IProps) {
+  const { courtClusterDetailsStore, courtClusterStore } = useStore();
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
-
+  const {
+    courtClusterArray,
+    loadListCourt,
+    loadingInitial,
+  } = courtClusterStore;
   const [loadingCourtId, setLoadingCourtId] = useState<number | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -36,6 +39,11 @@ function CourtClusterList({ title, itemsPerPage, courtClusters }: IProps) {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    loadListCourt();
+  }, [loadListCourt]);
 
   const checkScroll = () => {
     if (containerRef.current) {
@@ -56,7 +64,7 @@ function CourtClusterList({ title, itemsPerPage, courtClusters }: IProps) {
         container.removeEventListener('scroll', checkScroll);
       }
     };
-  }, [courtClusters, windowWidth]);
+  }, [courtClusterArray, windowWidth]);
 
   const getResponsiveItemWidth = () => {
     if (windowWidth < 576) return '100%';
@@ -86,102 +94,107 @@ function CourtClusterList({ title, itemsPerPage, courtClusters }: IProps) {
     }
   };
 
-  const getVisibleItems = () => {
-    if (windowWidth < 576) return 1;
-    if (windowWidth < 992) return 2;
-    if (windowWidth < 1280) return 3;
-    return itemsPerPage;
-  };
-
-  // Handle empty state
-  if (courtClusters.length === 0) {
-    return (
-      <Row justify="center" align="middle" style={{ minHeight: '200px' }}>
-        <Typography.Text>Không có sân bóng nào</Typography.Text>
-      </Row>
-    );
-  }
+  // const getVisibleItems = () => {
+  //   if (windowWidth < 576) return 1;
+  //   if (windowWidth < 992) return 2;
+  //   if (windowWidth < 1280) return 3;
+  //   return itemsPerPage;
+  // };
 
   return (
-    <div className="court-cluster-container">
-      <Row justify="space-between" align="middle" style={{ marginBottom: '16px' }}>
-        <Title level={3}>{title}</Title>
-      </Row>
-
-      <div className="court-list-content">
-        <Button
-          className="nav-button prev-button"
-          onClick={handlePrevious}
-          style={{
-            backgroundColor: !canScrollLeft ? 'white' : '#115363',
-            color: !canScrollLeft ? 'black' : 'white',
-          }}
-          disabled={!canScrollLeft}
-          icon={<IoIosArrowBack />}
+    <>
+      {loadingInitial ? (
+        <Skeleton
+          paragraph={{ rows: 6 }}
+          active
+          style={{ height: '100%', width: '100%' }}
         />
+      ) : courtClusterArray.length === 0 ? (
+        <Row justify="center" align="middle" style={{ minHeight: '200px' }}>
+          <Typography.Text>Không có sân bóng nào</Typography.Text>
+        </Row>
+      ) : (
+        <div className="court-cluster-container">
+          <Row justify="space-between" align="middle" style={{ marginBottom: '16px' }}>
+            <Title level={3}>{title}</Title>
+          </Row>
 
-        <div ref={containerRef} className="courts-container">
-          <div className="courts-wrapper" style={{ display: 'flex' }}>
-            {courtClusters.map((c) => (
-              <div
-                key={c.id}
-                style={{ flex: `0 0 ${getResponsiveItemWidth()}`, padding: '0 8px' }}
-              >
-                <Card hoverable className="court-card">
-                  <Image src={c.images[0]} />
-                  <div className="court-details">
-                    <div className="court-info">
-                      <Title level={5} className="overflow-hidden">
-                        {c.title}
-                      </Title>
-                      <Paragraph>Khu vực: {c.address}</Paragraph>
-                      <Row justify="space-between" align="middle" className="rating-row">
-                        <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>
-                        <Row>
-                          <FaStar className="text-yellow-500" style={{ marginTop: '3px' }} />
-                          <FaStar className="text-yellow-500" style={{ marginTop: '3px' }} />
-                          <FaStar className="text-yellow-500" style={{ marginTop: '3px' }} />
-                          <FaStar className="text-yellow-500" style={{ marginTop: '3px' }} />
-                          <FaStarHalfAlt className="text-yellow-500" style={{ marginTop: '3px' }} />
-                          <Typography.Paragraph style={{ marginLeft: '5px' }}>(4.5)</Typography.Paragraph>
-                        </Row>
-                      </Row>
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      <CourtBookingForm
-                        courtClusterId={c.id}
-                        loadingCourtId={loadingCourtId}
-                        setLoadingCourtId={setLoadingCourtId}
-                      />
-                      <Button
-                        className="book-button"
-                        onClick={() => {
-                          courtClusterDetailsStore.clearSelectedCourt();
-                          navigate(`/chi-tiet/${c.id}`);
-                        }}
-                      >
-                        Chi tiết sân
-                      </Button>
-                    </div>
+          <div className="court-list-content">
+            <Button
+              className="nav-button prev-button"
+              onClick={handlePrevious}
+              style={{
+                backgroundColor: !canScrollLeft ? 'white' : '#115363',
+                color: !canScrollLeft ? 'black' : 'white',
+              }}
+              disabled={!canScrollLeft}
+              icon={<IoIosArrowBack />}
+            />
+
+            <div ref={containerRef} className="courts-container">
+              <div className="courts-wrapper" style={{ display: 'flex' }}>
+                {courtClusterArray.map((c: any) => (
+                  <div
+                    key={c.id}
+                    style={{ flex: `0 0 ${getResponsiveItemWidth()}`, padding: '0 8px' }}
+                  >
+                    <Card hoverable className="court-card">
+                      <Image src={c.images[0]} />
+                      <div className="court-details">
+                        <div className="court-info">
+                          <Title level={5} className="overflow-hidden">
+                            {c.title}
+                          </Title>
+                          <Paragraph>Khu vực: {c.address}</Paragraph>
+                          <Row justify="space-between" align="middle" className="rating-row">
+                            <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>
+                            <Row>
+                              <FaStar className="text-yellow-500" style={{ marginTop: '3px' }} />
+                              <FaStar className="text-yellow-500" style={{ marginTop: '3px' }} />
+                              <FaStar className="text-yellow-500" style={{ marginTop: '3px' }} />
+                              <FaStar className="text-yellow-500" style={{ marginTop: '3px' }} />
+                              <FaStarHalfAlt className="text-yellow-500" style={{ marginTop: '3px' }} />
+                              <Typography.Paragraph style={{ marginLeft: '5px' }}>(4.5)</Typography.Paragraph>
+                            </Row>
+                          </Row>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          <CourtBookingForm
+                            courtClusterId={c.id}
+                            loadingCourtId={loadingCourtId}
+                            setLoadingCourtId={setLoadingCourtId}
+                          />
+                          <Button
+                            className="book-button"
+                            onClick={() => {
+                              courtClusterDetailsStore.clearSelectedCourt();
+                              navigate(`/chi-tiet/${c.id}`);
+                            }}
+                          >
+                            Chi tiết sân
+                          </Button>
+                        </div>
+                      </div>
+                    </Card>
                   </div>
-                </Card>
+                ))}
               </div>
-            ))}
+            </div>
+
+            <Button
+              className="nav-button next-button"
+              onClick={handleNext}
+              style={{
+                backgroundColor: !canScrollRight ? 'white' : '#115363',
+                color: !canScrollRight ? 'black' : 'white',
+              }}
+              disabled={!canScrollRight}
+              icon={<IoIosArrowForward />}
+            />
           </div>
         </div>
-
-        <Button
-          className="nav-button next-button"
-          onClick={handleNext}
-          style={{
-            backgroundColor: !canScrollRight ? 'white' : '#115363',
-            color: !canScrollRight ? 'black' : 'white',
-          }}
-          disabled={!canScrollRight}
-          icon={<IoIosArrowForward />}
-        />
-      </div>
-    </div>
+      )}
+    </>
   );
 }
 

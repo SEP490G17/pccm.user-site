@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import dayjs from 'dayjs';
 import { FastField, Field, Form, Formik } from 'formik';
 import { useStore } from '@/app/stores/store';
-import { BookingByDay, BookingWithCombo, IBookingWithCombo } from '@/app/models/booking.model';
+import { BookingByDay } from '@/app/models/booking.model';
 import { observer } from 'mobx-react-lite';
 import { ICourtCluster } from '@/app/models/courtcluster.model';
 import {
@@ -11,8 +11,6 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Grid,
-  GridItem,
   Heading,
   Input,
   Select,
@@ -76,7 +74,7 @@ const BookingByDayComponent = observer(({ selectedCourt }: IBookingByDayComponen
     const start = dayjs(`1970-01-01T${fromTime}`);
     const end = dayjs(`1970-01-01T${toTime}`);
     let totalPrice = 0;
-    if(!courtPrices) return 0;
+    if (!courtPrices) return 0;
     courtPrices.forEach(({ fromTime, toTime, price }) => {
       const priceStart = dayjs(`1970-01-01T${fromTime}`);
       const priceEnd = dayjs(`1970-01-01T${toTime}`);
@@ -102,7 +100,7 @@ const BookingByDayComponent = observer(({ selectedCourt }: IBookingByDayComponen
       </Heading>
       <Formik
         onSubmit={async (value) => {
-          if(!authStore.isLoggedIn){
+          if (!authStore.isLoggedIn) {
             authStore.setVisible(true);
             return;
           }
