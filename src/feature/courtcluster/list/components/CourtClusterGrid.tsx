@@ -37,7 +37,7 @@ export default function CourtClusterGrid({ courts, loading }: Props) {
     <div style={{ position: 'relative' }}>
       <Row justify="space-between" style={{ height: '100%' }}>
         <Col style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', zIndex: 1 }}>
-          <Button 
+          <Button
             onClick={handlePrev}
             icon={<IoIosArrowBack />}
             style={{
@@ -49,7 +49,7 @@ export default function CourtClusterGrid({ courts, loading }: Props) {
         </Col>
 
         <Col style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', zIndex: 1 }}>
-          <Button 
+          <Button
             onClick={handleNext}
             icon={<IoIosArrowForward />}
             style={{
@@ -76,7 +76,7 @@ export default function CourtClusterGrid({ courts, loading }: Props) {
                         <Title level={5} className="court-title">
                           {c.title}
                         </Title>
-                        <Paragraph>Khu vực: {c.address}</Paragraph>
+                        <Paragraph>Khu vực: {c.provinceName} - {c.districtName}</Paragraph>
                         <Paragraph className="service-paragraph" style={{ height: '25px' }}>
                           {c.services.slice(0, 2).map((service: { id: Key | null | undefined; serviceName: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; }) => (
                             <Tag key={service.id}>{service.serviceName}</Tag>

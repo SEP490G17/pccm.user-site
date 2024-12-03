@@ -11,10 +11,9 @@ import {
   PopoverTrigger,
   PopoverContent,
   PopoverBody,
-  Text,
-  Flex,
 } from '@chakra-ui/react';
-
+import { FaLocationDot } from "react-icons/fa6";
+import { Input } from 'antd';
 interface Province {
   id: string;
   full_name: string;
@@ -56,7 +55,6 @@ const AddressSelectAtom: React.FC<AddressSelectAtomProps> = ({
   onChange,
   values,
   errors,
-  touched,
 }) => {
   const [provinces, setProvinces] = useState<Province[]>([]);
   const [districts, setDistricts] = useState<District[]>([]);
@@ -111,70 +109,75 @@ const AddressSelectAtom: React.FC<AddressSelectAtomProps> = ({
 
   // Handle changes in each select field
   const handleChange = (field: string, value: string) => {
-    onChange(field, value);
+    switch (field) {
+      case 'province':
+        onChange('province', value);
+        onChange('district', '');
+        onChange('ward', '');
+        break;
+      case 'district':
+        onChange('district', value);
+        onChange('ward', '');
+        break;
+      case 'ward':
+        onChange('ward', value);
+        break;
+      default:
+        onChange(field, value);
+    }
   };
 
   // Reset the form fields
   const handleReset = () => {
     onChange('province', '');
     onChange('district', '');
+    onChange('ward', '');
   };
 
   // Generate the address label in the requested format
-  const addressLabel = `${values.province ? provinces.find((p) => p.id === values.province)?.full_name : 'Chưa chọn Tỉnh Thành'}, 
-    ${values.district ? districts.find((d) => d.id === values.district)?.full_name : 'Chưa chọn Huyện'}, 
-    ${values.ward ? wards.find((w) => w.id === values.ward)?.full_name : 'Chưa chọn Xã'}`;
+  const addressLabel = (values.province || values.district || values.ward)
+    ? `${provinces.find((p) => p.id === values.province) ? provinces.find((p) => p.id === values.province)?.full_name : ""}${districts.find((d) => d.id === values.district) ? `, ${districts.find((d) => d.id === values.district)?.full_name}` : ""} ${wards.find((w) => w.id === values.ward) ? `, ${wards.find((w) => w.id === values.ward)?.full_name}` : ""}`
+    : 'Chọn khu vực';
 
   return (
-    <Box style={{ width: '100%', marginBottom: '10px' }}>
-      <Flex direction="column" align="stretch" width="100%">
-        <Text fontSize="sm" fontWeight="bold" mt={4} mb={2}>
-          Địa chỉ đã chọn:
-        </Text>
-
-        <Box display="flex" alignItems="center" mb={4}>
-          <Box
-            width="100%"
-            minWidth="350px"
-            maxWidth="100%"
-            whiteSpace="nowrap"
-            overflow="hidden"
-            textOverflow="ellipsis"
-            fontSize="sm"
-            color="gray.600"
-            border="1px solid"
-            borderColor="gray.300"
-            padding="4px 8px"
-            borderRadius="md"
-            textAlign="left"
-          >
-            {addressLabel}
-          </Box>
-        </Box>
-
-        {/* Nút Chọn Khu Vực */}
-        <Popover placement="bottom-start">
-          <PopoverTrigger>
-            <Button className="book-button" width="auto" size="sm" colorScheme="teal">
-              Chọn khu vực
-            </Button>
-          </PopoverTrigger>
+    <Box style={{ width: '100%' }}>
+      <Box display="flex" alignItems="center">
+        <Popover placement="bottom-end">
+          <Input
+            readOnly
+            value={addressLabel}
+            style={{
+              width: '100%',
+              maxWidth: '100%',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              fontSize: 'sm',
+              color: 'gray.600',
+              borderColor: 'gray.300',
+              borderRadius: 'md',
+            }}
+            addonAfter={
+              <PopoverTrigger>
+                <Box display="flex" alignItems="center" cursor="pointer">
+                  <FaLocationDot style={{ color: 'gray', cursor: 'pointer' }} />
+                </Box>
+              </PopoverTrigger>
+            }
+          />
           <PopoverContent width="100%" maxWidth="350px" padding={4}>
             <PopoverBody paddingBottom={4}>
               <Grid templateColumns="1fr" rowGap={5}>
                 {/* Tỉnh Thành Dropdown */}
                 <GridItem colSpan={1}>
-                  <FormControl isInvalid={!!(errors.province && touched.province)}>
+                  <FormControl>
                     <Select
                       value={values.province}
                       onChange={(e) => handleChange('province', e.target.value)}
-                      title="Chọn Tỉnh Thành"
-                      isRequired
-                      placeholder="-- Chọn Tỉnh Thành --"
-                      maxHeight="200px"
+                      placeholder="-- Tỉnh Thành --"
+                      maxHeight="100px"
                       overflowY="auto"
                       width="100%"
-                      menuPlacement="auto"
                     >
                       {provinces.map((province) => (
                         <option key={province.id} value={province.id}>
@@ -188,19 +191,14 @@ const AddressSelectAtom: React.FC<AddressSelectAtomProps> = ({
 
                 {/* Quận Huyện Dropdown */}
                 <GridItem colSpan={1}>
-                  <FormControl isInvalid={!!(errors.district && touched.district)}>
+                  <FormControl>
                     <Select
                       value={values.district}
                       onChange={(e) => handleChange('district', e.target.value)}
-                      title="Chọn Quận Huyện"
                       disabled={!values.province}
-                      isRequired
-                      placeholder="-- Chọn Quận Huyện --"
-                      maxHeight="200px"
+                      placeholder="-- Quận Huyện --"
                       overflowY="auto"
                       width="100%"
-                      maxWidth="250px"
-                      menuPlacement="auto"
                     >
                       {districts.map((district) => (
                         <option key={district.id} value={district.id}>
@@ -214,19 +212,14 @@ const AddressSelectAtom: React.FC<AddressSelectAtomProps> = ({
 
                 {/* Phường Xã Dropdown */}
                 <GridItem colSpan={1}>
-                  <FormControl isInvalid={!!(errors.ward && touched.ward)}>
+                  <FormControl>
                     <Select
                       value={values.ward}
                       onChange={(e) => handleChange('ward', e.target.value)}
-                      title="Chọn Phường Xã"
                       disabled={!values.district}
-                      isRequired
-                      placeholder="-- Chọn Phường Xã --"
-                      maxHeight="200px"
+                      placeholder="-- Phường Xã --"
                       overflowY="auto"
                       width="100%"
-                      maxWidth="250px"
-                      menuPlacement="auto"
                     >
                       {wards.map((ward) => (
                         <option key={ward.id} value={ward.id}>
@@ -255,7 +248,7 @@ const AddressSelectAtom: React.FC<AddressSelectAtomProps> = ({
             </PopoverBody>
           </PopoverContent>
         </Popover>
-      </Flex>
+      </Box>
     </Box>
   );
 };

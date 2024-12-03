@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite';
 import { toast } from 'react-toastify';
 
 const RegisterPage = () => {
-    const { accountStore,authStore } = useStore();
+    const { accountStore, authStore } = useStore();
     const { register } = accountStore;
     const [form] = Form.useForm();
 
@@ -74,7 +74,17 @@ const RegisterPage = () => {
                 <Row gutter={[16, 16]}>
                     <Col xs={24} sm={12}>
                         <Form.Item name="phone" rules={phoneRules}>
-                            <Input className={styles.input} placeholder="Số điện thoại *" />
+
+                            <Input
+                                className={styles.input}
+                                placeholder="Số điện thoại *"
+                                onKeyDown={(e) => {
+                                    const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'];
+                                    if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
+                                        e.preventDefault();
+                                    }
+                                }}
+                            />
                         </Form.Item>
                     </Col>
                     <Col xs={24} sm={12}>

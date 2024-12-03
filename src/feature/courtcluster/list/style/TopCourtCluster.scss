@@ -10,7 +10,7 @@
       scroll-behavior: smooth;
       -ms-overflow-style: none;
       scrollbar-width: none;
-
+      
       &::-webkit-scrollbar {
         display: none;
       }
@@ -106,12 +106,8 @@
   border: none;
   transition: all 0.3s ease;
 
-  &:hover,
-  &:focus {
-    border-color: #115363;
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
-    background-color: white;
-    color: black;
+  &:hover {
+    background-color: #0d3f4a;
   }
 }
 

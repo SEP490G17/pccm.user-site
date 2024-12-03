@@ -1,4 +1,4 @@
-import './style/HomeCourtCluster.scss';
+import './style/TopCourtCluster.scss';
 
 import { Button, Card, Image, Row, Skeleton, Typography } from 'antd';
 import { FaRegStar, FaStar } from 'react-icons/fa';
@@ -18,14 +18,14 @@ interface IProps {
   itemsPerPage: number;
 }
 
-function CourtClusterList({ title, itemsPerPage }: IProps) {
+function TopCourtCluster({ title, itemsPerPage }: IProps) {
   const { courtClusterDetailsStore, courtClusterStore } = useStore();
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const {
-    courtClusterArray,
-    loadListCourt,
-    loadingInitial,
+    topCourtClusterArray,
+    loadListTopCourt,
+    loadingTopCourt,
   } = courtClusterStore;
   const [loadingCourtId, setLoadingCourtId] = useState<number | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -43,8 +43,8 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    loadListCourt();
-  }, [loadListCourt]);
+    loadListTopCourt();
+  }, [loadListTopCourt]);
 
   const checkScroll = () => {
     if (containerRef.current) {
@@ -65,7 +65,7 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
         container.removeEventListener('scroll', checkScroll);
       }
     };
-  }, [courtClusterArray, windowWidth]);
+  }, [topCourtClusterArray, windowWidth]);
 
   const getResponsiveItemWidth = () => {
     if (windowWidth < 576) return '100%';
@@ -104,13 +104,13 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
 
   return (
     <>
-      {loadingInitial ? (
+      {loadingTopCourt ? (
         <Skeleton
           paragraph={{ rows: 6 }}
           active
           style={{ height: '100%', width: '100%' }}
         />
-      ) : courtClusterArray.length === 0 ? (
+      ) : topCourtClusterArray.length === 0 ? (
         <Row justify="center" align="middle" style={{ minHeight: '200px' }}>
           <Typography.Text>Không có sân bóng nào</Typography.Text>
         </Row>
@@ -134,15 +134,15 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
 
             <div ref={containerRef} className="courts-container">
               <div className="courts-wrapper" style={{ display: 'flex' }}>
-                {courtClusterArray.map((c: ICourtCluster) => (
+                {topCourtClusterArray.map((c: ICourtCluster) => (
                   <div
                     key={c.id}
                     style={{ flex: `0 0 ${getResponsiveItemWidth()}`, padding: '0 8px' }}
                   >
                     <Card hoverable className="court-card">
-                      <Image src={c.images[0]} />
+                      <Image src={c.images[0]} width={'100%'} height={'200px'} />
                       <div className="court-details">
-                        <div className="court-info">
+                        <div >
                           <Title level={5} className="overflow-hidden">
                             {c.title}
                           </Title>
@@ -202,4 +202,4 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
   );
 }
 
-export default observer(CourtClusterList);
+export default observer(TopCourtCluster);
