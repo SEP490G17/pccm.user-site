@@ -124,7 +124,6 @@ export default class CourtClusterDetailsStore {
   };
 
   setLoadingInitialDetailsPage = (isLoad: boolean) => {
-    console.log('Loading state:', isLoad); // Debugging log
     runInAction(() => {
       this.loadingInitialDetailsPage = isLoad;
     });
@@ -209,7 +208,6 @@ export default class CourtClusterDetailsStore {
     this.setBooking(this.mapBookingResponseToBookingModel(booking));
   };
   mapBookingResponseToBookingModel = (booking: any): BookingModel => {
-    console.log('check booking', booking);
     const recu = booking.RecurrenceRule ? booking.RecurrenceRule : booking.recurrenceRule;
     return {
       courtId: booking.courtId ?? 0,

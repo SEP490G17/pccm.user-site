@@ -73,7 +73,11 @@ const NotificationAtom = observer(() => {
                 description={
                   <Link
                     to={`/booking-history/chi-tiet/${item.url}`}
-                    onClick={async () => await notificationStore.updateReadNotification(item.id)}
+                    onClick={async () => {
+                      if (!item.isRead) {
+                        await notificationStore.updateReadNotification(item.id);
+                      }
+                    }}
                   >
                     {item.message}
                   </Link>
@@ -86,16 +90,13 @@ const NotificationAtom = observer(() => {
       </InfiniteScroll>
     </div>
   );
-  console.log('check noties', NotificationArray);
 
   return (
-    <>
       <Dropdown overlay={notificationMenu} trigger={['click']}>
         <Badge count={notificationStore.numOfUnRead} offset={[10, 0]}>
           <BellOutlined style={{ fontSize: 24, cursor: 'pointer' }} />
         </Badge>
       </Dropdown>
-    </>
   );
 });
 

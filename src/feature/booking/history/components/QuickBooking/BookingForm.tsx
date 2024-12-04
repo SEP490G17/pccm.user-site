@@ -134,7 +134,6 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
       setAvailableSlots([]);
       setSelectedTimeRange(null)
       setTotalPrice(0);
-      authStore.getUser();
     }
   }, [isModalVisible, form, authStore]);
 

@@ -21,7 +21,6 @@ const ForgotPopUp: React.FC<ForgotPopUpProps> = ({ token }) => {
 
         setLoading(true);
         try {
-            console.log("Token sử dụng để đặt lại mật khẩu:", token);
             // Gửi yêu cầu đổi mật khẩu lên server
             await agent.Account.confirmForgotPassword({
                 token,

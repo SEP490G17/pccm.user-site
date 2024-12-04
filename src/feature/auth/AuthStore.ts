@@ -70,11 +70,11 @@ export default class AuthStore {
   };
 
   getUser = async () => {
-    try {
-      const user = await agent.Account.current();
-      runInAction(() => (this.userApp = user));
-    } catch (error) {
-      console.log(error);
-    }
+      const [err, res] = await catchErrorHandle(agent.Account.current());
+      runInAction(() =>{
+        if(err) return;
+        this.userApp = res;
+      })
+    
   };
 }

@@ -46,15 +46,19 @@ const CourtClusterDetailsPage = observer(() => {
     }
 
     if (id) {
-      signalRStore.createConnection().then(async () => {
-        await signalRStore.joinCourtClusterConnection(Number(id));
-      });
+      if (signalRStore.hubConnection == null) {
+        signalRStore.createConnection().then(async () => {
+          await signalRStore.joinCourtClusterConnection(Number(id));
+        });
+      } else {
+        signalRStore.joinCourtClusterConnection(Number(id));
+      }
       setLoadingInitialDetailsPage(true);
       Promise.all([
         (courtClusterDetailsStore.loadScheduleBookingList(),
-          courtClusterDetailsStore.loadCourtPrice(),
-          getDetailsCourtCluster(id),
-          getListReviewByCourtClusterId(id)),
+        courtClusterDetailsStore.loadCourtPrice(),
+        getDetailsCourtCluster(id),
+        getListReviewByCourtClusterId(id)),
       ]).finally(() => setLoadingInitialDetailsPage(false));
     }
 

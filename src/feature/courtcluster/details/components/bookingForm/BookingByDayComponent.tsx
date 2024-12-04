@@ -93,6 +93,11 @@ const BookingByDayComponent = observer(({ selectedCourt }: IBookingByDayComponen
   };
   const toast = useToast();
   const { courtClusterDetailsStore, authStore } = useStore();
+  const initial = new BookingByDay();
+  if(authStore.userApp){
+    initial.fullName = authStore.userApp.displayName;
+    initial.phoneNumber = authStore.userApp.phoneNumber;
+  }
   return (
     <Flex direction={'column'} height={'100%'}>
       <Heading size={'lg'} className="mb-5">
@@ -114,7 +119,7 @@ const BookingByDayComponent = observer(({ selectedCourt }: IBookingByDayComponen
           };
           await courtClusterDetailsStore.bookingByDay(newCombo, toast);
         }}
-        initialValues={new BookingByDay()}
+        initialValues={initial}
         validationSchema={validationSchema}
       >
         {({ setFieldValue, values }) => (

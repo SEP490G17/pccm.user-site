@@ -40,7 +40,6 @@ export default class ServiceStore {
       queryParams.append('Filter', courtClusterId);
     }
 
-    console.log('Gọi API với URL:', `/Service?${queryParams.toString()}`);
 
     const [error, res] = await catchErrorHandle(agent.Services.list(`?${queryParams.toString()}`));
     runInAction(() => {

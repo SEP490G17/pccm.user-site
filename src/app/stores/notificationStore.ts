@@ -36,15 +36,12 @@ export default class NotificationStore {
 
   updateReadNotification = async (id: number) => {
     const noti = { ...this.notificationRegistry.get(id) };
-    const [err, res] = await catchErrorHandle(agent.Notification.updateState(id));
+    const [, res] = await catchErrorHandle(agent.Notification.updateState(id));
     runInAction(() => {
-      if (res) {
-        if (noti) {
+      if (res && noti) {
           noti.isRead = true;
           this.notificationRegistry.set(id, noti);
           this.numOfUnRead -= 1;
-          console.log('set success', noti);
-        }
       }
     });
   };

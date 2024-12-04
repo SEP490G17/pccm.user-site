@@ -43,7 +43,6 @@ const LoginPopUp = observer(({ onClose }: LoginPopUpProps) => {
           setError(null);
           authStore.setVisible(false);
         }
-        console.log(value);
       })
       .catch();
   };
@@ -75,14 +74,14 @@ const LoginPopUp = observer(({ onClose }: LoginPopUpProps) => {
                 rules={[{ required: true, message: 'Vui lòng nhập tên!' }]}
                 validateTrigger={['onBlur', 'onChange']}
               >
-                <Input className={styles.input} placeholder="Nhập SDT/Username" />
+                <Input className={styles.input} placeholder="Nhập SDT/Username"  defaultValue={'trongnp144'}/>
               </Form.Item>
               <Form.Item
                 name="password"
                 rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
                 validateTrigger={['onBlur', 'onChange']}
               >
-                <Input.Password className={styles.input} placeholder="Nhập mật khẩu" />
+                <Input.Password className={styles.input} placeholder="Nhập mật khẩu" defaultValue={'123456aA@'}/>
               </Form.Item>
 
               <Form.Item name="remember" valuePropName="checked">
