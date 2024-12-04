@@ -17,7 +17,7 @@ export interface ICourtCluster {
   numbOfCourts: number;
   products: IProduct[];
   courts: ICourt[];
-
+  rate: number;
 }
 
 export interface CourtPriceBooking {
@@ -27,7 +27,7 @@ export interface CourtPriceBooking {
   price: number;
 }
 
-export interface ICourt{
+export interface ICourt {
   courtId: number;
   courtName: string;
   courtPrices: CourtPriceResponse[];
@@ -39,14 +39,12 @@ export interface CourtPriceResponse {
   toTime: string;
 }
 
-
 export interface CourtCombo {
-  id?:number;
+  id?: number;
   totalPrice: number;
   displayName: string;
   duration: number;
 }
-
 
 // export interface ILocation {
 //   tinh: string;
@@ -73,8 +71,6 @@ export interface IProduct {
   categoryId: number;
   thumbnailUrl: string;
 }
-
-
 
 export interface CourtPriceBooking {
   courtId: number;

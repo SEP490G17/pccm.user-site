@@ -238,6 +238,10 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const phoneRules = [
+    { required: true, message: 'Vui lòng nhập số điện thoại' },
+    { pattern: /^0\d{9}$/, message: 'Số điện thoại không hợp lệ' }
+  ];
   return (
     <>
       <Button
@@ -274,9 +278,16 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
                 <Title level={5}>Số điện thoại:</Title>
                 <Form.Item
                   name="phonenumber"
-                  rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
+                  rules={phoneRules}
+                  required
                 >
-                  <Input placeholder="Nhập số điện thoại" />
+                  <Input placeholder="Nhập số điện thoại *"
+                    onKeyDown={(e) => {
+                      const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'];
+                      if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
+                        e.preventDefault();
+                      }
+                    }} />
 
                 </Form.Item>
               </Col>
@@ -285,6 +296,7 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
                 <Form.Item
                   name="fullname"
                   rules={[{ required: true, message: 'Vui lòng nhập tên!' }]}
+                  required
                 >
                   <Input type='tel' placeholder="Nhập số điện thoại" />
 

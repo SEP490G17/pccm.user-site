@@ -1,39 +1,59 @@
-import './CourtClusterList.scss';
-import { Button, Card, Col, Image, Input, Row, Select, Slider, Typography } from 'antd';
-import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
+import './style/CourtClusterList.scss';
+import { Button, Card, Col, Flex, Image, Input, Row, Select, Slider, Typography } from 'antd';
+import { FaRegStar, FaStar } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import ListBanner from '@/feature/home/components/HomeBanner';
-import ListCourtCluster from '@/feature/home/components/HomeCourtCluster';
 import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
-import Pagination from '@/feature/atoms/Pagination';
 import { useStore } from '@/app/stores/store';
 import AddressSelectAtom from '@/app/common/form/AddressSelectAtom';
 import { SearchOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
+import CourtBookingForm from '@/feature/booking/history/components/QuickBooking/BookingForm';
+import TopCourtCluster from './TopCourtCluster';
+import { TiArrowSync } from "react-icons/ti";
+import LoadMoreButtonAtoms from '@/feature/atoms/LoadMoreButtonAtoms';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
 
-interface IProps {
-  itemsPerPage: number;
-}
-
-function ListCourtClusterPage({ itemsPerPage }: IProps) {
+const ListCourtClusterPage = observer(() => {
   const { courtClusterStore, courtClusterDetailsStore } = useStore();
   const {
     courtClusterArray,
-    topCourtClusterArray,
+    courtClusterRegistry,
     loadListCourt,
+    filterListCourtCluster,
+    courtPageParams,
     loadListTopCourt,
     loadingInitial,
+    loadingMore
   } = courtClusterStore;
   const navigate = useNavigate();
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [priceRange, setPriceRange] = useState<[number, number]>([100, 1500000]);
+  const phrases = ['Tìm sân thể thao'];
+  const [placeholder, setPlaceholder] = useState('');
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [loadingCourtId, setLoadingCourtId] = useState<number | null>(null);
+  const [priceRange, setPriceRange] = useState<number[]>([10000, 1500000]);
   const [searchText, setSearchText] = useState('');
-  const [rating, setRating] = useState('all');
+  const [rating, setRating] = useState("");
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (charIndex < phrases[phraseIndex].length) {
+        setPlaceholder((prev) => prev + phrases[phraseIndex][charIndex]);
+        setCharIndex((prev) => prev + 1);
+      } else {
+        setTimeout(() => {
+          setCharIndex(0);
+          setPlaceholder('');
+          setPhraseIndex((prev) => (prev + 1) % phrases.length);
+        }, 100);
+      }
+    }, 250);
+
+    return () => clearInterval(interval);
+  }, [charIndex, phraseIndex, phrases]);
 
   // State for form fields
   const [formValues, setFormValues] = useState({
@@ -76,13 +96,6 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
     loadListTopCourt();
   }, [loadListCourt, loadListTopCourt]);
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = courtClusterArray.slice(startIndex, startIndex + itemsPerPage);
-
-  const onPageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
   // Hàm xử lý khi nhấn "Tìm kiếm"
   const handleSearch = () => {
     const searchParams = {
@@ -93,8 +106,22 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
       maxPrice: priceRange[1],
     };
     // Gọi API
-    loadListCourt(searchParams);
+    filterListCourtCluster(searchParams);
   };
+
+  const handleReset = () => {
+    setSearchText('');
+    setFormValues({
+      province: '',
+      district: '',
+      ward: '',
+      address: '',
+    });
+    setRating('');
+    setPriceRange([10000, 1500000]);
+
+    filterListCourtCluster();
+  }
 
   return (
     <div className="list-court-cluster">
@@ -107,29 +134,45 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
       <div className="banner-container">
         <ListBanner title="" />
       </div>
-      <div
+
+
+      <div className="featured-courts-wrapper">
+        <div className="featured-courts">
+          <TopCourtCluster itemsPerPage={3} />
+        </div>
+      </div>
+
+      <Title level={1} style={{ margin: '24px 0' }}>
+        Danh sách sân
+      </Title>
+
+      <Flex
         style={{
           backgroundColor: '#fff',
-          padding: '20px',
+          marginBottom: '20px',
+          padding: '20px 3px 20px 20px',
           borderRadius: '8px',
           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
         }}
       >
         <Row gutter={[16, 16]} justify="space-between" align="middle" className="filter-row">
-          <Col xs={24} sm={24} md={8} lg={5}>
+          <Col xs={24} sm={24} md={24} lg={6}>
             <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>
-              Tìm sân
+              Tên sân
             </label>
             <Input
-              placeholder="Tìm sân"
-              style={{ width: '100%', marginBottom: '40px' }}
+              placeholder={placeholder}
+              style={{ width: '100%' }}
               suffix={<SearchOutlined />}
-              value={searchText} // Liên kết với state
-              onChange={(e) => setSearchText(e.target.value)} // Cập nhật state
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
             />
           </Col>
 
-          <Col xs={24} sm={24} md={10} lg={9}>
+          <Col xs={24} sm={24} md={24} lg={6}>
+            <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>
+              Khu vực
+            </label>
             <AddressSelectAtom
               onChange={handleFieldChange}
               values={formValues}
@@ -138,95 +181,96 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
             />
           </Col>
 
-          <Col xs={24} sm={12} md={3} lg={3}>
+          <Col xs={24} sm={12} md={24} lg={4}>
             <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>
               Đánh giá
             </label>
             <Select
               defaultValue="Tất cả"
-              style={{ width: '100%', marginBottom: '40px' }}
-              value={rating} // Liên kết với state
-              onChange={(value) => setRating(value)} // Cập nhật state
+              style={{ width: '100%' }}
+              value={rating}
+              onChange={(value) => setRating(value)}
             >
               <Option value="">Tất cả</Option>
-              <Option value="5">5 sao</Option>
-              <Option value="4">4 sao</Option>
-              <Option value="3">3 sao</Option>
-              <Option value="2">2 sao</Option>
+              <Option value="5">Đánh giá 4 đến 5 sao</Option>
+              <Option value="4">Đánh giá 3 đến 4 sao</Option>
+              <Option value="3">Đánh giá 1 đến 3 sao</Option>
             </Select>
           </Col>
 
-          <Col xs={24} sm={12} md={3} lg={5}>
+          <Col xs={24} sm={12} md={24} lg={5}>
             <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>
               Mức giá
             </label>
             <Slider
               range
-              min={100}
+              min={10000}
               max={1500000}
-              step={100}
+              step={10000}
               value={priceRange}
-              onChange={(value: [number, number]) => setPriceRange(value)}
-              style={{ marginBottom: '25px', marginTop: '15px' }}
+              onChange={(value: number[]) => setPriceRange(value)}
+              styles={{
+                track: {
+                  backgroundColor: '#115363',
+                },
+              }}
             />
-            <div
-              style={{ textAlign: 'center', fontSize: '16px', fontWeight: 'bold', color: '#333' }}
-            >
-              {`${priceRange[0]?.toLocaleString()} VND - ${priceRange[1]?.toLocaleString()} VND`}
-            </div>
+            {`${priceRange[0]?.toLocaleString()} VND - ${priceRange[1]?.toLocaleString()} VND`}
           </Col>
 
-          <Col xs={24} sm={12} md={1} lg={2}>
+          <Col xs={24} sm={12} md={24} lg={2}>
             <Button
+              style={{ marginTop: '5px', height: '50px', borderRadius: '10px' }}
               className="book-button"
-              onClick={handleSearch} // Gọi hàm khi nhấn nút
+              onClick={() => handleSearch()}
             >
-              Tìm kiếm
+              Tìm sân
             </Button>
           </Col>
+          <Col xs={24} sm={12} md={24} lg={1} className="icon-wrapper">
+            <TiArrowSync onClick={() => handleReset()} style={{ width: '70%', height: '70%' }} />
+          </Col>
         </Row>
-      </div>
+      </Flex>
 
-      <div className="featured-courts-wrapper">
-        <div className="featured-courts">
-          <ListCourtCluster itemsPerPage={3} courtClusters={topCourtClusterArray} />
-        </div>
-      </div>
-
-      <Title level={2} style={{ marginBottom: '24px' }}>
-        Danh sách sân
-      </Title>
-      <Row gutter={[16, 16]} className="court-list">
+      <Row gutter={[3, 3]} className="court-list">
         {loadingInitial
           ? Array.from({ length: 4 }).map((_, i) => (
-              <Col key={i} xs={24} sm={12} md={8} lg={6}>
-                <Card loading={true} />
-              </Col>
-            ))
-          : currentItems.map((c) => (
-              <Col key={c.id} xs={24} sm={12} md={8} lg={6} className="court-col">
-                <Card hoverable className="court-card">
-                  <Image src={c.images[0]} width={'100%'} height={'200px'} />
-                  <div className="court-details">
-                    <div className="court-info">
-                      <Title level={5} className="court-title">
-                        {c.title}
-                      </Title>
-                      <Paragraph>Khu vực: {c.address}</Paragraph>
-                      <Row justify="space-between" align="middle" className="rating-row">
-                        <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>
-                        <Row>
-                          <FaStar className="text-yellow-500" color="#f7d03f" />
-                          <FaStar className="text-yellow-500" color="#f7d03f" />
-                          <FaStar className="text-yellow-500" color="#f7d03f" />
-                          <FaStar className="text-yellow-500" color="#f7d03f" />
-                          <FaStarHalfAlt className="text-yellow-500" color="#f7d03f" />
-                          <Typography.Paragraph className="rating-value">
-                            (4.5)
-                          </Typography.Paragraph>
-                        </Row>
+            <Col key={i} xs={24} sm={12} md={8} lg={6}>
+              <Card loading={true} />
+            </Col>
+          ))
+          : courtClusterArray.map((c) => (
+            <Col key={c.id} xs={24} sm={12} md={8} lg={6} className="court-col">
+              <Card hoverable className="court-card" style={{ height: '95%' }}>
+                <Image src={c.images[0]} width={'100%'} height={'200px'} />
+                <div className="court-details">
+                  <div className="court-info">
+                    <Title level={5} className="court-title">
+                      {c.title}
+                    </Title>
+                    <Paragraph>Khu vực: {c.provinceName} - {c.districtName}</Paragraph>
+                    <Row justify="space-between" align="middle" className="rating-row">
+                      <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>
+                      <Row>
+                        {Array.from({ length: 5 }, (_, i) => {
+                          if (i < Math.floor(c.rate)) {
+                            return <FaStar key={i} className="text-yellow-500" color="#f7d03f" style={{ marginTop: '3px' }} />;
+                          }
+                          else {
+                            return <FaRegStar key={i} className="text-yellow-500" style={{ marginTop: '3px' }} />;
+                          }
+                        })}
+                        <Typography.Paragraph style={{ marginLeft: '5px' }}>({c.rate ? c.rate.toFixed() : 0})</Typography.Paragraph>
                       </Row>
-                    </div>
+                    </Row>
+                  </div>
+                  <Flex vertical gap={8}>
+                    <CourtBookingForm
+                      courtClusterId={c.id}
+                      loadingCourtId={loadingCourtId}
+                      setLoadingCourtId={setLoadingCourtId}
+                    />
                     <Button
                       className="book-button"
                       onClick={() => {
@@ -236,22 +280,27 @@ function ListCourtClusterPage({ itemsPerPage }: IProps) {
                     >
                       Chi tiết sân
                     </Button>
-                  </div>
-                </Card>
-              </Col>
-            ))}
+                  </Flex>
+                </div>
+              </Card>
+            </Col>
+          ))}
       </Row>
 
-      <Row justify="center" className="pagination">
-        <Pagination
-          currentPage={currentPage}
-          pageSize={itemsPerPage}
-          total={courtClusterArray.length}
-          onPageChange={onPageChange}
-        />
+      <Row justify="center">
+        <LoadMoreButtonAtoms
+          handleOnClick={() => {
+            courtPageParams.skip = courtClusterRegistry.size;
+            loadListCourt();
+          }}
+          // hidden={courtClusterRegistry.size >= courtPageParams.totalElement}
+          hidden={false}
+          loading={loadingMore}
+        >
+        </LoadMoreButtonAtoms>
       </Row>
     </div>
   );
-}
+})
 
-export default observer(ListCourtClusterPage);
+export default ListCourtClusterPage;

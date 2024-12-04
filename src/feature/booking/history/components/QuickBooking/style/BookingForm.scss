@@ -18,6 +18,22 @@
   }
 }
 
+.book-button {
+  width: 100%;
+  background-color: #115363;
+  color: white;
+  border: none;
+  transition: all 0.3s ease;
+
+  &:hover,
+  &:focus {
+    border-color: #115363;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+    background-color: white;
+    color: black;
+  }
+}
+
 .booking-form {
   .form-header {
     text-align: center;
