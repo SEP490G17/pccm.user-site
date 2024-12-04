@@ -207,26 +207,27 @@ export default class CourtClusterDetailsStore {
   updateBookingSignalr = (booking: any) => {
     this.setBooking(this.mapBookingResponseToBookingModel(booking));
   };
+
   mapBookingResponseToBookingModel = (booking: any): BookingModel => {
-    const recu = booking.RecurrenceRule ? booking.RecurrenceRule : booking.recurrenceRule;
-    return {
-      courtId: booking.courtId ?? 0,
-      courtName: booking.courtName,
-      endTime: booking.endDay,
-      startTime: booking.startDay,
-      paymentStatus: booking.paymentStatus,
-      paymentUrl: booking.paymentUrl,
-      status: booking.status,
-      isSuccess: booking.isSuccess,
-      fullName: booking.fullName,
-      phoneNumber: booking.phoneNumber,
-      totalPrice: booking.totalPrice,
-      RecurrenceRule: recu ?? '',
-      recurrenceRule: recu,
-      id: booking.id,
-      untilTime: '',
-    };
+  const recu = booking.RecurrenceRule ? booking.RecurrenceRule : booking.recurrenceRule;
+  return {
+    courtId: booking.courtId ?? 0,
+    courtName: booking.courtName,
+    endTime: booking.endDay,
+    startTime: booking.startDay,
+    paymentStatus: booking.paymentStatus,
+    paymentUrl: booking.paymentUrl,
+    status: booking.status,
+    isSuccess: booking.isSuccess,
+    fullName: booking.fullName,
+    phoneNumber: booking.phoneNumber,
+    totalPrice: booking.totalPrice,
+    RecurrenceRule: recu ?? '',
+    recurrenceRule: recu,
+    id: booking.id,
+    untilTime: '',
   };
+};
 
   createBookingSignalr = (booking: BookingModel) => {
     this.setBooking(booking);

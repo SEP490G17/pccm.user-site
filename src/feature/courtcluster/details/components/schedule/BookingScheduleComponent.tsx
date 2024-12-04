@@ -7,7 +7,7 @@ import {
   ResourceDirective,
   ResourcesDirective,
 } from '@syncfusion/ej2-react-schedule';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { isNullOrUndefined, L10n } from '@syncfusion/ej2-base';
 import { observer } from 'mobx-react-lite';
 import { ICourtCluster } from '@/app/models/courtcluster.model';
@@ -35,6 +35,9 @@ const BookingScheduleComponent = observer(
 
     const { courtClusterDetailsStore, authStore } = useStore();
     const { bookingScheduleArray } = courtClusterDetailsStore;
+    useEffect(()=>{
+      courtClusterDetailsStore.loadScheduleBookingList();
+    },[courtClusterDetailsStore]);
     const group = { resources: ['courts'] };
     const schedule = useRef<ScheduleComponent>(null);
 
@@ -161,6 +164,7 @@ const BookingScheduleComponent = observer(
         }
       }
     };
+    
     return (
       <ScheduleComponent
         ref={schedule}

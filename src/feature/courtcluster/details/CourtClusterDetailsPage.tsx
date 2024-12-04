@@ -19,6 +19,7 @@ import './CourtClusterDetailsStyle.scss';
 import BookingFormComponent from './components/bookingForm/BookingFormComponent';
 import CourtClusterServicesTab from './components/ServiceTab/CourtClusterServicesTab';
 import CourtClusterProductsTab from './components/ProductTab/CourtClusterProductsTab';
+import { runInAction } from 'mobx';
 
 const CourtClusterDetailsPage = observer(() => {
   const { id } = useParams();
@@ -55,11 +56,9 @@ const CourtClusterDetailsPage = observer(() => {
       }
       setLoadingInitialDetailsPage(true);
       Promise.all([
-        (courtClusterDetailsStore.loadScheduleBookingList(),
-        courtClusterDetailsStore.loadCourtPrice(),
-        getDetailsCourtCluster(id),
+        (getDetailsCourtCluster(id),
         getListReviewByCourtClusterId(id)),
-      ]).finally(() => setLoadingInitialDetailsPage(false));
+      ]).finally(() => runInAction(() => setLoadingInitialDetailsPage(false)));
     }
 
     return () => {
