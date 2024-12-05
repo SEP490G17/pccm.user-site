@@ -41,7 +41,7 @@ export default class AuthStore {
       }
     });
     this.loadingLogin = false;
-    return {err,res}
+    return { err, res };
   };
 
   loadUserFromLocalStorage = () => {
@@ -70,11 +70,10 @@ export default class AuthStore {
   };
 
   getUser = async () => {
-      const [err, res] = await catchErrorHandle(agent.Account.current());
-      runInAction(() =>{
-        if(err) return;
-        this.userApp = res;
-      })
-    
+    const [err, res] = await catchErrorHandle(agent.Account.current());
+    runInAction(() => {
+      if (err) return;
+      this.userApp = res ?? null;
+    });
   };
 }

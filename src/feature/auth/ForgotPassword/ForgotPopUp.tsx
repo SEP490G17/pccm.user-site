@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Form, Input, Button, Typography } from 'antd';
 import { toast } from 'react-toastify';
 import agent from '../../../app/api/agent';
+import { router } from '@/app/router/Routes';
 
 const { Title } = Typography;
 
@@ -32,12 +33,13 @@ const ForgotPopUp: React.FC<ForgotPopUpProps> = ({ token }) => {
             toast.error(error?.response?.data?.message || 'Có lỗi xảy ra!');
         } finally {
             setLoading(false);
+            router.navigate('/');
         }
     };
 
     return (
         <Modal
-            visible={true}
+            open={true}
             title={<Title level={4}>Đặt lại mật khẩu</Title>}
             footer={null}
             closable={false}
@@ -70,11 +72,12 @@ const ForgotPopUp: React.FC<ForgotPopUpProps> = ({ token }) => {
                     <Input.Password placeholder="Nhập lại mật khẩu mới" />
                 </Form.Item>
 
-                <Button type="primary" htmlType="submit" block loading={loading}>
+                <Button type="primary" style={{backgroundColor:'#115363'}} htmlType="submit" block loading={loading}>
                     Đặt lại mật khẩu
                 </Button>
             </Form>
         </Modal>
+        
     );
 };
 

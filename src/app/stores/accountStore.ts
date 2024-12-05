@@ -50,11 +50,16 @@ export default class AccountStore {
 
   forgotPassword = async (email: string) => {
     this.loadingForgotPassword = true;
-    await agent.Account.forgotPassword(email)
-      .then(() => toast.success('Email đặt lại mật khẩu đã được gửi'))
-      .catch((error: any) => toast.error(error[0]))
-      .finally(() => (this.loadingForgotPassword = false));
+    const [err, res] = await catchErrorHandle(agent.Account.forgotPassword(email));
+    runInAction(() => {
+      this.loadingForgotPassword = false;
+    });
+    if (res) {
+      toast.success('Email đặt lại mật khẩu đã được gửi');
+    }
+    return { err, res };
   };
+
   confirmForgotPassword = async (token: string, newPassword: string) => {
     this.loadingConfirmPassword = true;
     const data = new ConfirmForgotPasswordDto({ token, newPassword });
@@ -76,8 +81,9 @@ export default class AccountStore {
       toast.error(err[0] || 'Đã xảy ra lỗi trong quá trình thay đổi mật khẩu');
       return false;
     }
-
-    toast.success('Thay đổi mật khẩu thành công');
-    return true;
+    if (res) {
+      toast.success('Thay đổi mật khẩu thành công');
+      return true;
+    }
   };
 }
