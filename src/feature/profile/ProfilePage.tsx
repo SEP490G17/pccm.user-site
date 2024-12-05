@@ -34,7 +34,7 @@ const ProfilePage: React.FC = () => {
                 phone: profileData.phoneNumber,
                 imageUrl: profileData.imageUrl,
                 birthday: profileData.birthDate ? dayjs(profileData.birthDate) : null,
-                gender: profileData.gender ? 'male' : 'female',
+                gender: profileData.gender === null ? null : profileData.gender ? 'male' : 'female',
             });
             setImageUrl(profileData.imageUrl);
         }
@@ -76,7 +76,7 @@ const ProfilePage: React.FC = () => {
     return (
         <div className="profile-page-container">
             <PageHeadingAtoms
-                breadCrumb={[{ title: 'Trang chủ', to: '/home' }, { title: 'Thông tin cá nhân', to: '/view-profile/' }]}
+                breadCrumb={[{ title: 'Trang chủ', to: '/trang-chu' }, { title: 'Thông tin cá nhân', to: '/thongtin/' }]}
             />
             <div style={{ maxWidth: '70%', margin: 'auto' }}>
                 <div style={{ padding: '5%', backgroundColor: 'white', borderRadius: '8px' }}>
@@ -182,7 +182,7 @@ const ProfilePage: React.FC = () => {
                                         </Col>
                                         <Col xs={24} sm={24} md={24} lg={12}>
                                             <Form.Item labelCol={{ span: 24 }} label="Giới Tính" name="gender">
-                                                <Select disabled={!isEditing}>
+                                                <Select disabled={!isEditing} placeholder="Chọn giới tính">
                                                     <Option value="male">Nam</Option>
                                                     <Option value="female">Nữ</Option>
                                                 </Select>

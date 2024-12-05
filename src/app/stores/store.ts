@@ -16,6 +16,7 @@ import NotificationStore from './notificationStore';
 import ProductStore from './productStore';
 import ServiceStore from './serviceStore';
 import CategoryStore from './categoryStore';
+import OrderStore from './orderStore';
 
 interface Store {
   commonStore: CommonStore;
@@ -35,6 +36,7 @@ interface Store {
   categoryStore: CategoryStore;
   signalRStore:SignalRStore;
   notificationStore:NotificationStore;
+  orderStore: OrderStore;
 }
 
 export const store: Store = {
@@ -53,7 +55,8 @@ export const store: Store = {
   productStore: new ProductStore(),
   serviceStore: new ServiceStore(),
   categoryStore: new CategoryStore(),  signalRStore: new SignalRStore(),
-  notificationStore:new NotificationStore()
+  notificationStore:new NotificationStore(),
+  orderStore: new OrderStore(),
 };
 
 export const StoreContext = createContext(store);

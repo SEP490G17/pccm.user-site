@@ -31,6 +31,7 @@ import { store } from '../stores/store';
 import { toast } from 'react-toastify';
 import { ImageUpload } from '../models/upload.model';
 import { NotificationUser } from '../models/noti.model';
+import { OrderDetailOfBooking } from '../models/order.model';
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
@@ -152,6 +153,7 @@ const Booking = {
   bookingByDay: (bookingByDay: IBookingByDay): Promise<any> =>
     requests.post(`/booking/byDay`, bookingByDay),
   cancelBooking: (id: number): Promise<any> => requests.put(`/booking/cancel/${id}`, {}),
+  orderDetailofBooking: (id: number) => requests.get<OrderDetailOfBooking>(`/order/v1/${id}`),
 };
 
 const PaymentAgent = {

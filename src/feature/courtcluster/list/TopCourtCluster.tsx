@@ -108,7 +108,7 @@ function TopCourtCluster({ title, itemsPerPage }: IProps) {
         <Skeleton
           paragraph={{ rows: 6 }}
           active
-          style={{ height: '100%', width: '100%' }}
+          style={{ height: '100%', width: '100%', paddingTop: '30px' }}
         />
       ) : topCourtClusterArray.length === 0 ? (
         <Row justify="center" align="middle" style={{ minHeight: '200px' }}>

@@ -72,14 +72,14 @@ const Header = observer(() => {
   const handleMenuClick = ({ key }: { key: string }) => {
     if (key === 'viewProfile') {
       if (userApp) {
-        navigate('/view-profile');
+        navigate('/thongtin');
       } else {
         setLoginModalVisible(true);
       }
     } else if (key === 'login') {
       authStore.setVisible(true);
     } else if (key === 'viewHistory') {
-      navigate('/booking-history');
+      navigate('/lich-su');
     } else if (key === 'changePassword') {
       setChangePasswordModalVisible(true);
     } else if (key === 'logout') {
@@ -124,7 +124,7 @@ const Header = observer(() => {
         <Space size={40} align="center">
           <div
             className="header-item"
-            onClick={() => navigate('/list-courtcluster')}
+            onClick={() => navigate('/cum-san')}
             style={{ cursor: 'pointer' }}
           >
             <Flex align="center">
@@ -165,7 +165,7 @@ const Header = observer(() => {
               <Link onClick={() => authStore.setVisible(true)}>Đăng nhập</Link>/
               <Link
                 onClick={() => {
-                  router.navigate('/register');
+                  router.navigate('/dang-ki');
                 }}
               >
                 Đăng kí

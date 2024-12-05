@@ -16,15 +16,17 @@ export const customFormatTime = (time: string): string => {
   return `${hours}:${minutes}`;
 };
 
-export const catchErrorHandle = async <T>(promise: Promise<T>) : Promise<[undefined, T] | [Error|any]> => {
+export const catchErrorHandle = async <T>(
+  promise: Promise<T>,
+): Promise<[undefined, T] | [Error | any]> => {
   return promise
-      .then(data => {
-          return [undefined, data] as [undefined, T]
-      })
-      .catch(error => {
-          return [error]
-      });
-}
+    .then((data) => {
+      return [undefined, data] as [undefined, T];
+    })
+    .catch((error) => {
+      return [error];
+    });
+};
 export const getBookingStatusColor = (status: number) => {
   switch (status) {
     case BookingStatus.Pending:
@@ -78,3 +80,17 @@ export const toIsoString = (date: Date): string => {
     pad(Math.abs(tzo) % 60)
   );
 };
+
+export function calculateTimeDifferenceInHours(startTime: string, endTime: string): number {
+  const [startHour, startMinute] = startTime.split(':').map(Number);
+  const [endHour, endMinute] = endTime.split(':').map(Number);
+
+  const startTotalMinutes = startHour * 60 + startMinute;
+  const endTotalMinutes = endHour * 60 + endMinute;
+
+  const differenceInMinutes = endTotalMinutes - startTotalMinutes;
+
+  const differenceInHours = differenceInMinutes / 60;
+
+  return differenceInHours;
+}

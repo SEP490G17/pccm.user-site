@@ -26,9 +26,9 @@ const NewsDetail: React.FC = () => {
         <div className="news-detail" style={{ margin: 'auto', padding: '20px 0px' }}>
             <PageHeadingAtoms
                 breadCrumb={[
-                    { title: "Trang chủ", to: "/home" },
-                    { title: "Tin tức", to: `/news` },
-                    { title: newsDetail.title, to: `/news/${newsDetail.id}` }
+                    { title: "Trang chủ", to: "/trang-chu" },
+                    { title: "Tin tức", to: `/tin-tuc` },
+                    { title: newsDetail.title, to: `/tin-tuc/${newsDetail.id}` }
                 ]}
             />
             {/* <div style={{ marginBottom: '50px' }}>

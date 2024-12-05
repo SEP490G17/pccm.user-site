@@ -40,7 +40,7 @@ export default class BookingStore {
         .finally(() => (this.loadingCreate = false));
     });
   };
-
+  
   loadListBooking = async () => {
     this.setLoadingInitial(true);
 

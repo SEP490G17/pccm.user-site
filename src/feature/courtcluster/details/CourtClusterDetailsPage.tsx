@@ -103,7 +103,7 @@ const CourtClusterDetailsPage = observer(() => {
     <>
       <PageHeadingAtoms
         breadCrumb={[
-          { title: 'Trang chủ', to: '/home' },
+          { title: 'Trang chủ', to: '/trang-chu' },
           { title: 'Chi tiết sân', to: `/dat-san/${id}` },
         ]}
       />

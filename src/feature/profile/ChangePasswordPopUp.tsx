@@ -14,13 +14,18 @@ interface ChangePasswordPopUpProps {
 const ChangePasswordPopUp: React.FC<ChangePasswordPopUpProps> = ({ visible, onClose }) => {
   const { accountStore } = useStore();
   const validationSchema = Yup.object().shape({
-    currentPassword: Yup.string().required('Current password is required'),
+    currentPassword: Yup.string().required('Vui lòng nhập mật khẩu hiện tại'),
     newPassword: Yup.string()
-      .required('New password is required')
-      .min(8, 'Password must be at least 8 characters long'),
+      .required('Mật khẩu không được bỏ trống')
+      .min(8, 'Mật khẩu phải có ít nhất 8 ký tự')
+      .matches(/[a-z]/, 'Mật khẩu phải chứa ít nhất 1 chữ thường')
+      .matches(/[A-Z]/, 'Mật khẩu phải chứa ít nhất 1 chữ hoa')
+      .matches(/[0-9]/, 'Mật khẩu phải chứa ít nhất 1 chữ số')
+      .matches(/[@$!%*?&]/, 'Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt'),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('newPassword'), ''], 'Passwords must match')
-      .required('Confirm password is required'),
+      .required('Mật khẩu xác nhận không được bỏ trống')
+      .oneOf([Yup.ref('newPassword')], 'Mật khẩu xác nhận không khớp'),
+
   });
 
   return (
@@ -36,14 +41,17 @@ const ChangePasswordPopUp: React.FC<ChangePasswordPopUpProps> = ({ visible, onCl
       <Formik
         initialValues={{ currentPassword: '', newPassword: '', confirmPassword: '' }}
         validationSchema={validationSchema}
-        onSubmit={(values, { resetForm }) => {
+        onSubmit={async (values, { resetForm }) => {
           const changeInput = new ChangePasswordInput({
             currentPassword: values.currentPassword,
             newPassword: values.newPassword,
           });
-          accountStore.changePassword(changeInput);
-          resetForm();
-          onClose();
+
+          const success = await accountStore.changePassword(changeInput);
+          if (success) {
+            resetForm();
+            onClose();
+          }
         }}
       >
         {({ values, handleChange, handleSubmit, errors, touched }) => (
@@ -95,12 +103,12 @@ const ChangePasswordPopUp: React.FC<ChangePasswordPopUpProps> = ({ visible, onCl
             <div className="modal-footer">
               <Row gutter={16}>
                 <Col xs={24} sm={12}>
-                  <Button type="default" onClick={onClose} block>
+                  <Button type="default" onClick={onClose} block disabled={accountStore.loadingChangePassword}>
                     Hủy
                   </Button>
                 </Col>
                 <Col xs={24} sm={12}>
-                  <Button type="default" style={{ backgroundColor: '#115363', color: 'white' }} htmlType="submit" block>
+                  <Button type="default" style={{ backgroundColor: '#115363', color: 'white' }} htmlType="submit" block loading={accountStore.loadingChangePassword}>
                     Xác nhận
                   </Button>
                 </Col>

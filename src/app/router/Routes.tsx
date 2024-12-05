@@ -24,35 +24,35 @@ export const routes: RouteObject[] = [
         element: <HomePage />,
       },
       {
-        path: 'home',
+        path: 'trang-chu',
         element: <HomePage />,
       },
       {
-        path: 'news',
+        path: 'tin-tuc',
         element: <NewsPage />
       },
       {
-        path: 'news/:id',
+        path: 'tin-tuc/:id',
         element: <NewsDetailPage />
       },
       {
-        path: 'list-courtcluster',
-        element: <ListCourtCluser itemsPerPage={8} />
+        path: 'cum-san',
+        element: <ListCourtCluser />
       },
       {
-        path: 'booking-history',
+        path: 'lich-su',
         element: <BookingHistoryPage />
       },
       {
-        path: 'booking-history/chi-tiet/:id',
+        path: 'lich-su/chi-tiet/:id',
         element: <BookingDetailsPage />
       },
       {
-        path: 'view-profile',
+        path: 'thongtin',
         element: <ProfilePage />
       },
       {
-        path: 'register',
+        path: 'dang-ki',
         element: <RegisterPage />
       },
       {

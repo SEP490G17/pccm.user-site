@@ -66,9 +66,18 @@ export default class AccountStore {
 
   changePassword = async (value: ChangePasswordInput) => {
     this.loadingChangePassword = true;
-    await agent.Account.changePassword(value)
-      .then(() => toast.success('Thay đổi mật khẩu thành công'))
-      .catch((error: any) => toast.error(error[0]))
-      .finally(() => (this.loadingRegister = false));
+    const [err, res] = await catchErrorHandle(agent.Account.changePassword(value));
+
+    runInAction(() => {
+      this.loadingChangePassword = false;
+    });
+
+    if (err) {
+      toast.error(err[0] || 'Đã xảy ra lỗi trong quá trình thay đổi mật khẩu');
+      return false;
+    }
+
+    toast.success('Thay đổi mật khẩu thành công');
+    return true;
   };
 }

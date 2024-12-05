@@ -72,7 +72,7 @@ const NotificationAtom = observer(() => {
                 title={<p className="text-sm flex">{item.title}</p>}
                 description={
                   <Link
-                    to={`/booking-history/chi-tiet/${item.url}`}
+                    to={`/lich-su/chi-tiet/${item.url}`}
                     onClick={async () => {
                       if (!item.isRead) {
                         await notificationStore.updateReadNotification(item.id);

@@ -25,8 +25,8 @@ const NewsPage = () => {
         <div className="news-page">
             <PageHeadingAtoms
                 breadCrumb={[
-                    { title: "Trang chủ", to: "/home" },
-                    { title: "Tin tức", to: "/news/" }
+                    { title: "Trang chủ", to: "/trang-chu" },
+                    { title: "Tin tức", to: "/tin-tuc/" }
                 ]}
             />
             <div className="news-main-section">
@@ -37,7 +37,7 @@ const NewsPage = () => {
                     ) : (
                         <div className="news-list">
                             {sortedNews.map((newsItem) => (
-                                <Link key={newsItem.id} to={`/news/${newsItem.id}`} className="news-item">
+                                <Link key={newsItem.id} to={`/tin-tuc/${newsItem.id}`} className="news-item">
                                     <img
                                         className="thumbnail"
                                         src={newsItem.thumbnail}
@@ -67,7 +67,7 @@ const NewsPage = () => {
                     ) : (
                         <div className="recent-post-list">
                             {recentPosts.map((newsItem) => (
-                                <Link key={newsItem.id} to={`/news/${newsItem.id}`} className="recent-post-item">
+                                <Link key={newsItem.id} to={`/tin-tuc/${newsItem.id}`} className="recent-post-item">
                                     <img src={newsItem.thumbnail || '/default-thumbnail.jpg'} alt={newsItem.title} />
                                     <div className="recent-post-content">
                                         <h4>{newsItem.title}</h4>
@@ -89,7 +89,7 @@ const NewsPage = () => {
                     <div className="related-news-container">
                         <div className="related-news-list">
                             {shuffledNews.map((newsItem) => (
-                                <Link key={newsItem.id} to={`/news/${newsItem.id}`} className="related-news-item">
+                                <Link key={newsItem.id} to={`/tin-tuc/${newsItem.id}`} className="related-news-item">
                                     <img src={newsItem.thumbnail || '/default-thumbnail.jpg'} alt={newsItem.title} />
                                     <h4>{newsItem.title}</h4>
                                     <p>{newsItem.title.slice(0, 70)}...</p>

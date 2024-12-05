@@ -23,7 +23,6 @@ const ListCourtClusterPage = observer(() => {
     courtClusterArray,
     courtClusterRegistry,
     loadListCourt,
-    filterListCourtCluster,
     courtPageParams,
     loadListTopCourt,
     loadingInitial,
@@ -106,7 +105,7 @@ const ListCourtClusterPage = observer(() => {
       maxPrice: priceRange[1],
     };
     // Gọi API
-    filterListCourtCluster(searchParams);
+    loadListCourt(searchParams);
   };
 
   const handleReset = () => {
@@ -120,15 +119,15 @@ const ListCourtClusterPage = observer(() => {
     setRating('');
     setPriceRange([10000, 1500000]);
 
-    filterListCourtCluster();
+    loadListCourt();
   }
 
   return (
     <div className="list-court-cluster">
       <PageHeadingAtoms
         breadCrumb={[
-          { title: 'Trang chủ', to: '/home' },
-          { title: 'Sân thể thao', to: '/list-courtcluster' },
+          { title: 'Trang chủ', to: '/trang-chu' },
+          { title: 'Sân thể thao', to: '/cum-san' },
         ]}
       />
       <div className="banner-container">
@@ -193,8 +192,8 @@ const ListCourtClusterPage = observer(() => {
             >
               <Option value="">Tất cả</Option>
               <Option value="5">Đánh giá 4 đến 5 sao</Option>
-              <Option value="4">Đánh giá 3 đến 4 sao</Option>
-              <Option value="3">Đánh giá 1 đến 3 sao</Option>
+              <Option value="3">Đánh giá 2 đến 3 sao</Option>
+              <Option value="1">Đánh giá 1 sao</Option>
             </Select>
           </Col>
 
@@ -218,7 +217,7 @@ const ListCourtClusterPage = observer(() => {
             {`${priceRange[0]?.toLocaleString()} VND - ${priceRange[1]?.toLocaleString()} VND`}
           </Col>
 
-          <Col xs={24} sm={12} md={24} lg={2}>
+          <Col xs={21} sm={21} md={21} lg={2}>
             <Button
               style={{ marginTop: '5px', height: '50px', borderRadius: '10px' }}
               className="book-button"
@@ -227,8 +226,8 @@ const ListCourtClusterPage = observer(() => {
               Tìm sân
             </Button>
           </Col>
-          <Col xs={24} sm={12} md={24} lg={1} className="icon-wrapper">
-            <TiArrowSync onClick={() => handleReset()} style={{ width: '70%', height: '70%' }} />
+          <Col xs={3} sm={3} md={3} lg={1} className="icon-wrapper">
+            <TiArrowSync onClick={() => handleReset()} />
           </Col>
         </Row>
       </Flex>
@@ -290,11 +289,18 @@ const ListCourtClusterPage = observer(() => {
       <Row justify="center">
         <LoadMoreButtonAtoms
           handleOnClick={() => {
+            const searchParams = {
+              searchText,
+              ...formValues,
+              rating,
+              minPrice: priceRange[0],
+              maxPrice: priceRange[1],
+            };
+            courtClusterStore.loadingMore = true
             courtPageParams.skip = courtClusterRegistry.size;
-            loadListCourt();
+            loadListCourt(searchParams);
           }}
-          // hidden={courtClusterRegistry.size >= courtPageParams.totalElement}
-          hidden={false}
+          hidden={courtClusterRegistry.size == courtPageParams.totalElement}
           loading={loadingMore}
         >
         </LoadMoreButtonAtoms>
