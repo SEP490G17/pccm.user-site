@@ -55,6 +55,7 @@ const NewsDetail: React.FC = () => {
                         <div className="news-date">
                             <strong>Ngày đăng: </strong> {new Date(newsDetail.createdAt).toLocaleDateString()}
                         </div>
+                        <div className="news-content" dangerouslySetInnerHTML={{ __html: newsDetail.content }} />
                     </div>
                     {/* <div className="social-section">
                         <div className="social-item">
