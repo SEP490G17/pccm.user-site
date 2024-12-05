@@ -37,6 +37,19 @@ const NewsDetail: React.FC = () => {
             <div className="news-detail-content">
                 <div className="content-wrapper">
                     <div className="main-content">
+                        <div className="news-meta">
+                            <div className="news-tags">
+                                <strong>Tags: </strong>
+                                {newsDetail.tags.map((tag, index) => (
+                                    <span key={index} className="tag">
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                            <div className="news-date">
+                                <strong>Ngày đăng: </strong> {new Date(newsDetail.createdAt).toLocaleDateString()}
+                            </div>
+                        </div>
                         <h1 className="news-title">{newsDetail.title}</h1>
                         <img
                             src={newsDetail.thumbnail || defaultThumbnail}
@@ -44,17 +57,7 @@ const NewsDetail: React.FC = () => {
                             className="news-thumbnail"
                         />
                         <div className="news-description" dangerouslySetInnerHTML={{ __html: newsDetail.description }} />
-                        <div className="news-tags">
-                            <strong>Tags: </strong>
-                            {newsDetail.tags.map((tag, index) => (
-                                <span key={index} className="tag">
-                                    {tag}
-                                </span>
-                            ))}
-                        </div>
-                        <div className="news-date">
-                            <strong>Ngày đăng: </strong> {new Date(newsDetail.createdAt).toLocaleDateString()}
-                        </div>
+                        <div className="news-content" dangerouslySetInnerHTML={{ __html: newsDetail.content }} />
                     </div>
                     {/* <div className="social-section">
                         <div className="social-item">
