@@ -18,7 +18,7 @@ const AppFooter = () => {
     return (
         <>
             <div className="section">
-                <Title style={{ fontSize: '24px' }}>Kết nối với Thế Giới PickleBall</Title>
+                <Title style={{ fontSize: '24px' }}>Kết nối với chúng tôi</Title>
                 <Card>
                     <Row gutter={16}>
                         <Col xs={24} md={12}>
@@ -29,30 +29,12 @@ const AppFooter = () => {
                                     <p>Mail: <Text type="danger">email@example.com</Text></p>
                                     <p>Hotline (Zalo): <Text type="danger">0904.795.885</Text></p>
                                 </TabPane>
-                                <TabPane tab="Hồ Chí Minh" key="2">
-                                    <Text strong>Hồ Chí Minh</Text>
-                                    <p>Điện thoại: <Text type="danger">0111.111.111</Text></p>
-                                    <p>Mail: <Text type="danger">email@example.com</Text></p>
-                                    <p>Hotline (Zalo): <Text type="danger">0111.111.111</Text></p>
-                                </TabPane>
-                                <TabPane tab="Đà Nẵng" key="3">
-                                    <Text strong>Đà Nẵng</Text>
-                                    <p>Điện thoại: <Text type="danger">0111.111.111</Text></p>
-                                    <p>Mail: <Text type="danger">email@example.com</Text></p>
-                                    <p>Hotline (Zalo): <Text type="danger">0111.111.111</Text></p>
-                                </TabPane>
-                                <TabPane tab="Hải Dương" key="4">
-                                    <Text strong>Hải Dương</Text>
-                                    <p>Điện thoại: <Text type="danger">0111.111.111</Text></p>
-                                    <p>Mail: <Text type="danger">email@example.com</Text></p>
-                                    <p>Hotline (Zalo): <Text type="danger">0111.111.111</Text></p>
-                                </TabPane>
                             </Tabs>
                         </Col>
                         <Col xs={24} md={12}>
                             <iframe
-                                className="iframe-rounded"  // Thêm class cho iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.7446071964646!2d105.78066861532864!3d21.043081792652826!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab67f1422db7%3A0xb7f769bdaec1fae0!2zNTYgxJDGsOG7nW5nIFRo4bqldSBUcsawbSwgQ2F1IMSRaeG7h3UsIEjDoCBO4buZaQ!5e0!3m2!1sen!2s!4v1699899202517!5m2!1sen!2s"
+                                className="iframe-rounded"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3727.3340357481194!2d105.5227143!3d21.0124217!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135abc60e7d3f19%3A0x2be9d7d0b5abcbf4!2zVHLGsOG7nW5nIMSQaeG7h3AgRlBUIEjDoCBO4buZaQ!5e0!3m2!1sen!2s!4v1702022200175!5m2!1sen!2s"
                                 width="100%"
                                 height="240"
                                 style={{ border: 0 }}
@@ -67,12 +49,12 @@ const AppFooter = () => {
                 <Footer className="footer-layout">
                     <Row gutter={16}>
                         <Col span={6}>
-                            <Text className="footer-col">Kết nối với Thế Giới Thể Thao</Text>
+                            <Text className="footer-col">Kết nối với chúng tôi</Text>
                             <div className="footer-col-item">
-                                <Text>Hà Nội</Text>
+                                <Text>SEP490_G17, Đại học FPT Hà Nội</Text>
                             </div>
                             <div className="footer-col-item">
-                                <Text>26A - Thạch Hòa - Thạch Thất - Hà Nội</Text>
+                                <Text>Khu Công Nghệ Cao Hòa Lạc, km 29, Đại lộ, Thăng Long, Hà Nội</Text>
                             </div>
                             <div className="footer-col-item">
                                 <Text>Điện thoại: <Link href="tel:0904795885" style={{ color: 'red' }}>0111.111.111</Link></Text>
@@ -90,7 +72,6 @@ const AppFooter = () => {
                             <Link className="footer-link">Điều khoản sử dụng</Link>
                             <Link className="footer-link">Hướng dẫn đổi trả</Link>
                             <Link className="footer-link">Cam kết chất lượng</Link>
-                            <Link className="footer-link">Giao hàng & Nhận hàng</Link>
                             <Link className="footer-link">Đặt hàng & Thanh toán</Link>
                             <Link className="footer-link">Tuyển dụng</Link>
                         </Col>
@@ -116,7 +97,7 @@ const AppFooter = () => {
                     </Row>
                     <Divider className="footer-divider" />
                     <Text className="footer-copyright">
-                        © 2024 Thế Giới Thể Thao. All Rights Reserved.
+                        © 2024 SEP490_G17. All Rights Reserved.
                     </Text>
                 </Footer>
                 {/* <div className="footer-red">
