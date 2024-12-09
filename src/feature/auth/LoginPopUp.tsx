@@ -25,6 +25,7 @@ const LoginPopUp = observer(({ onClose }: LoginPopUpProps) => {
   useEffect(() => {
     if (!visible) {
       form.resetFields();
+      setError(null);
     }
   }, [visible, form]);
   const [error, setError] = useState<any>(null);
@@ -37,7 +38,7 @@ const LoginPopUp = observer(({ onClose }: LoginPopUpProps) => {
       .login(data)
       .then((value) => {
         if (value.err) {
-          setError(value.err);
+          setError(value.err.response.data);
         }
         if (value.res) {
           setError(null);
@@ -62,6 +63,10 @@ const LoginPopUp = observer(({ onClose }: LoginPopUpProps) => {
             <Form
               form={form}
               name="login"
+              initialValues={{
+                username: 'trongnp144',
+                password: '123456aA@'
+              }}
               autoComplete="off"
               style={{ textAlign: 'center' }}
               onFinish={handleLogin}
@@ -74,16 +79,16 @@ const LoginPopUp = observer(({ onClose }: LoginPopUpProps) => {
                 rules={[{ required: true, message: 'Vui lòng nhập tên!' }]}
                 validateTrigger={['onBlur', 'onChange']}
               >
-                <Input className={styles.input} placeholder="Nhập SDT/Username"  defaultValue={'trongnp144'}/>
+                <Input className={styles.input} placeholder="Nhập SDT/Username" />
               </Form.Item>
               <Form.Item
                 name="password"
                 rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
                 validateTrigger={['onBlur', 'onChange']}
               >
-                <Input.Password className={styles.input} placeholder="Nhập mật khẩu" defaultValue={'123456aA@'}/>
+                <Input.Password className={styles.input} placeholder="Nhập mật khẩu" />
               </Form.Item>
-
+              {error && <p className='text-red-500 text-left' style={{paddingBottom:'20px'}}>{error}</p>}
               <Form.Item name="remember" valuePropName="checked">
                 <Checkbox className={styles.checkboxWrapper}>Ghi nhớ đăng nhập</Checkbox>
               </Form.Item>
@@ -117,7 +122,7 @@ const LoginPopUp = observer(({ onClose }: LoginPopUpProps) => {
                 <Button
                   className={styles.toggleButton}
                   onClick={() => {
-                    navigate('/register');
+                    navigate('/dang-ki');
                     onClose();
                   }}
                 >

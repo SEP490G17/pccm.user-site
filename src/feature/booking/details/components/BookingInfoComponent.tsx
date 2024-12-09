@@ -118,7 +118,7 @@ const BookingInfoComponent = observer(() => {
             <Typography.Text className="font-bold text-lg">Giá tiền sân:</Typography.Text>
           </Col>
           <Col xs={14} sm={13}>
-            <Typography.Text className="text-lg">{bookingDetails.totalPrice.toLocaleString('vn') ?? 0}</Typography.Text>
+            <Typography.Text className="text-lg">{bookingDetails.totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) ?? 0}</Typography.Text>
           </Col>
 
           {bookingDetails.paymentStatus && (
@@ -138,17 +138,20 @@ const BookingInfoComponent = observer(() => {
           )}
         </Row>
       </Col>
+      {
+        bookingDetails.isSuccess &&
+        <Col xs={24} lg={12}>
+          <OrdersOfBookingComponent orders={ordersOfBooking} booking={selectedBooking} />
+        </Col>
+      }
 
-      <Col xs={24} lg={12}>
-        <OrdersOfBookingComponent orders={ordersOfBooking} />
-      </Col>
 
       <Col xs={24}>
         <div className={`flex gap-2 ${screens.lg ? 'justify-end' : 'justify-center'}`}>
           {!bookingDetails.isSuccess && bookingDetails.status !== BookingStatus.Cancelled && (
             <Button
-              className="text-base p-3 py-4 w-32"
-              style={{ borderRadius: '8px', backgroundColor: 'red', color: 'white' }}
+              className="text-base p-4 py-5 w-32"
+              style={{ borderRadius: '6px', backgroundColor: 'red', color: 'white' }}
               type="primary"
               danger
               onClick={async () => await bookingDetailsStore.cancelBooking(bookingDetails.id, toast)}

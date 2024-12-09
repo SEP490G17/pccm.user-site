@@ -23,62 +23,39 @@ export default class CourtClusterListStore {
     makeAutoObservable(this);
   }
 
-  loadListCourt = async () => {
-    this.loadingMore = true;
+  loadListCourt = async (filters: any = {}) => {
+    const isFiltering = Object.keys(filters).length > 0;
+
+    if (isFiltering) {
+      if (!this.loadingMore) {
+        this.loadingInitial = true;
+        this.courtClusterRegistry.clear();
+        this.courtPageParams.clearLazyPage();
+      }
+    } else {
+      if (!this.loadingMore) {
+        this.loadingInitial = true;
+        this.courtClusterRegistry.clear();
+        this.courtPageParams.clearLazyPage();
+      }
+      this.loadingMore = true;
+    }
 
     const queryParams = new URLSearchParams();
-
     queryParams.append('skip', `${this.courtPageParams.skip}`);
     queryParams.append('pageSize', `${this.courtPageParams.pageSize}`);
 
-    const [error, response] = await catchErrorHandle<PaginationModel<ICourtCluster>>(
-      agent.CourtClusters.list(`?${queryParams.toString()}`),
-    );
-
-    runInAction(() => {
-      if (error) {
-        toast.error('Tải danh sách cụm sân thất bại');
-      }
-      if (response) {
-        const { count, data } = response;
-        data.forEach(this.setCourtCluster);
-        this.courtPageParams.totalElement = count;
-      }
-      this.loadingMore = false;
-    });
-  };
-
-  filterListCourtCluster = async (filters: any = {}) => {
-    this.loadingInitial = true;
-
-    const queryParams = new URLSearchParams();
-    this.courtClusterRegistry.clear();
-    this.courtPageParams.clearLazyPage();
-    // Các tham số phân trang mặc định
-    queryParams.append('skip', `${this.courtPageParams.skip}`);
-    queryParams.append('pageSize', `${this.courtPageParams.pageSize}`);
-
-    if (filters.searchText) {
-      queryParams.append('search', filters.searchText);
-    }
-    if (filters.province) {
-      queryParams.append('province', filters.province);
-    }
-    if (filters.district) {
-      queryParams.append('district', filters.district);
-    }
-    if (filters.ward) {
-      queryParams.append('ward', filters.ward);
-    }
-    if (filters.rating) {
-      queryParams.append('rating', filters.rating);
-    }
+    // Áp dụng bộ lọc nếu có
+    if (filters.searchText) queryParams.append('search', filters.searchText);
+    if (filters.province) queryParams.append('province', filters.province);
+    if (filters.district) queryParams.append('district', filters.district);
+    if (filters.ward) queryParams.append('ward', filters.ward);
+    if (filters.rating) queryParams.append('rating', filters.rating);
     if (filters.minPrice !== undefined && filters.maxPrice !== undefined) {
       queryParams.append('minPrice', `${filters.minPrice}`);
       queryParams.append('maxPrice', `${filters.maxPrice}`);
     }
 
-    // Gọi API với các tham số đã được tạo ra
     const [error, response] = await catchErrorHandle<PaginationModel<ICourtCluster>>(
       agent.CourtClusters.list(`?${queryParams.toString()}`),
     );
@@ -86,13 +63,14 @@ export default class CourtClusterListStore {
     runInAction(() => {
       if (error) {
         toast.error('Tải danh sách cụm sân thất bại');
-      }
-      if (response) {
+      } else if (response) {
         const { count, data } = response;
         data.forEach(this.setCourtCluster);
         this.courtPageParams.totalElement = count;
       }
+
       this.loadingInitial = false;
+      this.loadingMore = false;
     });
   };
 
@@ -136,7 +114,7 @@ export default class CourtClusterListStore {
 
   // Hàm trả về danh sách top courts
   get topCourtClusterArray() {
-    return Array.from(this.courtClusterTopRegistry.values());
+    return _.orderBy(Array.from(this.courtClusterTopRegistry.values()), ['id'], ['desc']);
   }
 
   setLoadingInitial = (isLoad: boolean) => (this.loadingInitial = isLoad);

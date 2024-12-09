@@ -1,5 +1,5 @@
-import React from 'react';
-import { Modal, Button, Form, Input, Typography, Spin, Row, Col } from 'antd';
+import React, { useState } from 'react';
+import { Modal, Button, Form, Input, Typography, Row, Col } from 'antd';
 import { LockOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../app/stores/store'; // Đảm bảo rằng store có thể truy cập
@@ -15,18 +15,32 @@ const ForgotPasswordPopUp: React.FC<ForgotPasswordPopUpProps> = ({ visible, onCl
     const [form] = Form.useForm();
     const { accountStore } = useStore(); // Dùng store để truy cập accountStore
     const { loadingForgotPassword } = accountStore; // Lấy trạng thái loading từ store
-
+    const [error, setError] = useState<any>(null);
     // Xử lý sự kiện submit form
     const onFinish = (values: { email: string }) => {
         // Gọi store để gửi email yêu cầu
-        accountStore.forgotPassword(values.email);
+        accountStore.forgotPassword(values.email)
+            .then((value) => {
+                if (value.err) {
+                    setError(value.err.response.data);
+                }
+                if (value.res) {
+                    setError(null);
+                    form.resetFields();
+                }
+            })
+            .catch();
     };
 
     return (
         <Modal
             title="Quên mật khẩu"
             open={visible}
-            onCancel={onClose}
+            onCancel={() => (
+                onClose(),
+                setError(null),
+                form.resetFields()
+            )}
             footer={null}
             centered
         >
@@ -34,7 +48,7 @@ const ForgotPasswordPopUp: React.FC<ForgotPasswordPopUpProps> = ({ visible, onCl
                 <Row justify="center" style={{ marginBottom: 20 }}>
                     <Col>
                         {/* Icon Lock */}
-                        <LockOutlined style={{ fontSize: '48px', color: '#1890ff' }} />
+                        <LockOutlined style={{ fontSize: '48px', color: '#115363' }} />
                     </Col>
                 </Row>
                 <Form
@@ -53,20 +67,19 @@ const ForgotPasswordPopUp: React.FC<ForgotPasswordPopUpProps> = ({ visible, onCl
                     >
                         <Input placeholder="Nhập email của bạn" />
                     </Form.Item>
-
+                    {error && <p className='text-red-500 text-left' style={{ paddingBottom: '20px' }}>{error}</p>}
                     <Row justify="center" style={{ marginBottom: 10 }}>
                         <Button
                             type="primary"
                             htmlType="submit"
                             block
-                            style={{ width: '40%' }}
+                            style={{ width: '40%', backgroundColor:'#115363' }}
                             loading={loadingForgotPassword}
                         >
-                            {loadingForgotPassword ? 'Đang gửi...' : 'Gửi mã xác nhận'}
+                            Gửi mã xác nhận
                         </Button>
                     </Row>
                 </Form>
-                {loadingForgotPassword && <Spin tip="Đang gửi email..." />}
             </div>
         </Modal>
     );

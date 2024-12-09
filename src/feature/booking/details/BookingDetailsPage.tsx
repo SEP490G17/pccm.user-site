@@ -33,8 +33,8 @@ const BookingDetailsPage = observer(() => {
     <>
       <PageHeadingAtoms
         breadCrumb={[
-          { title: 'Trang chủ', to: '/home' },
-          { title: 'Lịch sử đặt sân', to: '/booking-history' },
+          { title: 'Trang chủ', to: '/trang-chu' },
+          { title: 'Lịch sử đặt sân', to: '/lich-su' },
         ]}
       />
       <div className="w-full flex justify-center py-4">

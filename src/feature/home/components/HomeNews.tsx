@@ -37,14 +37,14 @@ function HomeNews({ title, itemsPerPage }: IProps) {
         ) : (
           <>
             {currentItems.map((news, index) => (
-              <Col 
-                key={news.id} 
+              <Col
+                key={news.id}
                 xs={24}
                 sm={24}
                 md={index === 1 ? 16 : 8}
                 lg={index === 1 ? 16 : 8}
               >
-                <Link to={`/news/${news.id}`} key={news.id}>
+                <Link to={`/tin-tuc/${news.id}`} key={news.id}>
                   <Card
                     hoverable
                     bodyStyle={{
@@ -91,8 +91,8 @@ function HomeNews({ title, itemsPerPage }: IProps) {
             ))}
             {currentItems.length < itemsPerPage &&
               Array.from({ length: itemsPerPage - currentItems.length }).map((_, index) => (
-                <Col 
-                  key={index} 
+                <Col
+                  key={index}
                   xs={24}
                   sm={24}
                   md={8}
@@ -103,9 +103,10 @@ function HomeNews({ title, itemsPerPage }: IProps) {
               ))}
             <Flex justify='center' className='w-full'>
               <Button
+                style={{ backgroundColor: '#115363' }}
                 type="primary"
                 className="view-more-btn"
-                onClick={() => (window.location.href = '/news')}
+                onClick={() => (window.location.href = '/tin-tuc')}
               >
                 Xem thêm
               </Button>

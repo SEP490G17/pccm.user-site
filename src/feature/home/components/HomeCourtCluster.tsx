@@ -151,7 +151,7 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
                             <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>
                             <Row>
                               {Array.from({ length: 5 }, (_, i) => {
-                                if (i < Math.floor(c.rate)) {
+                                if (i < Math.floor(Number(c.rate ? c.rate.toFixed() : 0))) {
                                   return <FaStar key={i} className="text-yellow-500" color="#f7d03f" style={{ marginTop: '3px' }} />;
                                 }
                                 else {

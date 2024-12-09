@@ -4,7 +4,7 @@ import {
   HistoryOutlined,
   KeyOutlined,
   LogoutOutlined,
-  SearchOutlined,
+  // SearchOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import {
@@ -13,7 +13,7 @@ import {
   Dropdown,
   Flex,
   Image,
-  Input,
+  // Input,
   Menu,
   Space,
   Typography,
@@ -34,10 +34,10 @@ import NotificationAtom from '../common/NotificationAtom';
 const { Text } = Typography;
 
 const Header = observer(() => {
-  const phrases = ['Tìm sân thể thao', 'Từ khóa tìm kiếm'];
-  const [placeholder, setPlaceholder] = useState('');
-  const [phraseIndex, setPhraseIndex] = useState(0);
-  const [charIndex, setCharIndex] = useState(0);
+  // const phrases = ['Tìm sân thể thao', 'Từ khóa tìm kiếm'];
+  // const [placeholder, setPlaceholder] = useState('');
+  // const [phraseIndex, setPhraseIndex] = useState(0);
+  // const [charIndex, setCharIndex] = useState(0);
   const [isLoginModalVisible, setLoginModalVisible] = useState(false);
   const [isChangePasswordModalVisible, setChangePasswordModalVisible] = useState(false);
   const { authStore, commonStore } = useStore();
@@ -48,38 +48,38 @@ const Header = observer(() => {
       authStore.getUser();
     }
   }, [authStore, commonStore]);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (charIndex < phrases[phraseIndex].length) {
-        setPlaceholder((prev) => prev + phrases[phraseIndex][charIndex]);
-        setCharIndex((prev) => prev + 1);
-      } else {
-        setTimeout(() => {
-          setCharIndex(0);
-          setPlaceholder('');
-          setPhraseIndex((prev) => (prev + 1) % phrases.length);
-        }, 100);
-      }
-    }, 250);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (charIndex < phrases[phraseIndex].length) {
+  //       setPlaceholder((prev) => prev + phrases[phraseIndex][charIndex]);
+  //       setCharIndex((prev) => prev + 1);
+  //     } else {
+  //       setTimeout(() => {
+  //         setCharIndex(0);
+  //         setPlaceholder('');
+  //         setPhraseIndex((prev) => (prev + 1) % phrases.length);
+  //       }, 100);
+  //     }
+  //   }, 250);
 
-    return () => clearInterval(interval);
-  }, [charIndex, phraseIndex, phrases]);
+  //   return () => clearInterval(interval);
+  // }, [charIndex, phraseIndex, phrases]);
 
-  const handleSearch = () => {
-    console.log('Searching for:', placeholder);
-  };
+  // const handleSearch = () => {
+  //   console.log('Searching for:', placeholder);
+  // };
 
   const handleMenuClick = ({ key }: { key: string }) => {
     if (key === 'viewProfile') {
       if (userApp) {
-        navigate('/view-profile');
+        navigate('/thongtin');
       } else {
         setLoginModalVisible(true);
       }
     } else if (key === 'login') {
       authStore.setVisible(true);
     } else if (key === 'viewHistory') {
-      navigate('/booking-history');
+      navigate('/lich-su');
     } else if (key === 'changePassword') {
       setChangePasswordModalVisible(true);
     } else if (key === 'logout') {
@@ -115,16 +115,16 @@ const Header = observer(() => {
           <Text className="header-title">Pickleball</Text>
         </Flex>
         <Space align="center">
-          <Input
+          {/* <Input
             placeholder={placeholder}
             className="header-input"
             suffix={<SearchOutlined onClick={handleSearch} />}
-          />
+          /> */}
         </Space>
         <Space size={40} align="center">
           <div
             className="header-item"
-            onClick={() => navigate('/list-courtcluster')}
+            onClick={() => navigate('/cum-san')}
             style={{ cursor: 'pointer' }}
           >
             <Flex align="center">
@@ -165,7 +165,7 @@ const Header = observer(() => {
               <Link onClick={() => authStore.setVisible(true)}>Đăng nhập</Link>/
               <Link
                 onClick={() => {
-                  router.navigate('/register');
+                  router.navigate('/dang-ki');
                 }}
               >
                 Đăng kí

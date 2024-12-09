@@ -108,7 +108,7 @@ function TopCourtCluster({ title, itemsPerPage }: IProps) {
         <Skeleton
           paragraph={{ rows: 6 }}
           active
-          style={{ height: '100%', width: '100%' }}
+          style={{ height: '100%', width: '100%', paddingTop: '30px' }}
         />
       ) : topCourtClusterArray.length === 0 ? (
         <Row justify="center" align="middle" style={{ minHeight: '200px' }}>
@@ -151,7 +151,7 @@ function TopCourtCluster({ title, itemsPerPage }: IProps) {
                             <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>
                             <Row>
                               {Array.from({ length: 5 }, (_, i) => {
-                                if (i < Math.floor(c.rate)) {
+                                if (i < Math.floor(Number(c.rate ? c.rate.toFixed() : 0))) {
                                   return <FaStar key={i} className="text-yellow-500" color="#f7d03f" style={{ marginTop: '3px' }} />;
                                 }
                                 else {

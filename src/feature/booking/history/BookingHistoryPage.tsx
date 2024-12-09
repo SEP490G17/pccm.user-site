@@ -168,8 +168,8 @@ const BookingHistoryPage: React.FC = observer(() => {
     <>
       <PageHeadingAtoms
         breadCrumb={[
-          { title: 'Trang chủ', to: '/home' },
-          { title: 'Sân thể thao', to: '/list-courtcluster' },
+          { title: 'Trang chủ', to: '/trang-chu' },
+          { title: 'Sân thể thao', to: '/cum-san' },
         ]}
       />
       <Title level={2}>Lịch Sử Đặt Sân</Title>
