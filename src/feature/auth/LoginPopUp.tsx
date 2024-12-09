@@ -67,7 +67,7 @@ const LoginPopUp = observer(({ onClose }: LoginPopUpProps) => {
               onFinish={handleLogin}
             >
               <h1 className={`${styles.title} mb-5`}>ĐĂNG NHẬP</h1>
-              <p className='text-red-500 text-left'>{error && error}</p>
+              <p className='text-red-500 text-left'>{error && error.response.data}</p>
 
               <Form.Item
                 name="username"

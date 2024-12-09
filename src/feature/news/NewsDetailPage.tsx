@@ -13,10 +13,10 @@ const NewsDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const newsId = Number(id);
     const { newsDetail } = newsStore
+    window.scrollTo(0, 0);
     useEffect(() => {
-        window.scrollTo(0, 0);
         newsStore.detailNews(newsId);
-    }, [newsStore]);
+    }, [newsStore, newsId]);
 
     if (!newsDetail) {
         return <div>Không tìm thấy tin tức</div>;

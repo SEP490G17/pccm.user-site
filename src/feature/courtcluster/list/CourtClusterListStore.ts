@@ -131,12 +131,12 @@ export default class CourtClusterListStore {
   };
 
   get courtClusterArray() {
-    return _.orderBy(Array.from(this.courtClusterRegistry.values()), ['id'], ['asc']);
+    return _.orderBy(Array.from(this.courtClusterRegistry.values()), ['id'], ['desc']);
   }
 
   // Hàm trả về danh sách top courts
   get topCourtClusterArray() {
-    return _.orderBy(Array.from(this.courtClusterTopRegistry.values()), ['id'], ['asc']);
+    return Array.from(this.courtClusterTopRegistry.values());
   }
 
   setLoadingInitial = (isLoad: boolean) => (this.loadingInitial = isLoad);
