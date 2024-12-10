@@ -112,7 +112,7 @@ function TopCourtCluster({ title, itemsPerPage }: IProps) {
         />
       ) : topCourtClusterArray.length === 0 ? (
         <Row justify="center" align="middle" style={{ minHeight: '200px' }}>
-          <Typography.Text>Không có sân bóng nào</Typography.Text>
+          <Typography.Text>Không có sân còn giờ trống</Typography.Text>
         </Row>
       ) : (
         <div className="court-cluster-container">

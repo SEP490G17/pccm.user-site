@@ -134,6 +134,9 @@ const ListCourtClusterPage = observer(() => {
         <ListBanner title="" />
       </div>
 
+      <Title level={1} style={{ margin: '24px 0' }}>
+        Sân còn giờ trống
+      </Title>
 
       <div className="featured-courts-wrapper">
         <div className="featured-courts">
