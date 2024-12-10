@@ -114,51 +114,36 @@ const Header = observer(() => {
           <Image preview={false} src={logo} width={'4.0345rem'} height={'2.677rem'} alt="Logo" />
           <Text className="header-title">Pickleball</Text>
         </Flex>
-        <Space align="center">
-          {/* <Input
-            placeholder={placeholder}
-            className="header-input"
-            suffix={<SearchOutlined onClick={handleSearch} />}
-          /> */}
-        </Space>
         <Space size={40} align="center">
-          <div
-            className="header-item"
+          <Flex
+            align="center"
             onClick={() => navigate('/cum-san')}
-            style={{ cursor: 'pointer' }}
+            className=" cursor-pointer mr-2"
           >
-            <Flex align="center">
-              <Image
-                preview={false}
-                src={listCourtIcon}
-                width={30}
-                height={24}
-                alt="Sân thể thao"
-              />
-            </Flex>
-          </div>
+            <Image preview={false} src={listCourtIcon} width={30} height={24} alt="Sân thể thao" />
+          </Flex>
 
           {userApp && <NotificationAtom />}
 
           {userApp && (
-            <>
-              <Dropdown
-                className="dropdown"
-                overlay={menu}
-                trigger={['hover']}
-                getPopupContainer={(triggerNode) => {
-                  const container = document.querySelector('.header-container') as HTMLElement;
-                  return container || triggerNode;
-                }}
-              >
-                <div className="header-item" style={{ cursor: 'pointer', width: '100%' }}>
-                  <Flex className="flex-row gap-2" align="center">
-                    <Avatar size={32} alt="Tài khoản" src={userApp.image} />
-                    <Text className="header-text">{userApp.displayName}</Text>
-                  </Flex>
-                </div>
-              </Dropdown>
-            </>
+            <Dropdown
+              className="dropdown"
+              overlay={menu}
+              trigger={['hover']}
+              getPopupContainer={(triggerNode) => {
+                const container = document.querySelector('.header-container') as HTMLElement;
+                return container || triggerNode;
+              }}
+            >
+              <div className="header-item" style={{ cursor: 'pointer', width: '100%' }}>
+                <Flex className="flex-row gap-2" align="center">
+                  <Avatar size={32} alt="Tài khoản" src={userApp.image} />
+                  <Text className="hidden md:block text-[#4B5563] whitespace-nowrap overflow-hidden text-ellipsis max-h-28">
+                    {userApp.displayName}
+                  </Text>
+                </Flex>
+              </div>
+            </Dropdown>
           )}
           {!userApp && (
             <Flex gap={10}>

@@ -171,11 +171,6 @@ const BookingScheduleComponent = observer(
         group={group}
         timeFormat="HH:mm"
         timeScale={{ enable: true, interval: 60, slotCount: 1 }}
-        workHours={{
-          highlight: true,
-          start: selectedCourtCluster.openTime,
-          end: selectedCourtCluster.closeTime,
-        }}
         startHour={selectedCourtCluster.openTime.substring(0, 5)}
         endHour={selectedCourtCluster.closeTime.substring(0, 5)}
         cellClick={handleOnCellClick}

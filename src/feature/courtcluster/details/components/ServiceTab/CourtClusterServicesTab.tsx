@@ -47,7 +47,7 @@ const CourtClusterServicesTab = observer(({ courtClusterId }: IProps) => {
     return (
         <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
             {serviceStore.serviceArray.map((service, index) => (
-                <Col key={service.id} span={8}>
+                <Col key={service.id} xs={24} sm={12} lg={8}>
                     <div
                         style={{
                             background: 'white',

@@ -94,12 +94,14 @@ const BookingHistoryPage: React.FC = observer(() => {
             <Tag
               icon={<ClockCircleOutlined />}
               className="w-36 h-10 text-sm items-center justify-center flex"
-              color="#108ee9"
+              color="gold"
             >
               Chờ xác nhận
             </Tag>
           )}
-          {record.status === BookingStatus.Confirmed && record.paymentStatus === PaymentStatus.Success && (
+          {record.status === BookingStatus.Confirmed && record.paymentStatus === PaymentStatus.Success && 
+          !record.isSuccess &&
+          (
             <Tag
               icon={<CheckCircleOutlined />}
               className="w-36 h-10 text-sm items-center justify-center flex"

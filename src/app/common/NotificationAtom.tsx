@@ -92,7 +92,9 @@ const NotificationAtom = observer(() => {
   );
 
   return (
-      <Dropdown overlay={notificationMenu} trigger={['click']}>
+      <Dropdown overlay={notificationMenu} trigger={['click']} 
+      placement={window.innerWidth <= 768 ? "bottom" : "bottomRight"} // Thay đổi vị trí
+      >
         <Badge count={notificationStore.numOfUnRead} offset={[10, 0]}>
           <BellOutlined style={{ fontSize: 24, cursor: 'pointer' }} />
         </Badge>
