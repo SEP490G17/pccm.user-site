@@ -78,7 +78,7 @@ const ProfilePage: React.FC = () => {
             <PageHeadingAtoms
                 breadCrumb={[{ title: 'Trang chủ', to: '/trang-chu' }, { title: 'Thông tin cá nhân', to: '/thongtin/' }]}
             />
-            <div style={{ maxWidth: '70%', margin: 'auto' }}>
+            <div className='m-auto xl:w-3/4'>
                 <div style={{ padding: '5%', backgroundColor: 'white', borderRadius: '8px' }}>
                     <Form form={form} onFinish={handleUpdateProfile} className="form-container">
                         {
