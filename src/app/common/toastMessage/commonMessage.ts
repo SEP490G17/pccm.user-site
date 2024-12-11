@@ -1,5 +1,4 @@
 import { UseToastOptions } from '@chakra-ui/react';
-import { DefaultCourtClusterText } from './courtClusterMessage';
 
 export const DefaultSettingToast = {
   duration: 5000,
