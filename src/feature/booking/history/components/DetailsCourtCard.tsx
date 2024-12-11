@@ -56,11 +56,11 @@ const DetailsCourtCard = ({ court }: IProps) => {
           </tr>
           <tr>
             <td>Giá sân từ:</td>
-            <td>{minPrice?.toLocaleString('vn')} đ</td>
+            <td>{minPrice?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })} đ</td>
           </tr>
           <tr>
             <td>Giá sân đến:</td>
-            <td>{maxPrice?.toLocaleString('vn')} đ</td>
+            <td>{maxPrice?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })} đ</td>
           </tr>
         </tbody>
       </table>

@@ -1,7 +1,9 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { CourtPrice, IAvailableSlotModel, IBookingByDay, ISlots } from '../models/booking.model';
 import agent from '../api/agent';
-import { toast } from 'react-toastify';
+import { BookingMessage } from '../common/toastMessage/bookingMessage';
+import { CreateToastFnReturn } from '@chakra-ui/react';
+import { catchErrorHandle } from '../helper/utils';
 
 export default class BookingStore {
   availableSlot: IAvailableSlotModel[] | null = [];
@@ -31,16 +33,21 @@ export default class BookingStore {
     });
   };
 
-  createBooking = async (value: IBookingByDay) => {
+  createBooking = async (value: IBookingByDay, toast: CreateToastFnReturn) => {
     this.loadingCreate = true;
-    await runInAction(async () => {
-      await agent.Booking.create(value)
-        .then(() => toast.success('Tạo booking thành công'))
-        .catch(() => toast.error('Tạo booking thất bại'))
-        .finally(() => (this.loadingCreate = false));
+    const [err, res] = await catchErrorHandle(agent.Booking.create(value));
+    runInAction(() => {
+      if (err) {
+        toast(BookingMessage.bookingFailure(err?.response?.data));
+      }
+      if (res) {
+        toast(BookingMessage.bookingSuccess());
+      }
+      this.loadingCreate = false;
     });
+    return { err, res };
   };
-  
+
   loadListBooking = async () => {
     this.setLoadingInitial(true);
 

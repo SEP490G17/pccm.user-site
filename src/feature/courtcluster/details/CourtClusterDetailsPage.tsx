@@ -20,11 +20,13 @@ import BookingFormComponent from './components/bookingForm/BookingFormComponent'
 import CourtClusterServicesTab from './components/ServiceTab/CourtClusterServicesTab';
 import CourtClusterProductsTab from './components/ProductTab/CourtClusterProductsTab';
 import { runInAction } from 'mobx';
+import { useToast } from '@chakra-ui/react';
 
 const CourtClusterDetailsPage = observer(() => {
   const { id } = useParams();
   const { courtClusterStore, courtClusterDetailsStore, signalRStore } = useStore();
   const { loadListCourt } = courtClusterStore;
+  const toast = useToast();
   const {
     selectedCourt,
     reviewArray,
@@ -56,8 +58,8 @@ const CourtClusterDetailsPage = observer(() => {
       }
       setLoadingInitialDetailsPage(true);
       Promise.all([
-        (getDetailsCourtCluster(id),
-        getListReviewByCourtClusterId(id)),
+        (getDetailsCourtCluster(id, toast),
+          getListReviewByCourtClusterId(id)),
       ]).finally(() => runInAction(() => setLoadingInitialDetailsPage(false)));
     }
 
@@ -70,6 +72,7 @@ const CourtClusterDetailsPage = observer(() => {
     id,
     setLoadingInitialDetailsPage,
     getDetailsCourtCluster,
+    toast,
     getListReviewByCourtClusterId,
     courtClusterDetailsStore.loadScheduleBookingList,
     courtClusterDetailsStore,
