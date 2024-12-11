@@ -13,6 +13,7 @@ import CourtBookingForm from '@/feature/booking/history/components/QuickBooking/
 import TopCourtCluster from './TopCourtCluster';
 import { TiArrowSync } from "react-icons/ti";
 import LoadMoreButtonAtoms from '@/feature/atoms/LoadMoreButtonAtoms';
+import { ICourt } from '@/app/models/courtcluster.model';
 
 const { Title, Paragraph } = Typography;
 const { Option } = Select;
@@ -121,6 +122,15 @@ const ListCourtClusterPage = observer(() => {
 
     loadListCourt();
   }
+
+  const getMinMaxPrices = (courts: ICourt[]) => {
+    const prices = courts.flatMap(court => court.courtPrices.map(price => price.price));
+
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+
+    return { minPrice, maxPrice };
+  };
 
   return (
     <div className="list-court-cluster">
@@ -251,21 +261,27 @@ const ListCourtClusterPage = observer(() => {
                     <Title level={5} className="court-title">
                       {c.title}
                     </Title>
+
                     <Paragraph>Khu vực: {c.provinceName} - {c.districtName}</Paragraph>
-                    <Row justify="space-between" align="middle" className="rating-row">
-                      <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>
-                      <Row>
-                        {Array.from({ length: 5 }, (_, i) => {
-                          if (i < Math.floor(Number(c.rate ? c.rate.toFixed() : 0))) {
-                            return <FaStar key={i} className="text-yellow-500" color="#f7d03f" style={{ marginTop: '3px' }} />;
-                          }
-                          else {
-                            return <FaRegStar key={i} className="text-yellow-500" style={{ marginTop: '3px' }} />;
-                          }
-                        })}
-                        <Typography.Paragraph style={{ marginLeft: '5px' }}>({c.rate ? c.rate.toFixed() : 0})</Typography.Paragraph>
-                      </Row>
+                    <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>
+                    <Paragraph>
+                      Giá tiền: {getMinMaxPrices(c.courts).minPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })} - {getMinMaxPrices(c.courts).maxPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                    </Paragraph>
+                    <Paragraph>
+                      Giờ mở cửa: {c.openTime} - {c.closeTime}
+                    </Paragraph>
+                    <Row>
+                      {Array.from({ length: 5 }, (_, i) => {
+                        if (i < Math.floor(Number(c.rate ? c.rate.toFixed() : 0))) {
+                          return <FaStar key={i} className="text-yellow-500" color="#f7d03f" style={{ marginTop: '3px' }} />;
+                        }
+                        else {
+                          return <FaRegStar key={i} className="text-yellow-500" style={{ marginTop: '3px' }} />;
+                        }
+                      })}
+                      <Typography.Paragraph style={{ marginLeft: '5px' }}>({c.rate ? c.rate.toFixed() : 0})</Typography.Paragraph>
                     </Row>
+
                   </div>
                   <Flex vertical gap={8}>
                     <CourtBookingForm

@@ -1,18 +1,21 @@
-import React from 'react';
 import { Modal, Form, Input, Button, Row, Col } from 'antd';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import './style/ChangePasswordPopUp.scss';
 import { ChangePasswordInput } from '@/app/models/account.model';
 import { useStore } from '@/app/stores/store';
+import { observer } from 'mobx-react-lite';
+import { useToast } from '@chakra-ui/react';
 
 interface ChangePasswordPopUpProps {
   visible: boolean;
   onClose: () => void;
 }
 
-const ChangePasswordPopUp: React.FC<ChangePasswordPopUpProps> = ({ visible, onClose }) => {
+const ChangePasswordPopUp = observer(({ visible, onClose }: ChangePasswordPopUpProps) => {
   const { accountStore } = useStore();
+  const { loadingChangePassword } = accountStore;
+  const toast = useToast();
   const validationSchema = Yup.object().shape({
     currentPassword: Yup.string().required('Vui lòng nhập mật khẩu hiện tại'),
     newPassword: Yup.string()
@@ -47,7 +50,7 @@ const ChangePasswordPopUp: React.FC<ChangePasswordPopUpProps> = ({ visible, onCl
             newPassword: values.newPassword,
           });
 
-          const success = await accountStore.changePassword(changeInput);
+          const success = await accountStore.changePassword(changeInput, toast);
           if (success) {
             resetForm();
             onClose();
@@ -103,12 +106,12 @@ const ChangePasswordPopUp: React.FC<ChangePasswordPopUpProps> = ({ visible, onCl
             <div className="modal-footer">
               <Row gutter={16}>
                 <Col xs={24} sm={12}>
-                  <Button type="default" onClick={onClose} block disabled={accountStore.loadingChangePassword}>
+                  <Button type="default" onClick={onClose} block disabled={loadingChangePassword}>
                     Hủy
                   </Button>
                 </Col>
                 <Col xs={24} sm={12}>
-                  <Button type="default" style={{ backgroundColor: '#115363', color: 'white' }} htmlType="submit" block loading={accountStore.loadingChangePassword}>
+                  <Button type="default" style={{ backgroundColor: '#115363', color: 'white' }} htmlType="submit" block loading={loadingChangePassword}>
                     Xác nhận
                   </Button>
                 </Col>
@@ -119,6 +122,6 @@ const ChangePasswordPopUp: React.FC<ChangePasswordPopUpProps> = ({ visible, onCl
       </Formik>
     </Modal>
   );
-};
+});
 
 export default ChangePasswordPopUp;

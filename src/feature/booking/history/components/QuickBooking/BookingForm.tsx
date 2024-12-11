@@ -9,6 +9,7 @@ import { useStore } from '@/app/stores/store';
 import { observer } from "mobx-react-lite";
 import BookingDetail from './BookingDetail';
 import CourtSelection from './CourtSelection';
+import { useToast } from '@chakra-ui/react';
 
 const { Title } = Typography;
 
@@ -28,6 +29,7 @@ export interface DataType {
 const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingCourtId }: IProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
+  const toast = useToast();
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
   const [selectedCourt, setSelectedCourt] = useState<number | null>(null);
   const [availablePrices, setAvailablePrices] = useState<CourtPrice[]>([]);
@@ -117,14 +119,13 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
       phoneNumber: values.phonenumber,
     };
 
-    bookingStore.createBooking(newBooking)
-      .then(() => {
-        setIsModalVisible(false);
-        form.resetFields();
+    await bookingStore.createBooking(newBooking, toast)
+      .then((value) => {
+        if (value.res) {
+          setIsModalVisible(false);
+          form.resetFields();
+        }
       })
-      .catch((error) => {
-        console.error('Booking creation failed', error);
-      });
   };
 
   useEffect(() => {
@@ -169,6 +170,12 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
     return availableSlots.some((slot) => {
       const [slotStart, slotEnd] = slot.split(" - ").map((time) => time.trim());
       if (selectedStartFormatted >= slotStart && selectedEndFormatted <= slotEnd) {
+        form.setFields([
+          {
+            name: 'totalPrice',
+            errors: [],
+          },
+        ]);
         return true
       }
       else {

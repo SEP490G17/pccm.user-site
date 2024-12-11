@@ -17,8 +17,8 @@ import { observer } from 'mobx-react-lite';
 import { FaStar } from 'react-icons/fa';
 import ReviewCard from '../../../../booking/history/components/ReviewCard';
 import TextArea from 'antd/es/input/TextArea';
-import { toast } from 'react-toastify';
 import { useStore } from '@/app/stores/store';
+import { useToast } from '@chakra-ui/react';
 
 interface IProps {
   reviews?: IReview[] | undefined;
@@ -29,6 +29,7 @@ const ReviewCourtClusterComponent = ({ reviews, courtClusterId }: IProps) => {
   const [value, setValue] = useState(0);
   const [comment, setComment] = useState('');
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const toast = useToast();
   const { courtClusterDetailsStore, commonStore } = useStore();
   const [form] = Form.useForm();
   const ratingsData: { [key: string]: number } = {
@@ -80,7 +81,13 @@ const ReviewCourtClusterComponent = ({ reviews, courtClusterId }: IProps) => {
 
   const handleFinish = async (values: any) => {
     if (values.star == null) {
-      toast.error('Vui lòng đánh giá sao');
+      toast({
+        title: 'Lỗi',
+        description: 'Vui lòng đánh giá sao',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     } else {
       const data = new ReviewsDto({
         phoneNumber: commonStore.getPhoneNumber(),
@@ -89,7 +96,7 @@ const ReviewCourtClusterComponent = ({ reviews, courtClusterId }: IProps) => {
         rating: values.star,
       });
       try {
-        await courtClusterDetailsStore.createReviews(data);
+        await courtClusterDetailsStore.createReviews(data, toast);
         form.resetFields();
       } catch (error) {
         console.error("Error creating review:", error);

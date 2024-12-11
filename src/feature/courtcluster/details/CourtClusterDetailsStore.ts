@@ -15,8 +15,9 @@ dayjs.extend(timezone);
 import _ from 'lodash';
 import { store } from '@/app/stores/store';
 import { CreateToastFnReturn } from '@chakra-ui/react';
-import { CommonMessage } from '@/app/common/toastMessage/commonMessage';
+import { CommonMessage, ReviewMessage } from '@/app/common/toastMessage/commonMessage';
 import { BookingMessage, DefaultBookingText } from '@/app/common/toastMessage/bookingMessage';
+import { CourtClusterMessage } from '@/app/common/toastMessage/courtClusterMessage';
 
 export default class CourtClusterDetailsStore {
   reviewsRegistry = new Map<number, IReview>();
@@ -50,19 +51,14 @@ export default class CourtClusterDetailsStore {
     }
   };
 
-  getDetailsCourtCluster = async (id: string) => {
+  getDetailsCourtCluster = async (id: string, toast: CreateToastFnReturn) => {
     this.selectedCourtId = id;
     const [error, response] = await catchErrorHandle<ICourtCluster>(
       agent.CourtClusters.details(this.selectedCourtId),
     );
     runInAction(() => {
       if (error) {
-        notification.error({
-          message: 'Tải thông tin cụm sân thất bại',
-          type: 'error',
-          duration: 3,
-          placement: 'bottom',
-        });
+        toast(CourtClusterMessage.loadDetailsFail());
       } else {
         this.selectedCourt = response;
       }
@@ -88,22 +84,25 @@ export default class CourtClusterDetailsStore {
     });
   };
 
-  createReviews = async (data: ReviewsDto) => {
+  createReviews = async (data: ReviewsDto, toast: CreateToastFnReturn) => {
     this.loadingReview = true;
     if (!store.commonStore.getPhoneNumber()) {
-      toast.error('Bạn cần đăng nhập để dùng chức năng này');
+      toast(ReviewMessage.ReviewLoginRequire());
       this.loadingReview = false;
       return;
     }
-    try {
-      const response = await agent.Reviews.create(data);
-      this.setReviews(response);
-      toast.success('Thêm đánh giá thành công');
-    } catch {
-      toast.error('Thêm đánh giá thất bại');
-    } finally {
+    const [err, res] = await catchErrorHandle(agent.Reviews.create(data));
+    runInAction(async () => {
+      if (err) {
+        toast(ReviewMessage.CreateReviewFail());
+      }
+      if (res) {
+        this.setReviews(res);
+        toast(ReviewMessage.CreateReviewSuccess());
+      }
       this.loadingReview = false;
-    }
+    });
+    this.loadingReview = false;
   };
 
   deleteReviews = async (data: number) => {
@@ -209,25 +208,25 @@ export default class CourtClusterDetailsStore {
   };
 
   mapBookingResponseToBookingModel = (booking: any): BookingModel => {
-  const recu = booking.RecurrenceRule ? booking.RecurrenceRule : booking.recurrenceRule;
-  return {
-    courtId: booking.courtId ?? 0,
-    courtName: booking.courtName,
-    endTime: booking.endDay,
-    startTime: booking.startDay,
-    paymentStatus: booking.paymentStatus,
-    paymentUrl: booking.paymentUrl,
-    status: booking.status,
-    isSuccess: booking.isSuccess,
-    fullName: booking.fullName,
-    phoneNumber: booking.phoneNumber,
-    totalPrice: booking.totalPrice,
-    RecurrenceRule: recu ?? '',
-    recurrenceRule: recu,
-    id: booking.id,
-    untilTime: '',
+    const recu = booking.RecurrenceRule ? booking.RecurrenceRule : booking.recurrenceRule;
+    return {
+      courtId: booking.courtId ?? 0,
+      courtName: booking.courtName,
+      endTime: booking.endDay,
+      startTime: booking.startDay,
+      paymentStatus: booking.paymentStatus,
+      paymentUrl: booking.paymentUrl,
+      status: booking.status,
+      isSuccess: booking.isSuccess,
+      fullName: booking.fullName,
+      phoneNumber: booking.phoneNumber,
+      totalPrice: booking.totalPrice,
+      RecurrenceRule: recu ?? '',
+      recurrenceRule: recu,
+      id: booking.id,
+      untilTime: '',
+    };
   };
-};
 
   createBookingSignalr = (booking: BookingModel) => {
     this.setBooking(booking);

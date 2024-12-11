@@ -10,6 +10,8 @@ import { toast } from 'react-toastify';
 import { Profile } from '../models/user.model';
 import { store } from './store';
 import { catchErrorHandle } from '../helper/utils';
+import { AccountMessage } from '../common/toastMessage/accountMessage';
+import { CreateToastFnReturn } from '@chakra-ui/react';
 
 export default class AccountStore {
   loadingRegister: boolean = false;
@@ -69,21 +71,24 @@ export default class AccountStore {
       .finally(() => (this.loadingConfirmPassword = false));
   };
 
-  changePassword = async (value: ChangePasswordInput) => {
+  changePassword = async (value: ChangePasswordInput, toast: CreateToastFnReturn) => {
     this.loadingChangePassword = true;
     const [err, res] = await catchErrorHandle(agent.Account.changePassword(value));
 
     runInAction(() => {
+      if (res) {
+        toast(AccountMessage.changePasswordSuccess());
+      }
+      if (err) {
+        toast(AccountMessage.changePasswordFail(undefined, err.response?.data));
+      }
       this.loadingChangePassword = false;
     });
-
-    if (err) {
-      toast.error(err[0] || 'Đã xảy ra lỗi trong quá trình thay đổi mật khẩu');
-      return false;
-    }
     if (res) {
-      toast.success('Thay đổi mật khẩu thành công');
       return true;
+    }
+    if (err) {
+      return false;
     }
   };
 }
