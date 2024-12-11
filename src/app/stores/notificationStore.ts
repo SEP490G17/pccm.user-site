@@ -55,7 +55,6 @@ export default class NotificationStore {
   }
 
   setNotification = (noti: NotificationUser) => {
-    console.log('check noti ', noti);
     this.notificationRegistry.set(noti.id, noti);
   };
 

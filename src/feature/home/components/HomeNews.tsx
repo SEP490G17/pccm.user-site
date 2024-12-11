@@ -1,7 +1,7 @@
 import { useStore } from '@/app/stores/store';
 import { Card, Col, Row, Skeleton, Typography, Button, Tag, Flex } from 'antd';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './style/HomeNews.scss';
 
@@ -12,17 +12,14 @@ interface IProps {
   itemsPerPage: number;
 }
 
-function HomeNews({ title, itemsPerPage }: IProps) {
+const HomeNews = observer(({ title, itemsPerPage }: IProps) =>{
   const { newsStore } = useStore();
-  const { listNews, loadListNews, loadingInitial } = newsStore;
+  const { listNews, loadNews, loadingInitial } = newsStore;
 
   useEffect(() => {
-    loadListNews();
-  }, []);
+    loadNews();
+  }, [loadNews]);
 
-  const [currentPage] = useState(1);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = listNews.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <>
@@ -36,7 +33,10 @@ function HomeNews({ title, itemsPerPage }: IProps) {
           <Skeleton />
         ) : (
           <>
-            {currentItems.map((news, index) => (
+            {listNews.map((news, index) => {
+              
+              if(index >= itemsPerPage) return;
+              return (
               <Col
                 key={news.id}
                 xs={24}
@@ -88,19 +88,8 @@ function HomeNews({ title, itemsPerPage }: IProps) {
                   </Card>
                 </Link>
               </Col>
-            ))}
-            {currentItems.length < itemsPerPage &&
-              Array.from({ length: itemsPerPage - currentItems.length }).map((_, index) => (
-                <Col
-                  key={index}
-                  xs={24}
-                  sm={24}
-                  md={8}
-                  lg={8}
-                >
-                  <div className="news-card empty-card" style={{ height: '300px' }}></div>
-                </Col>
-              ))}
+            )})}
+          
             <Flex justify='center' className='w-full'>
               <Button
                 style={{ backgroundColor: '#115363' }}
@@ -116,6 +105,6 @@ function HomeNews({ title, itemsPerPage }: IProps) {
       </Row>
     </>
   );
-}
+})
 
-export default observer(HomeNews);
+export default HomeNews;

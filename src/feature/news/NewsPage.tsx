@@ -2,106 +2,99 @@ import './style/NewsPage.scss';
 
 import { Link } from 'react-router-dom';
 import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
-import Pagination from '@/feature/atoms/Pagination';
-import { Skeleton } from 'antd';
+import { Button, Flex, Input, Skeleton, Tag } from 'antd';
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import { useStore } from '@/app/stores/store';
 
-const NewsPage = () => {
-    const { newsStore } = useStore();
+const NewsPage = observer(() => {
+  const { newsStore } = useStore();
+  const { loadNews, listNews, newsPageParam, newsRegistry, loadCommonTags, commonTags, setTagsTerm, tagList } = newsStore;
+  useEffect(() => {
+    loadNews();
+    loadCommonTags();
+  }, [loadNews, loadCommonTags]);
 
-    useEffect(() => {
-        newsStore.loadListNews();
-    }, [newsStore]);
-
-    const sortedNews = newsStore.paginatedNews.slice().sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-    const recentPosts = sortedNews.slice(0, 5);
-    const shuffledNews = [...newsStore.listNews].sort(() => 0.5 - Math.random());
-    const { currentPage, pageSize } = newsStore;
- 
-
-    return (
-        <div className="news-page">
-            <PageHeadingAtoms
-                breadCrumb={[
-                    { title: "Trang chủ", to: "/trang-chu" },
-                    { title: "Tin tức", to: "/tin-tuc/" }
-                ]}
-            />
-            <div className="news-main-section">
-                <div className="news-updates">
-                    <h2 className="section-title">Tin tức mới cập nhật</h2>
-                    {newsStore.loadingInitial ? (
-                        <Skeleton active title paragraph={{ rows: 4 }} />
-                    ) : (
-                        <div className="news-list">
-                            {sortedNews.map((newsItem) => (
-                                <Link key={newsItem.id} to={`/tin-tuc/${newsItem.id}`} className="news-item">
-                                    <img
-                                        className="thumbnail"
-                                        src={newsItem.thumbnail}
-                                        alt={newsItem.title}
-                                    />
-                                    <div className="news-content">
-                                        <h3>{newsItem.title}</h3>
-                                        <p>{newsItem.title}</p>
-                                        <span>{new Date(newsItem.createdAt).toLocaleDateString()}</span>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-                    )}
-                    <Pagination
-                        currentPage={currentPage}
-                        pageSize={pageSize}
-                        total={newsStore.listNews.length}
-                        onPageChange={(page) => newsStore.setCurrentPage(page)}
-                    />
-                </div>
-
-                <div className="recent-posts">
-                    <h3 className="section-title recent-posts-title" >Bài viết gần đây</h3>
-                    {newsStore.loadingInitial ? (
-                        <Skeleton active title paragraph={{ rows: 3 }} />
-                    ) : (
-                        <div className="recent-post-list">
-                            {recentPosts.map((newsItem) => (
-                                <Link key={newsItem.id} to={`/tin-tuc/${newsItem.id}`} className="recent-post-item">
-                                    <img src={newsItem.thumbnail || '/default-thumbnail.jpg'} alt={newsItem.title} />
-                                    <div className="recent-post-content">
-                                        <h4>{newsItem.title}</h4>
-                                        <p>{newsItem.title.slice(0, 70)}...</p>
-                                        <span className="post-date">{new Date(newsItem.createdAt).toLocaleDateString()}</span>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            <div className="related-news">
-                <h3 className="section-title">Tin liên quan</h3>
-                {newsStore.loadingInitial ? (
-                    <Skeleton active title paragraph={{ rows: 3 }} />
-                ) : (
-                    <div className="related-news-container">
-                        <div className="related-news-list">
-                            {shuffledNews.map((newsItem) => (
-                                <Link key={newsItem.id} to={`/tin-tuc/${newsItem.id}`} className="related-news-item">
-                                    <img src={newsItem.thumbnail || '/default-thumbnail.jpg'} alt={newsItem.title} />
-                                    <h4>{newsItem.title}</h4>
-                                    <p>{newsItem.title.slice(0, 70)}...</p>
-                                    <span>{new Date(newsItem.createdAt).toLocaleDateString()}</span>
-                                </Link>
-                            ))}
-                        </div>
+  return (
+    <div className="news-page">
+      <PageHeadingAtoms
+        breadCrumb={[
+          { title: 'Trang chủ', to: '/trang-chu' },
+          { title: 'Tin tức', to: '/tin-tuc/' },
+        ]}
+      />
+      <h2 className="section-title">Tin tức mới cập nhật</h2>
+      <div className="w-full gap-4 flex">
+        <Input placeholder="Tìm kiếm" className="w-80" />
+        <Input placeholder="Tìm kiếm theo tags" className="w-80" />
+        <Button type='primary'>Tìm kiếm</Button>
+      </div>
+      <div className="news-main-section">
+        <div className="news-updates">
+          {newsStore.loadingInitial && newsRegistry.size == 0 ? (
+            <Skeleton active title paragraph={{ rows: 4 }} />
+          ) : (
+            <div className="news-list">
+              {listNews.map((newsItem) => (
+                <Link key={newsItem.id} to={`/tin-tuc/${newsItem.id}`} className="news-item">
+                  <img className="thumbnail" src={newsItem.thumbnail} alt={newsItem.title} />
+                  <div className="news-content">
+                    <h3>{newsItem.title}</h3>
+                    <p>{newsItem.title}</p>
+                    <span>{new Date(newsItem.createdAt).toLocaleDateString()}</span>
+                    <div className="flex flex-row gap-2 mt-5">
+                      {newsItem.tags.map((tag) => (
+                        <Tag key={tag} color="green">
+                          {tag}
+                        </Tag>
+                      ))}
                     </div>
+                  </div>
+                </Link>
+              ))}
+              <div className="flex items-center justify-center">
+                {newsRegistry.size < newsPageParam.totalElement && (
+                  <Button
+                    loading={newsStore.loadingInitial}
+                    onClick={() => {
+                      newsPageParam.skip = newsRegistry.size;
+                      if (newsRegistry.size < newsPageParam.totalElement) {
+                        loadNews();
+                      }
+                    }}
+                    type="primary"
+                  >
+                    Xem thêm
+                  </Button>
                 )}
+              </div>
             </div>
+          )}
         </div>
-    );
-};
 
-export default observer(NewsPage);
+        <div className="recent-posts">
+          <h3 className="section-title recent-posts-title">Top 10 tags phổ biến</h3>
+          <Flex gap={8} className="flex-col">
+            {Array.from(commonTags.entries()).map((ct, index) => {
+              return (
+                <Tag
+                  bordered={false}
+                  key={index}
+                  className="gap-2 text-black h-6 items-center flex justify-between hover:bg-teal-500"
+                  onClick={()=> setTagsTerm(ct[0])}
+                >
+                  {ct[0]}
+                  <p className="inline-flex  text-white bg-red-500 w-5 h-5 text-center rounded-full justify-center">
+                    {ct[1]}
+                  </p>
+                </Tag>
+              );
+            })}
+          </Flex>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+export default NewsPage;

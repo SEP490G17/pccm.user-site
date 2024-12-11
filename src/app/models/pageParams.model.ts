@@ -49,3 +49,6 @@ export class ProductPageParams extends PageParams {
   courtCluster?: number;
   category?: number;
 }
+export class NewsPageParams extends PageParams {
+  tagsList:string[] =[];
+}
