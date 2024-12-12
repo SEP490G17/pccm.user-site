@@ -15,7 +15,9 @@ export default class NewsStore {
   totalPages: number = 0; // Tổng số trang cho tin tức
   newsPageParam = new NewsPageParams();
   commonTags: Map<string, number> = new Map<string, number>();
+  anotherTagSet: Set<string> = new Set();
 
+  anotherTagsPageParam = new PageParams();
   constructor() {
     makeAutoObservable(this);
   }
@@ -28,8 +30,13 @@ export default class NewsStore {
     if (this.newsPageParam.searchTerm) {
       queryParams.append('search', this.newsPageParam.searchTerm);
     }
-    const [err, res] = await catchErrorHandle(agent.News.list(`?${queryParams.toString()}`));
-
+  
+    const tagList: string[] = this.newsPageParam.tagsList || [];
+  
+    const [err, res] = await catchErrorHandle(
+      agent.News.list(`?${queryParams.toString()}`, tagList)
+    );
+  
     runInAction(() => {
       if (res) {
         res.data.forEach(this.setNews);
@@ -42,15 +49,42 @@ export default class NewsStore {
       this.setLoadingInitial(false);
     });
   };
+  
 
-  loadCommonTags = async()=>{
-    const [, res] =await catchErrorHandle(agent.News.commonTags());
-    runInAction(()=>{
-      if(res){
-        this.setTags(res)
+  loadAnotherNews = async () => {
+    const queryParams = new URLSearchParams();
+    queryParams.append('skip', `${this.anotherTagsPageParam.skip}`);
+    queryParams.append('pageSize', `${this.anotherTagsPageParam.pageSize}`);
+    if (this.anotherTagsPageParam.searchTerm) {
+      queryParams.append('search', this.anotherTagsPageParam.searchTerm);
+    }
+
+    const [, res] = await catchErrorHandle(agent.News.anotherTags(`?${queryParams.toString()}`));
+
+    runInAction(() => {
+      if (res) {
+        res.data
+          .flatMap((x) => x.tag)
+          .forEach((tag) => {
+            this.anotherTagSet.add(tag); // Thêm vào Set
+          });
+        this.anotherTagsPageParam.totalElement = res.count; // Cập nhật theo size của Set
       }
-    })
+    });
+  };
+
+  get anotherTags() {
+    return Array.from(this.anotherTagSet);
   }
+
+  loadCommonTags = async () => {
+    const [, res] = await catchErrorHandle(agent.News.commonTags());
+    runInAction(() => {
+      if (res) {
+        this.setTags(res);
+      }
+    });
+  };
 
   get listNews() {
     return Array.from(this.newsRegistry.values());
@@ -76,39 +110,41 @@ export default class NewsStore {
     this.newsRegistry.set(news.id, news);
   };
 
-  setTags = (tags:Map<string,number>) => {
+  setTags = (tags: Map<string, number>) => {
     const array = Array.from(tags.entries()).map(([key, value]) => ({ key, value }));
 
     // If the structure is still nested, fix it
-    const flattenedArray = array.map((item) => ({
+    const flattenedArray = array.map((item: any) => ({
       key: item.value.key,
       value: item.value.value,
     }));
     flattenedArray.forEach((item) => {
-      this.commonTags.set(this.cleanKey(item.key), item.value);
+      this.commonTags.set(item.key, item.value);
     });
     console.log('check commonTags', this.commonTags);
-  }
-   cleanKey(key:string) {
-    // Remove unwanted characters like '[' or ']'
-    key = key.replace(/[\[\]\"]+/g, '');
-    // Decode Unicode escape sequences
-    return decodeURIComponent(JSON.parse(`"${key}"`));
-  }
+  };
 
-  setTagsTerm = (tag:string) =>{
-    const check = this.newsPageParam.tagsList.find((value)=>value == tag);
+  setTagsTerm = (tag: string) => {
+    const check = this.newsPageParam.tagsList.find((value) => value == tag);
     const tagList = [...this.newsPageParam.tagsList];
-    if(!check){
+    if (!check) {
       tagList.push(tag);
       this.newsPageParam.tagsList = tagList;
-    }else{
-      this.newsPageParam.tagsList= tagList.filter((value)=>value!= tag);
+    } else {
+      this.newsPageParam.tagsList = tagList.filter((value) => value != tag);
     }
     console.log(this.newsPageParam.tagsList);
+  };
+
+  get tagList() {
+    return this.newsPageParam.tagsList.join(',');
   }
 
-  get tagList(){
-    return this.newsPageParam.tagsList.join(',');
+  handleChangeTags = (tags: string[]) => {
+    this.newsPageParam ={...this.newsPageParam, tagsList: tags};
+  };
+
+  handlerSearchTempChange = (searchTemp:string) =>{
+    this.newsPageParam = {...this.newsPageParam, searchTerm:searchTemp};
   }
 }

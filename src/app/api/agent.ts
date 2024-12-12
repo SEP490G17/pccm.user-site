@@ -113,9 +113,10 @@ const CourtClusters = {
 };
 
 const News = {
-  list: (query: string): Promise<PaginationModel<INews>> => requests.get(`/news/usersite${query}`),
+  list: (query: string, tags:string[] = []): Promise<PaginationModel<INews>> => requests.post(`/news/usersite${query}`,tags),
   detail: (id: number): Promise<INewsDto> => requests.get(`/news/${id}`),
   commonTags: (): Promise<Map<string, number>> => requests.get('/news/most-common-tags'),
+  anotherTags: (query:string): Promise<PaginationModel<{tag:string}>> => requests.get(`/news/another-tags${query}`),
 };
 
 const Account = {
