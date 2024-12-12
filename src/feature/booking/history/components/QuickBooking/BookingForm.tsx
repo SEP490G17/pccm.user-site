@@ -190,18 +190,18 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
     });
   };
 
-  const currentHour = dayjs().hour();
-  const disabledTime = () => ({
-    disabledHours: () => {
-      const hours = [];
-      for (let i = 0; i < 24; i++) {
-        if (i < currentHour + 1 || i > 22) {
-          hours.push(i);
-        }
-      }
-      return hours;
-    },
-  });
+  // const currentHour = dayjs().hour();
+  // const disabledTime = () => ({
+  //   disabledHours: () => {
+  //     const hours = [];
+  //     for (let i = 0; i < 24; i++) {
+  //       if (i < currentHour + 1 || i > 22) {
+  //         hours.push(i);
+  //       }
+  //     }
+  //     return hours;
+  //   },
+  // });
 
   const calculatePrice = useCallback(
     (
@@ -209,8 +209,8 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
       toTime: string,
       courtPrices?: Array<{ fromTime: string; toTime: string; price: number }>
     ) => {
-      const start = dayjs(`1970-01-01T${fromTime}`).add(7, 'hour');
-      const end = dayjs(`1970-01-01T${toTime}`).add(7, 'hour');
+      const start = dayjs(`1970-01-01T${fromTime}`);
+      const end = dayjs(`1970-01-01T${toTime}`);
       let totalPrice = 0;
       if (!courtPrices) return 0;
       courtPrices.forEach(({ fromTime, toTime, price }) => {
@@ -234,7 +234,7 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
 
   useEffect(() => {
     if (selectedTimeRange && selectedTimeRange[0] && selectedTimeRange[1])
-      calculatePrice(selectedTimeRange[0].toISOString().split('T')[1].split('.')[0], selectedTimeRange[1].toISOString().split('T')[1].split('.')[0], courtPrices)
+      calculatePrice(dayjs(selectedTimeRange[0]).format('HH:mm'), dayjs(selectedTimeRange[1]).format('HH:mm'), courtPrices)
   }, [selectedTimeRange, selectedCourt, courtPrices, calculatePrice]);
 
   useEffect(() => {
@@ -334,7 +334,7 @@ const CourtBookingForm = observer(({ courtClusterId, loadingCourtId, setLoadingC
                           <BookingDetail
                             availableSlots={availableSlots}
                             setSelectedTimeRange={setSelectedTimeRange}
-                            disabledTime={disabledTime}
+                          // disabledTime={disabledTime}
                           />
                         </div>
                       )}

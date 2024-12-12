@@ -6,13 +6,12 @@ const { Title } = Typography;
 interface IProps {
     availableSlots: string[];
     setSelectedTimeRange: (value: [Dayjs | null, Dayjs | null]) => void;
-    disabledTime: () => any;
+    disabledTime?: () => any;
 }
 
 const BookingDetail = ({
     availableSlots,
     setSelectedTimeRange,
-    disabledTime,
 }: IProps) => {
     return (
         <Flex vertical gap="middle">
@@ -43,7 +42,6 @@ const BookingDetail = ({
                         style={{ width: '100%' }}
                         needConfirm={false}
                         onChange={(value) => value && setSelectedTimeRange([value[0], value[1]])}
-                        disabledTime={disabledTime}
                         placeholder={["Giờ bắt đầu", "Giờ kết thúc"]}
                     />
                 </Flex>
