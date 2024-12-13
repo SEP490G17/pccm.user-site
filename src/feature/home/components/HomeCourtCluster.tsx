@@ -152,10 +152,18 @@ function CourtClusterList({ title, itemsPerPage }: IProps) {
                       <Image src={c.images[0]} />
                       <div className="court-details">
                         <div className="court-info">
-                          <Title level={5} className="overflow-hidden">
+                          <Title level={5} className="overflow-hidden" style={{
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}>
                             {c.title}
                           </Title>
-                          <Paragraph>Khu vực: {c.provinceName} - {c.districtName}</Paragraph>
+                          <Paragraph style={{
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}>Khu vực: {c.provinceName} - {c.districtName}</Paragraph>
 
 
                           <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>

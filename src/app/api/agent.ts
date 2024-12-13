@@ -28,7 +28,6 @@ import { Profile, User } from '../models/user.model';
 import { router } from '../router/Routes';
 import { sleep } from '../helper/utils';
 import { store } from '../stores/store';
-import { toast } from 'react-toastify';
 import { ImageUpload } from '../models/upload.model';
 import { NotificationUser } from '../models/noti.model';
 import { OrderDetailOfBooking } from '../models/order.model';
@@ -61,8 +60,6 @@ axios.interceptors.response.use(
             }
           }
           throw modalStateErrors.flat();
-        } else {
-          toast.error(data);
         }
         break;
       case 401:
@@ -113,10 +110,12 @@ const CourtClusters = {
 };
 
 const News = {
-  list: (query: string, tags:string[] = []): Promise<PaginationModel<INews>> => requests.post(`/news/usersite${query}`,tags),
+  list: (query: string, tags: string[] = []): Promise<PaginationModel<INews>> =>
+    requests.post(`/news/usersite${query}`, tags),
   detail: (id: number): Promise<INewsDto> => requests.get(`/news/${id}`),
   commonTags: (): Promise<Map<string, number>> => requests.get('/news/most-common-tags'),
-  anotherTags: (query:string): Promise<PaginationModel<{tag:string}>> => requests.get(`/news/another-tags${query}`),
+  anotherTags: (query: string): Promise<PaginationModel<{ tag: string }>> =>
+    requests.get(`/news/another-tags${query}`),
 };
 
 const Account = {
