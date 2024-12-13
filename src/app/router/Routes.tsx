@@ -6,15 +6,14 @@ import NewsPage from '@/feature/news/NewsPage';
 import NewsDetailPage from '@/feature/news/NewsDetailPage';
 import ListCourtCluser from '@/feature/courtcluster/list/CourtCluserListPage';
 import BookingHistoryPage from '@/feature/booking/history/BookingHistoryPage';
-import ProfilePage from '@/feature/profile/ProfilePage'
+import ProfilePage from '@/feature/profile/ProfilePage';
 import RegisterPage from '@/feature/auth/RegisterPage';
 import BookingDetailsPage from '@/feature/booking/details/BookingDetailsPage';
 import ConfirmForgotPassword from '@/feature/auth/ForgotPassword/ConfirmForgotPassword';
-
-
+import NotFound from '@/feature/errors/NotFound';
+import ServerError from '@/feature/errors/ServerError';
 
 export const routes: RouteObject[] = [
-
   {
     path: '/',
     element: <MainLayout />,
@@ -29,31 +28,31 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'tin-tuc',
-        element: <NewsPage />
+        element: <NewsPage />,
       },
       {
         path: 'tin-tuc/:id',
-        element: <NewsDetailPage />
+        element: <NewsDetailPage />,
       },
       {
         path: 'cum-san',
-        element: <ListCourtCluser />
+        element: <ListCourtCluser />,
       },
       {
         path: 'lich-su',
-        element: <BookingHistoryPage />
+        element: <BookingHistoryPage />,
       },
       {
         path: 'lich-su/chi-tiet/:id',
-        element: <BookingDetailsPage />
+        element: <BookingDetailsPage />,
       },
       {
         path: 'thongtin',
-        element: <ProfilePage />
+        element: <ProfilePage />,
       },
       {
         path: 'dang-ki',
-        element: <RegisterPage />
+        element: <RegisterPage />,
       },
       {
         path: 'chi-tiet/:id',
@@ -61,11 +60,19 @@ export const routes: RouteObject[] = [
         children: [],
       },
       {
-        path: "/confirm-forgot-password",
+        path: '/confirm-forgot-password',
         element: <ConfirmForgotPassword />,
-      }
+      },
     ],
   },
+  {
+    path: 'not-found',
+    element: <NotFound key="not-found" />,
+  },
+  {
+    path: 'server-error',
+    element: <ServerError key="not-found" />,
+  }
 ];
 
 export const router = createBrowserRouter(routes);
