@@ -13,8 +13,8 @@ interface IProps {
 }
 
 const HomeNews = observer(({ title, itemsPerPage }: IProps) =>{
-  const { newsStore } = useStore();
-  const { listNews, loadNews, loadingInitial } = newsStore;
+  const { homeStore } = useStore();
+  const { listNews, loadNews, loadingInitial } = homeStore;
 
   useEffect(() => {
     loadNews();
