@@ -152,11 +152,19 @@ function TopCourtCluster({ title, itemsPerPage }: IProps) {
                       <Image src={c.images[0]} width={'100%'} height={'200px'} />
                       <div className="court-details">
                         <div >
-                          <Title level={5} className="overflow-hidden">
+                          <Title level={5} className="overflow-hidden" style={{
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}>
                             {c.title}
                           </Title>
 
-                          <Paragraph>Khu vực: {c.provinceName} - {c.districtName}</Paragraph>
+                          <Paragraph style={{
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}>Khu vực: {c.provinceName} - {c.districtName}</Paragraph>
                           <Paragraph>Số sân: {c.numbOfCourts}</Paragraph>
                           <Paragraph>
                             Giá tiền: {getMinMaxPrices(c.courts).minPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })} - {getMinMaxPrices(c.courts).maxPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
