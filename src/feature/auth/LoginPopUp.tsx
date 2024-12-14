@@ -38,7 +38,7 @@ const LoginPopUp = observer(({ onClose }: LoginPopUpProps) => {
       .login(data)
       .then((value) => {
         if (value.err) {
-          setError(value.err.response.data);
+           setError(value.err.response?.data);
         }
         if (value.res) {
           setError(null);
@@ -72,7 +72,7 @@ const LoginPopUp = observer(({ onClose }: LoginPopUpProps) => {
               onFinish={handleLogin}
             >
               <h1 className={`${styles.title} mb-5`}>ĐĂNG NHẬP</h1>
-              <p className='text-red-500 text-left'>{error && error.response.data}</p>
+              {error && <p className='text-red-500 text-left mb-3'>{error}</p>}
 
               <Form.Item
                 name="username"
@@ -88,7 +88,6 @@ const LoginPopUp = observer(({ onClose }: LoginPopUpProps) => {
               >
                 <Input.Password className={styles.input} placeholder="Nhập mật khẩu" />
               </Form.Item>
-              {error && <p className='text-red-500 text-left' style={{paddingBottom:'20px'}}>{error}</p>}
               <Form.Item name="remember" valuePropName="checked">
                 <Checkbox className={styles.checkboxWrapper}>Ghi nhớ đăng nhập</Checkbox>
               </Form.Item>
