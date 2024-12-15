@@ -6,7 +6,7 @@ const ConfirmForgotPassword = () => {
     const currentUrl = window.location.href; 
 
     // Các domain hợp lệ
-    const isArgonautDomain = currentUrl.startsWith("http://localhost:3000/") || currentUrl.startsWith("http://localhost:3001/") || currentUrl.startsWith("http://localhost:3002/") || currentUrl.startsWith(" https://trongnp-registry.site/");
+    const isArgonautDomain = currentUrl.startsWith("http://localhost:3000/") || currentUrl.startsWith("http://localhost:3001/") || currentUrl.startsWith("http://localhost:3002/") || currentUrl.startsWith("https://trongnp-registry.site/");
 
     const urlParams = new URL(currentUrl).searchParams; // Parse URL
     const token = urlParams.get('token'); // Lấy token
