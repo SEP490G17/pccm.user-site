@@ -14,7 +14,27 @@ const ForgotPopUp: React.FC<ForgotPopUpProps> = ({ token }) => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
 
+    const validatePassword = (password: string) => {
+        if (password.length < 8) {
+            return 'Mật khẩu phải có ít nhất 8 ký tự!';
+        } else if (!/[A-Z]/.test(password)) {
+            return 'Mật khẩu phải có ít nhất một chữ hoa!';
+        } else if (!/[a-z]/.test(password)) {
+            return 'Mật khẩu phải có ít nhất một chữ thường!';
+        } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+            return 'Mật khẩu phải có ít nhất một ký tự đặc biệt!';
+        }
+        return null;
+    };
+
     const handleSubmit = async (values: { newPassword: string; confirmPassword: string }) => {
+        const passwordError = validatePassword(values.newPassword);
+
+        if (passwordError) {
+            toast.error(passwordError);
+            return;
+        }
+
         if (values.newPassword !== values.confirmPassword) {
             toast.error('Mật khẩu xác nhận không khớp!');
             return;
@@ -55,7 +75,6 @@ const ForgotPopUp: React.FC<ForgotPopUpProps> = ({ token }) => {
                     label="Mật khẩu mới"
                     rules={[
                         { required: true, message: 'Vui lòng nhập mật khẩu mới!' },
-                        { min: 6, message: 'Mật khẩu phải ít nhất 6 ký tự!' },
                     ]}
                 >
                     <Input.Password placeholder="Nhập mật khẩu mới" />
@@ -66,7 +85,6 @@ const ForgotPopUp: React.FC<ForgotPopUpProps> = ({ token }) => {
                     label="Xác nhận mật khẩu mới"
                     rules={[
                         { required: true, message: 'Vui lòng xác nhận mật khẩu!' },
-                        { min: 6, message: 'Mật khẩu phải ít nhất 6 ký tự!' },
                     ]}
                 >
                     <Input.Password placeholder="Nhập lại mật khẩu mới" />
