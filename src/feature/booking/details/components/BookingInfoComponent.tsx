@@ -110,7 +110,8 @@ const BookingInfoComponent = observer(() => {
           </Col>
           <Col xs={14} sm={13}>
             <Typography.Text className="text-lg">
-              {dayjs(bookingDetails.endDay).add(7, 'hour').format('DD/MM/YYYY')}
+              {bookingDetails.untilDay ? dayjs(bookingDetails.untilDay).add(7,'hour').format('DD/MM/YYYY') 
+              : dayjs(bookingDetails.endDay).add(7, 'hour').format('DD/MM/YYYY')}
             </Typography.Text>
           </Col>
 

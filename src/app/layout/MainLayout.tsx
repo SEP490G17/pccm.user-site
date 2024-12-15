@@ -2,12 +2,42 @@ import { Outlet } from 'react-router-dom';
 import { Layout } from 'antd';
 import Header from './Header';
 import Footer from './Footer';
-import { observer } from 'mobx-react-lite';
 import { ToastContainer } from 'react-toastify';
+import { useEffect } from 'react';
 
 const { Content } = Layout;
 
 const App = () => {
+  useEffect(() => {
+    const handleKeyPress = (e: any) => {
+      if (e.keyCode === 123) {
+        // F12 key
+        e.preventDefault();
+      }
+      if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+        // Ctrl + Shift + I
+        e.preventDefault();
+      }
+      if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+        // Ctrl + Shift + J
+        e.preventDefault();
+      }
+    };
+
+    const handleContextMenu = (e: any) => {
+      e.preventDefault(); // Disable right-click menu
+    };
+    if (import.meta.env.VITE_API_URL !== 'http://localhost:5000/api/') {
+      // Listen to keydown events and right-click events
+      window.addEventListener('keydown', handleKeyPress);
+      window.addEventListener('contextmenu', handleContextMenu);
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener('contextmenu', handleContextMenu);
+    };
+  }, []);
   return (
     <Layout>
       <Layout.Header
@@ -45,4 +75,4 @@ const App = () => {
   );
 };
 
-export default observer(App);
+export default App;

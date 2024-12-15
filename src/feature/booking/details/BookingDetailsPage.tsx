@@ -8,6 +8,7 @@ import Title from 'antd/es/typography/Title';
 import { getBookingStatusColor, getBookingStatusText } from '@/app/helper/utils';
 import { LoadingOutlined } from '@ant-design/icons';
 import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
+import dayjs from 'dayjs';
 
 const BookingDetailsPage = observer(() => {
   const { id } = useParams();
@@ -23,7 +24,7 @@ const BookingDetailsPage = observer(() => {
     if (id && !isNaN(Number(id))) {
       getDetailsBooking(Number(id));
     }
-    if(payment === 'success'){
+    if (payment === 'success') {
       setOpen(true);
     }
   }, [id, getDetailsBooking, payment]);
@@ -55,7 +56,15 @@ const BookingDetailsPage = observer(() => {
               <Card
                 className="pt-8"
                 title={
-                  <Title level={2}>Chi tiết booking {selectedBooking?.bookingDetails.id}</Title>
+                  <>
+                    <Title level={2}>Chi tiết booking {selectedBooking?.bookingDetails.id}</Title>
+                    <p className="font-thin mb-4">
+                      Ngày đặt:{' '}
+                      {selectedBooking?.bookingDetails.createdAt &&
+                        dayjs(selectedBooking?.bookingDetails.createdAt)
+                          .format('HH:mm DD/MM/YYYY')}
+                    </p>
+                  </>
                 }
                 bordered={false}
                 style={{ borderRadius: '8px' }}

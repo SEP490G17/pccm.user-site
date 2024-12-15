@@ -1,170 +1,69 @@
-import React, { useEffect } from 'react';
-import { observer } from 'mobx-react-lite';
-import { Table, Typography, Spin, Button, Tag, Grid } from 'antd';
-import { useStore } from '@/app/stores/store';
+import React, { useState } from 'react';
+import { Button, Tabs, Typography } from 'antd';
 import PageHeadingAtoms from '@/feature/atoms/PageHeadingAtoms';
-import dayjs from 'dayjs';
-import { BookingStatus, PaymentStatus, PaymentType } from '@/app/models/booking.model';
 const { Title } = Typography;
-import {
-  CheckCircleOutlined,
-  ClockCircleOutlined,
-  CloseCircleOutlined,
-  MinusCircleOutlined,
-} from '@ant-design/icons';
-import { router } from '@/app/router/Routes';
 
-const { useBreakpoint } = Grid;
-
-const BookingHistoryPage: React.FC = observer(() => {
-  const { bookingHistoryStore, paymentStore } = useStore();
-  const { getPayment } = paymentStore;
-  const screens = useBreakpoint();
-
-  const handlerPayment = async (bookingId: number) => {
-    await getPayment(PaymentType.Booking, bookingId).then((data) => {
-      if (data.res) {
-        window.location.href = data.res;
-      }
-    });
-  };
-
-  useEffect(() => {
-    bookingHistoryStore.loadListBooking();
-  }, []);
-
-  const columns = [
+import BookingHistoryAllTabs from './tabs/BookingHistoryAllTabs';
+import { Tab } from 'rc-tabs/lib/interface';
+import BookingHistoryPendingTabs from './tabs/BookingHistoryPendingTabs';
+import BookingHistoryAcceptedTabs from './tabs/BookingHistoryAcceptedTabs';
+import BookingHistoryDenyTabs from './tabs/BookingHistoryDenyTabs';
+import BookingHistoryCancelTabs from './tabs/BookingHistoryCancelTabs';
+import { ReloadOutlined } from '@ant-design/icons';
+import { useStore } from '@/app/stores/store';
+const BookingHistoryPage: React.FC = () => {
+  const [selectedTab, setSelectedTab] = useState<string>('1');
+  const { bookingHistoryStore } = useStore();
+  const items: Tab[] = [
     {
-      title: 'STT',
-      key: 'id',
-      render: (_: any, __: any, index: number) => index + 1,
+      label: <p className="w-32">Đang chờ duyệt</p>,
+      key: '1',
+      children: <BookingHistoryPendingTabs />,
     },
     {
-      title: 'Cụm sân',
-      dataIndex: 'courtClusterName',
-      key: 'courtClusterName',
-      render: (text: number) => `Sân ${text}`,
+      label: <p className="w-32">Đã được duyệt</p>,
+      key: '2',
+      children: <BookingHistoryAcceptedTabs />,
     },
     {
-      title: 'Địa chỉ',
-      dataIndex: 'address',
-      key: 'address',
-      render: (text: string) => text,
+      label: <p className="w-32">Đã bị từ chối</p>,
+      key: '3',
+      children: <BookingHistoryDenyTabs />,
     },
     {
-      title: 'Giờ chơi',
-      dataIndex: 'timePlay',
-      key: 'timePlay',
-      render: (text: number) => `${text}`,
+      label: <p className="w-32">Đã huỷ </p>,
+      key: '4',
+      children: <BookingHistoryCancelTabs />,
     },
     {
-      title: 'Bắt đầu',
-      dataIndex: 'startTime',
-      key: 'startTime',
-      render: (text: number) => `${dayjs(text).format('DD/MM/YYYY')}`,
-    },
-    {
-      title: 'Kết thúc',
-      dataIndex: 'endTime',
-      key: 'endTime',
-      render: (text: number) => `${dayjs(text).format('DD/MM/YYYY')}`,
-    },
-    {
-      title: 'Tổng giá',
-      dataIndex: 'totalPrice',
-      key: 'totalPrice',
-      render: (text: number) =>
-        `${text.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}`,
-    },
-    {
-      title: 'Trạng thái',
-      dataIndex: 'status',
-      key: 'status',
-      render: (
-        _: any,
-        record: {
-          status: BookingStatus;
-          paymentStatus?: PaymentStatus;
-          id: number;
-          isSuccess: boolean;
-        },
-      ) => (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {record.status === BookingStatus.Pending && (
-            <Tag
-              icon={<ClockCircleOutlined />}
-              className="w-36 h-10 text-sm items-center justify-center flex"
-              color="gold"
-            >
-              Chờ xác nhận
-            </Tag>
-          )}
-          {record.status === BookingStatus.Confirmed && record.paymentStatus === PaymentStatus.Success && 
-          !record.isSuccess &&
-          (
-            <Tag
-              icon={<CheckCircleOutlined />}
-              className="w-36 h-10 text-sm items-center justify-center flex"
-              color="success"
-            >
-              Đã thanh toán
-            </Tag>
-          )}
-          {record.status === BookingStatus.Confirmed && record.paymentStatus === undefined && (
-            <Tag
-              icon={<CheckCircleOutlined />}
-              className="w-36 h-10 text-sm items-center justify-center flex"
-              color="processing"
-            >
-              Đã xác nhận
-            </Tag>
-          )}
-          {record.status === BookingStatus.Confirmed &&
-            record.paymentStatus === PaymentStatus.Pending && (
-              <Button
-                style={{ backgroundColor: '#115363', color: 'white' }}
-                className="w-36 h-10 bg-teal-800"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handlerPayment(record.id);
-                }}
-              >
-                Thanh toán
-              </Button>
-            )}
-          {record.isSuccess && (
-            <Tag
-              icon={<CheckCircleOutlined />}
-              className="w-36 h-10 text-sm items-center justify-center flex"
-              color="#87d068"
-            >
-              Đã hoàn thành
-            </Tag>
-          )}
-
-          {record.status === BookingStatus.Declined && (
-            <Tag
-              icon={<CloseCircleOutlined />}
-              className="w-36 h-10 text-sm items-center flex justify-center"
-              color="error"
-            >
-              Đã từ chối
-            </Tag>
-          )}
-          {record.status === BookingStatus.Cancelled && (
-            <Tag
-              icon={<MinusCircleOutlined />}
-              className="w-36 h-10 text-sm items-center flex justify-center"
-              color="#f50"
-            >
-              Đã bị huỷ
-            </Tag>
-          )}
-          <br />
-        </div>
-      ),
+      label: <p className="w-32">Tất cả</p>,
+      key: '5',
+      children: <BookingHistoryAllTabs />,
     },
   ];
+  const handleTabsChange = (key: string) => {
+    setSelectedTab(key);
+  };
+
+  const handleReload = async () => {
+    switch (selectedTab) {
+      case '1':
+        await bookingHistoryStore.reloadPending();
+        break;
+      case '2':
+        await bookingHistoryStore.reloadAccepted();
+        break;
+      case '3':
+        await bookingHistoryStore.reloadDeny();
+        break;
+      case '4':
+        await bookingHistoryStore.reloadCancel();
+        break;
+      case '5':
+        await bookingHistoryStore.reloadAll();
+        break;
+    }
+  };
 
   return (
     <>
@@ -174,27 +73,15 @@ const BookingHistoryPage: React.FC = observer(() => {
           { title: 'Sân thể thao', to: '/cum-san' },
         ]}
       />
-      <Title level={2}>Lịch Sử Đặt Sân</Title>
-      {bookingHistoryStore.loadingInitial ? (
-        <Spin tip="Đang tải..." />
-      ) : (
-        <Table
-          dataSource={bookingHistoryStore.listBooking}
-          columns={columns}
-          rowKey="startTime"
-          pagination={false}
-          onRow={(record) => {
-            return {
-              onClick: () => {
-                router.navigate(`chi-tiet/${record.id}`);
-              },
-            };
-          }}
-          scroll={{ x: screens.lg ? 1000 : 'max-content' }}
-        />
-      )}
+      <div className="flex flex-row justify-between items-center">
+        <Title level={2}>Lịch Sử Đặt Sân</Title>
+        <Button icon={<ReloadOutlined />} onClick={handleReload}>
+          Tải lại
+        </Button>
+      </div>
+      <Tabs type="card" items={items} centered onChange={handleTabsChange} />
     </>
   );
-});
+};
 
 export default BookingHistoryPage;

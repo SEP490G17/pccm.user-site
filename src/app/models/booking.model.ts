@@ -40,6 +40,7 @@ export interface BookingInfor {
   playTime: string; // Thời gian bắt đầu đặt sân
   startDay: string;
   endDay: string;
+  untilDay?:string;
   paymentStatus: number;
   paymentUrl?: string;
   status: number;
@@ -47,6 +48,7 @@ export interface BookingInfor {
   totalPrice: number;
   RecurrenceRule?: string;
   recurrenceRule?: string;
+  createdAt:string;
   courtId: number;
   courtClusterId: number;
   address: string;
