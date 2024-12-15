@@ -14,15 +14,13 @@ const ConfirmForgotPassword = () => {
 
     if (!isArgonautDomain) {
         // Nếu không phải domain hợp lệ, không xử lý
-        console.error("Truy cập từ domain không hợp lệ:", currentUrl);
-        navigate('/404');
+        navigate('/server-error');
         return null;
     }
 
     if (!token) {
         // Nếu không có token, chuyển hướng về trang lỗi
-        console.error("Không tìm thấy token trong URL.");
-        navigate('/404');
+        navigate('/server-error');
         return null;
     }
 
