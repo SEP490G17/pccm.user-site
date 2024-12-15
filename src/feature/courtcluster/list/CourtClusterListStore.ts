@@ -114,7 +114,7 @@ export default class CourtClusterListStore {
 
   // Hàm trả về danh sách top courts
   get topCourtClusterArray() {
-    return _.orderBy(Array.from(this.courtClusterTopRegistry.values()), ['id'], ['desc']);
+    return Array.from(this.courtClusterTopRegistry.values());
   }
 
   setLoadingInitial = (isLoad: boolean) => (this.loadingInitial = isLoad);
