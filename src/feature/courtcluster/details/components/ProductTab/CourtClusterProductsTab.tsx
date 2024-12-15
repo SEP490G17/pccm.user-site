@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Select, Typography, Row, Col, Card, Skeleton } from 'antd'; // Import necessary components from Ant Design
+import { Select, Typography, Row, Col, Card, Skeleton, Button } from 'antd';
 import { useStore } from '@/app/stores/store.ts';
 import { Image } from 'antd'; // Import Image from antd
 
@@ -18,21 +18,24 @@ const CourtClusterProductsTab: React.FC<Props> = observer(({ courtClusterId }) =
     filterByCourtCluster,
     filterByCategory,
   } = productStore;
+
+  const handleLoadMore = () => {
+    productStore.loadMoreProducts();
+  };
+
   const { loadingInitial: loadingCategories, categoryRegistry, loadCategories } = categoryStore;
   const [selectedCategory, setSelectedCategory] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    filterByCourtCluster(courtClusterId);
+    // Khi courtClusterId thay đổi, reset filter và tải sản phẩm mới
+    productStore.resetProductFilter();
+    productStore.filterByCourtCluster(courtClusterId);
+
+    // Load categories nếu chưa được tải
     if (categoryRegistry.size === 0 && !loadingCategories) {
       loadCategories();
     }
-  }, [
-    courtClusterId,
-    filterByCourtCluster,
-    categoryRegistry.size,
-    loadCategories,
-    loadingCategories,
-  ]);
+  }, [courtClusterId, categoryRegistry.size, productStore, loadCategories, loadingCategories]);
 
   const handleCategoryChange = (categoryId: number | undefined) => {
     setSelectedCategory(categoryId);
@@ -116,6 +119,16 @@ const CourtClusterProductsTab: React.FC<Props> = observer(({ courtClusterId }) =
             <Text style={{ fontSize: '16px' }}>Không có sản phẩm nào trong danh mục này.</Text>
           )}
         </Row>
+      )}
+      { productArray.length < productStore.productPageParams.totalElement && (
+        <Button
+          type="primary"
+          style={{ marginTop: 16, display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
+          onClick={handleLoadMore}
+          loading={productStore.loading}
+        >
+          Xem thêm
+        </Button>
       )}
     </div>
   );

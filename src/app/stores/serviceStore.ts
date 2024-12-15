@@ -18,6 +18,7 @@ export default class ServiceStore {
 
   constructor() {
     makeAutoObservable(this);
+    this.servicePageParams.pageSize = 9;
     // Uncomment this line if periodic cache cleaning is needed
     // this.cleanupInterval = window.setInterval(this.cleanServiceCache, 30000);
   }
@@ -39,7 +40,6 @@ export default class ServiceStore {
         this.servicePageParams.filter.split('=')[1] || this.servicePageParams.filter;
       queryParams.append('Filter', courtClusterId);
     }
-
 
     const [error, res] = await catchErrorHandle(agent.Services.list(`?${queryParams.toString()}`));
     runInAction(() => {
@@ -66,6 +66,52 @@ export default class ServiceStore {
       }
       this.loading = false;
     });
+  };
+
+  loadMoreService = async () => {
+    this.loading = true;
+
+    // Ensure that servicePageParams is defined and safely access skip and pageSize
+    if (this.servicePageParams) {
+      this.servicePageParams.skip =
+        (this.servicePageParams.skip ?? 0) + this.servicePageParams.pageSize;
+
+      const queryParams = new URLSearchParams();
+      queryParams.append('skip', `${this.servicePageParams.skip}`);
+      queryParams.append('pageSize', `${this.servicePageParams.pageSize}`);
+      if (this.servicePageParams.searchTerm) {
+        queryParams.append('search', this.servicePageParams.searchTerm);
+      }
+      if (this.servicePageParams.filter) {
+        const courtClusterId =
+          this.servicePageParams.filter.split('=')[1] || this.servicePageParams.filter;
+        queryParams.append('Filter', courtClusterId);
+      }
+
+      const [error, res] = await catchErrorHandle(
+        agent.Services.list(`?${queryParams.toString()}`),
+      );
+      runInAction(() => {
+        if (error) {
+          toast.error('Lỗi khi lấy danh sách dịch vụ');
+          this.loading = false;
+          return;
+        }
+        if (res) {
+          const { count, data } = res;
+
+          if (!Array.isArray(data)) {
+            toast.error('Dữ liệu từ server không hợp lệ');
+            this.loading = false;
+            return;
+          }
+
+          data.forEach(this.setService);
+          this.servicePageParams.totalElement = count; // Cập nhật tổng số lượng dịch vụ
+        }
+        this.loading = false;
+      });
+    }
   };
 
   //#region Common operations
