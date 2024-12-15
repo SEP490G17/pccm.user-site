@@ -60,9 +60,9 @@ const NewsPage = observer(() => {
         ]}
       />
 
-      <div className="news-main-section">
+      <div className="flex flex-col-reverse gap-10 md:flex-row">
         <div className="news-updates">
-          <div className="w-full gap-4 flex justify-between">
+          <div className="w-full gap-4 flex flex-col md:flex-row md:justify-between">
             <h2 className="section-title">Tin tức </h2>
             <div className="flex justify-end items-end mt-auto gap-2 h-10 mb-5">
               <Input
@@ -118,7 +118,7 @@ const NewsPage = observer(() => {
             </div>
           )}
         </div>
-        <div>
+        <div className="w-full md:w-[30rem]">
           <h2 className="section-title" style={{ marginBottom: '1.8rem' }}>
             Lọc kết quả{' '}
           </h2>
@@ -144,7 +144,7 @@ const NewsPage = observer(() => {
                     <h3 className="section-title recent-posts-title">
                       <AccordionButton>
                         <Box as="span" flex="1" textAlign="left">
-                          Các tác khác
+                          Các tags khác
                         </Box>
                         <AccordionIcon />
                       </AccordionButton>
@@ -173,25 +173,33 @@ const NewsPage = observer(() => {
                           </Button>
                         )}
                       </Flex>
-                      <Flex className="mt-5 justify-end w-full gap-4">
-                        <Button
-                          type="text"
-                          className="bg-teal-700 text-white"
-                          onClick={async () => {
-                            newsPageParam.clearLazyPage();
-                            newsRegistry.clear();
-                            await loadNews();
-                          }}
-                        >
-                          Lọc
-                        </Button>
-                        <Button type="text" className="bg-red-600 text-white">
-                          Reset
-                        </Button>
-                      </Flex>
                     </AccordionPanel>
                   </AccordionItem>
                 </Accordion>
+                <Flex className="mt-5 justify-end w-full gap-4">
+                  <Button
+                    type="text"
+                    className="bg-teal-700 text-white"
+                    onClick={async () => {
+                      newsPageParam.clearLazyPage();
+                      newsRegistry.clear();
+                      await loadNews();
+                    }}
+                  >
+                    Lọc
+                  </Button>
+                  <Button type="text" className="bg-red-600 text-white"
+                  
+                    onClick={async ()=>{
+                      newsPageParam.clearLazyPage();
+                      newsRegistry.clear();
+                      newsPageParam.tagsList = [];
+                      await loadNews();
+                    }}
+                  >
+                    Reset
+                  </Button>
+                </Flex>
               </div>
             </Checkbox.Group>
           </div>

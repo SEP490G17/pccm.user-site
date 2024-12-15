@@ -18,8 +18,8 @@ function ListBanner({ title }: IProps) {
     // Split banners based on bannerType
     const { typeTwoBanners, otherBanners } = useMemo(() => {
         return {
-            typeTwoBanners: bannerArray.filter(banner => banner.bannerType === 1),
-            otherBanners: bannerArray.filter(banner => banner.bannerType !== 1)
+            otherBanners: bannerArray.filter(banner => banner.bannerType === 1),
+            typeTwoBanners: bannerArray.filter(banner => banner.bannerType !== 1)
         };
     }, [bannerArray]);
 
