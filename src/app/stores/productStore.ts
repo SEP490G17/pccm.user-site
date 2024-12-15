@@ -18,6 +18,7 @@ export default class ProductStore {
   loadingEdit: boolean = false;
   selectedCategory: number | undefined = undefined;
   constructor() {
+    this.productPageParams.pageSize = 9;
     this.productPageParams.pageIndex = 1;
     makeAutoObservable(this);
     // this.cleanupInterval = window.setInterval(this.cleanProductCache, 30000);
@@ -46,6 +47,39 @@ export default class ProductStore {
       if (error) {
         console.error('Error loading products:', error);
         toast.error('Lấy danh sách sản phẩm thất bại');
+      }
+      if (res) {
+        const { data, count } = res;
+        data.forEach(this.setProduct);
+        this.productPageParams.totalElement = count;
+      }
+      this.loading = false;
+    });
+  };
+  loadMoreProducts = async () => {
+    this.loading = true;
+    this.productPageParams.skip =
+      (this.productPageParams.skip ?? 0) + this.productPageParams.pageSize;
+
+    const queryParams = new URLSearchParams();
+    queryParams.append('skip', `${this.productPageParams.skip}`);
+    queryParams.append('pageSize', `${this.productPageParams.pageSize}`);
+
+    if (this.productPageParams.courtCluster) {
+      queryParams.append('courtCluster', `${this.productPageParams.courtCluster}`);
+    }
+
+    if (this.productPageParams.category) {
+      queryParams.append('category', `${this.productPageParams.category}`);
+    }
+
+    const [error, res] = await catchErrorHandle<PaginationModel<Product>>(
+      agent.Products.list(`?${queryParams.toString()}`),
+    );
+
+    runInAction(() => {
+      if (error) {
+        toast.error('Lỗi khi lấy sản phẩm');
       }
       if (res) {
         const { data, count } = res;
