@@ -32,7 +32,16 @@ function ListBanner({ title }: IProps) {
             {title && <Typography.Title level={3}>{title}</Typography.Title>}
             <Carousel autoplay autoplaySpeed={3000}>
                 {banners.map((banner: Banner) => (
-                    <div key={banner.id} className={`banner-slide ${isSmaller ? 'banner-slide-small' : ''}`}>
+                    <div
+                        key={banner.id}
+                        className={`banner-slide ${isSmaller ? 'banner-slide-small' : ''}`}
+                        onClick={() => {
+                            if (banner.linkUrl) {
+                                window.location.href = banner.linkUrl; 
+                            }
+                        }}
+                        style={{ cursor: 'pointer' }} 
+                    >
                         <div
                             className="banner-overlay"
                             style={{
