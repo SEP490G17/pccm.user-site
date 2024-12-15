@@ -289,7 +289,7 @@ const BookingByDayComponent = observer(({ selectedCourt }: IBookingByDayComponen
                   VND
                 </Text>
                 <Button type="submit" variant="solid" colorScheme="teal">
-                  Đặt combo
+                  Đặt lịch
                 </Button>
               </Flex>
             </Flex>
